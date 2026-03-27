@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tom Husom — How I Work</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(160deg, rgba(20,50,20,0.92) 0%, rgba(10,14,23,0.96) 50%, rgba(8,16,10,0.97) 100%),
+        url('./lincoln.jpg') center 20% / cover no-repeat fixed;
+      color: #e2e8f0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(34,197,94,0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ── BACK BUTTON ── */
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px;
+      background: transparent;
+      border: 1px solid #22c55e;
+      border-radius: 8px;
+      color: #4ade80;
+      font-size: 0.78rem; font-weight: 600;
+      text-decoration: none; letter-spacing: 0.04em;
+      transition: background 0.15s;
+      margin-bottom: 40px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .back-btn:hover { background: rgba(34,197,94,0.08); }
+
+    /* ── HERO ── */
+    .hero {
+      margin-bottom: 56px;
+    }
+
+    .hero-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #22c55e;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      font-weight: 800;
+      color: #f8fafc;
+      line-height: 1.1;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      font-weight: 500;
+      color: #4ade80;
+      margin-bottom: 20px;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-bio {
+      font-size: 1rem;
+      color: #94a3b8;
+      line-height: 1.75;
+      max-width: 640px;
+    }
+
+    .hero-bio strong { color: #e2e8f0; font-weight: 600; }
+
+    /* ── SECTION TITLES ── */
+    .section { margin-bottom: 52px; }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(34,197,94,0.2);
+    }
+
+    .section-header h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: -0.01em;
+    }
+
+    .section-header span {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #22c55e;
+    }
+
+    /* ── TOOLS GRID ── */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .tools-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 400px) {
+      .tools-grid { grid-template-columns: 1fr; }
+    }
+
+    .tool-chip {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(34,197,94,0.25);
+      border-radius: 12px;
+      padding: 16px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .tool-chip:hover {
+      border-color: rgba(34,197,94,0.55);
+      background: rgba(34,197,94,0.05);
+    }
+
+    .tool-chip .tool-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #4ade80;
+      margin-bottom: 5px;
+    }
+
+    .tool-chip .tool-desc {
+      font-size: 0.78rem;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    /* ── CASE STUDIES ── */
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 580px) {
+      .cases-grid { grid-template-columns: 1fr; }
+    }
+
+    .case-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 20px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color 0.15s, background 0.15s, transform 0.12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .case-card:hover {
+      border-color: rgba(34,197,94,0.35);
+      background: rgba(34,197,94,0.04);
+      transform: translateY(-2px);
+    }
+
+    .case-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .case-card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      line-height: 1.3;
+    }
+
+    .case-card .arrow {
+      color: #22c55e;
+      font-size: 1rem;
+      flex-shrink: 0;
+      opacity: 0.6;
+      transition: opacity 0.15s;
+    }
+    .case-card:hover .arrow { opacity: 1; }
+
+    .case-card p {
+      font-size: 0.82rem;
+      color: #64748b;
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    .case-tag {
+      display: inline-block;
+      background: rgba(34,197,94,0.1);
+      color: #22c55e;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-top: 4px;
+      align-self: flex-start;
+    }
+
+    /* ── WHY WE'RE BETTER — MOBILE ── */
+    @media (max-width: 640px) {
+      .why-better-body { flex-direction: column !important; }
+      .why-better-before { width: 100% !important; border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.06); }
+      .why-better-tiles { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media (max-width: 400px) {
+      .why-better-tiles { grid-template-columns: 1fr !important; }
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin: 52px 0;
+    }
+
+    /* ── ABOUT ME ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 580px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+
+    .about-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .about-item .about-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #22c55e;
+      margin-bottom: 6px;
+    }
+
+    .about-item .about-value {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    /* ── CTA ── */
+    .cta {
+      text-align: center;
+      padding: 48px 24px;
+      background: rgba(34,197,94,0.04);
+      border: 1px solid rgba(34,197,94,0.2);
+      border-radius: 22px;
+    }
+
+    .cta h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #f8fafc;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .cta p {
+      font-size: 0.95rem;
+      color: #64748b;
+      margin-bottom: 28px;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .contact-btn-primary {
+      background: #22c55e;
+      color: #0a0e17;
+    }
+    .contact-btn-primary:hover { background: #4ade80; }
+
+    .contact-btn-secondary {
+      background: transparent;
+      color: #4ade80;
+      border: 1px solid rgba(34,197,94,0.4);
+    }
+    .contact-btn-secondary:hover {
+      background: rgba(34,197,94,0.08);
+      border-color: #22c55e;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 0.75rem;
+      color: #334155;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <a href="dashboard.html" class="back-btn">← Dashboard</a>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-label">Portfolio · AI-Powered Development</div>
+      <h1>Tom Husom</h1>
+      <div class="hero-tagline">Senior Developer &nbsp;·&nbsp; Building with AI &nbsp;·&nbsp; Open to Work</div>
+      <p class="hero-bio">
+        <strong>20+ years building software</strong>, with a core background in <strong>data — ETL pipelines, Oracle, and SQL Server</strong>.
+        Now building with Claude Code, gstack, Gemini tools, and live APIs. <strong>Honest Tom's Dashboard</strong> is my proof of concept idea for dashboards using AI coding and imaging techniques. Every page on this site is a live, working project I designed and deployed myself.
+      </p>
+    </div>
+
+    <!-- TOOLS STACK -->
+    <div class="section">
+      <div class="section-header">
+        <span>Stack</span>
+        <h2>What I'm using right now</h2>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-chip">
+          <div class="tool-name">Claude Code</div>
+          <div class="tool-desc">AI pair programmer — built this entire dashboard from scratch</div>
+        </div>
+        <div class="tool-chip">
+          <div class="tool-name">gstack</div>
+          <div class="tool-desc">YC's AI engineering framework — /qa, /ship, /browse, /office-hours</div>
+        </div>
+        <div class="tool-chip">
+          <div class="tool-name">GitHub Pages</div>
+          <div class="tool-desc">Live deployment — every push ships to production instantly</div>
+        </div>
+        <div class="tool-chip">
+          <div class="tool-name">Yahoo Finance API</div>
+          <div class="tool-desc">Live stock, ETF &amp; crypto prices via CORS proxy with fallback chain</div>
+        </div>
+        <div class="tool-chip">
+          <div class="tool-name">Open-Meteo</div>
+          <div class="tool-desc">Live 7-day weather — no API key required, zero-cost</div>
+        </div>
+        <div class="tool-chip">
+          <div class="tool-name">GitHub Gist Sync</div>
+          <div class="tool-desc">Cross-device data sync with no server, no database — just a PAT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CASE STUDIES -->
+    <div class="section">
+      <div class="section-header">
+        <span>Built</span>
+        <h2>Every page is a live project</h2>
+      </div>
+      <div class="cases-grid">
+
+        <a href="index.html" class="case-card">
+          <div class="case-card-top">
+            <h3>Mr. Tight — Portfolio Tracker</h3>
+            <span class="arrow">↗</span>
+          </div>
+          <p>Live stock, ETF &amp; crypto dashboard. Real-time prices, P&amp;L tracking, and index values. Pure vanilla JS, no framework.</p>
+          <span class="case-tag">Live Data</span>
+        </a>
+
+        <a href="ainews.html" class="case-card">
+          <div class="case-card-top">
+            <h3>AI News</h3>
+            <span class="arrow">↗</span>
+          </div>
+          <p>Live AI headlines and videos. RSS feed aggregation with a 3-proxy fallback chain and 7-second timeout logic.</p>
+          <span class="case-tag">RSS + APIs</span>
+        </a>
+
+        <a href="rips_dip.html" class="case-card">
+          <div class="case-card-top">
+            <h3>Rip's Dip</h3>
+            <span class="arrow">↗</span>
+          </div>
+          <p>Personalized page for a friend — MN sports, fishing links, First Ave bands, live BTC/ETH prices. Built to spec.</p>
+          <span class="case-tag">Custom Build</span>
+        </a>
+
+        <a href="helmsdeep.html" class="case-card">
+          <div class="case-card-top">
+            <h3>Helm's Deep</h3>
+            <span class="arrow">↗</span>
+          </div>
+          <p>Brad's lair — MN sports, Burnsville Jags, personalized news and links. Another fully custom themed page.</p>
+          <span class="case-tag">Custom Build</span>
+        </a>
+
+        <a href="timmy.html" class="case-card">
+          <div class="case-card-top">
+            <h3>Timmy's Corner</h3>
+            <span class="arrow">↗</span>
+          </div>
+          <p>Tips and suggested reading, synced across devices via GitHub Gist. Editable in the browser, no backend.</p>
+          <span class="case-tag">Serverless Sync</span>
+        </a>
+
+        <a href="music.html" class="case-card">
+          <div class="case-card-top">
+            <h3>Music Picks</h3>
+            <span class="arrow">↗</span>
+          </div>
+          <p>Editable album picks with live iTunes album art fetched by search. Picks persist via cross-device Gist sync.</p>
+          <span class="case-tag">iTunes API</span>
+        </a>
+
+        <a href="weather.html" class="case-card">
+          <div class="case-card-top">
+            <h3>Weather</h3>
+            <span class="arrow">↗</span>
+          </div>
+          <p>7-day forecast using the Open-Meteo API. Zero API key, zero cost. Location: Aberdeen, SD.</p>
+          <span class="case-tag">Zero-Cost API</span>
+        </a>
+
+        <a href="research.html" class="case-card">
+          <div class="case-card-top">
+            <h3>Research</h3>
+            <span class="arrow">↗</span>
+          </div>
+          <p>Earnings dates and analyst consensus data. A personal tool for tracking market events around holdings.</p>
+          <span class="case-tag">Finance Tools</span>
+        </a>
+
+        <a href="csvanalyzer.html" class="case-card">
+          <div class="case-card-top">
+            <h3>CSV Analyzer</h3>
+            <span class="arrow">↗</span>
+          </div>
+          <p>Client-side data profiling tool. Drop any CSV — gets parsed in the browser, never touches a server. Auto-detects column types, flags nulls and duplicates, scores completeness, and renders Chart.js histograms and frequency distributions on the fly. Zero infrastructure, instant feedback loop.</p>
+          <span class="case-tag">Client-Side ETL</span>
+          <span class="case-tag">Data Profiling</span>
+          <span class="case-tag">Chart.js</span>
+        </a>
+
+        <!-- Why We're Better — full width pitch -->
+        <div class="case-card" style="grid-column: 1 / -1; flex-direction: column; gap: 0; padding: 0; overflow: hidden; cursor: default;">
+
+          <!-- Header -->
+          <div style="padding: 20px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: baseline; gap: 12px;">
+            <span style="font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #22c55e;">Client Pitch</span>
+            <h3 style="font-size: 1rem; color: #f1f5f9;">Why We're Better</h3>
+            <span style="font-size: 0.78rem; color: #475569; margin-left: auto;">lookslikelarry.com — 5 directions, built with AI</span>
+          </div>
+
+          <div class="why-better-body" style="display: flex; align-items: stretch; gap: 0;">
+
+            <!-- BEFORE column -->
+            <div class="why-better-before" style="width: 200px; flex-shrink: 0; padding: 20px 18px; border-right: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.15);">
+              <div style="font-size: 0.62rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #475569;">Before</div>
+              <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-decoration: line-through; line-height: 1.3;">lookslikelarry.com</div>
+              <img src="./larryshoot.webp" alt="Old site" style="width: 100%; height: 90px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); opacity: 0.45;" onerror="this.style.display='none'">
+              <p style="font-size: 0.74rem; color: #475569; line-height: 1.5; flex: 1;">Static. No story. No reason to stay. A placeholder, not a presence.</p>
+            </div>
+
+            <!-- AFTER — 5 tiles -->
+            <div class="why-better-tiles" style="flex: 1; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;">
+
+              <a href="toddfather.html" style="text-decoration: none; padding: 18px 14px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; gap: 8px; background: rgba(196,96,42,0.04); transition: background 0.15s;" onmouseover="this.style.background='rgba(196,96,42,0.1)'" onmouseout="this.style.background='rgba(196,96,42,0.04)'">
+                <div style="font-size: 0.58rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #c4602a;">Cinematic</div>
+                <img src="./toddfather.jpg" alt="Cinematic" style="width: 100%; height: 70px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(196,96,42,0.3);" onerror="this.style.display='none'">
+                <div style="font-size: 0.75rem; font-weight: 700; color: #d87840; line-height: 1.3;">ToddFather Classic</div>
+                <p style="font-size: 0.68rem; color: #64748b; line-height: 1.45; flex: 1;">Bebas Neue, rust palette, film-grade presence.</p>
+                <span style="font-size: 0.62rem; color: #c4602a;">View ↗</span>
+              </a>
+
+              <a href="futurefather.html" style="text-decoration: none; padding: 18px 14px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; gap: 8px; background: rgba(99,102,241,0.04); transition: background 0.15s;" onmouseover="this.style.background='rgba(99,102,241,0.1)'" onmouseout="this.style.background='rgba(99,102,241,0.04)'">
+                <div style="font-size: 0.58rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #818cf8;">Future</div>
+                <img src="./future_todd.png" alt="Future" style="width: 100%; height: 70px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(99,102,241,0.3);" onerror="this.style.display='none'">
+                <div style="font-size: 0.75rem; font-weight: 700; color: #a5b4fc; line-height: 1.3;">Future Vision</div>
+                <p style="font-size: 0.68rem; color: #64748b; line-height: 1.45; flex: 1;">Exo 2, neon-on-void, sci-fi energy.</p>
+                <span style="font-size: 0.62rem; color: #818cf8;">View ↗</span>
+              </a>
+
+              <a href="aifather.html" style="text-decoration: none; padding: 18px 14px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; gap: 8px; background: rgba(6,182,212,0.04); transition: background 0.15s;" onmouseover="this.style.background='rgba(6,182,212,0.1)'" onmouseout="this.style.background='rgba(6,182,212,0.04)'">
+                <div style="font-size: 0.58rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #22d3ee;">AI</div>
+                <img src="./ai_logo.png" alt="AI" style="width: 100%; height: 70px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(6,182,212,0.3);" onerror="this.style.display='none'">
+                <div style="font-size: 0.75rem; font-weight: 700; color: #67e8f9; line-height: 1.3;">AI Father</div>
+                <p style="font-size: 0.68rem; color: #64748b; line-height: 1.45; flex: 1;">Orbitron, cyan grid, machine intelligence.</p>
+                <span style="font-size: 0.62rem; color: #22d3ee;">View ↗</span>
+              </a>
+
+              <a href="expeditionfather.html" style="text-decoration: none; padding: 18px 14px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; gap: 8px; background: rgba(245,158,11,0.04); transition: background 0.15s;" onmouseover="this.style.background='rgba(245,158,11,0.1)'" onmouseout="this.style.background='rgba(245,158,11,0.04)'">
+                <div style="font-size: 0.58rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #f59e0b;">Retro</div>
+                <img src="./toddsvan.jpg" alt="Retro" style="width: 100%; height: 70px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(245,158,11,0.3);" onerror="this.style.display='none'">
+                <div style="font-size: 0.75rem; font-weight: 700; color: #fbbf24; line-height: 1.3;">Retro Father</div>
+                <p style="font-size: 0.68rem; color: #64748b; line-height: 1.45; flex: 1;">Barlow, amber tones, adventure-brand feel.</p>
+                <span style="font-size: 0.62rem; color: #f59e0b;">View ↗</span>
+              </a>
+
+              <a href="monsterfather.html" style="text-decoration: none; padding: 18px 14px; display: flex; flex-direction: column; gap: 8px; background: rgba(239,68,68,0.04); transition: background 0.15s;" onmouseover="this.style.background='rgba(239,68,68,0.1)'" onmouseout="this.style.background='rgba(239,68,68,0.04)'">
+                <div style="font-size: 0.58rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #ef4444;">Monster</div>
+                <img src="./toddfather3.png" alt="Monster" style="width: 100%; height: 70px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(239,68,68,0.3);" onerror="this.style.display='none'">
+                <div style="font-size: 0.75rem; font-weight: 700; color: #fca5a5; line-height: 1.3;">Monster Father</div>
+                <p style="font-size: 0.68rem; color: #64748b; line-height: 1.45; flex: 1;">Bold, dark, high-energy brand identity.</p>
+                <span style="font-size: 0.62rem; color: #ef4444;">View ↗</span>
+              </a>
+
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div style="padding: 12px 24px; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(34,197,94,0.03); display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-size: 0.72rem; color: #475569;">Each direction built with AI in hours — not weeks. Pick a vibe, we ship it.</span>
+            <span style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #22c55e;">Website Rebuild · 5 Directions</span>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ABOUT -->
+    <div class="section">
+      <div class="section-header">
+        <span>About</span>
+        <h2>Background</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-item">
+          <div class="about-label">Experience</div>
+          <div class="about-value">20+ years in software development — core background in data: ETL, Oracle, SQL Server, full-stack</div>
+        </div>
+        <div class="about-item">
+          <div class="about-label">Current Focus</div>
+          <div class="about-value">AI-assisted development, rapid prototyping, and shipping real working software</div>
+        </div>
+        <div class="about-item">
+          <div class="about-label">What I Build With</div>
+          <div class="about-value">Claude Code, gstack, vanilla JS, GitHub Pages, live APIs — no framework needed</div>
+        </div>
+        <div class="about-item">
+          <div class="about-label">Status</div>
+          <div class="about-value">Open to work — consulting, contract, or full-time</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta">
+      <h2>Let's Talk</h2>
+      <p>If you're building something and need a developer who knows how to ship — I'd love to hear about it.</p>
+      <div class="contact-links">
+        <a href="resume.html" class="contact-btn contact-btn-primary">
+          📄 View Resume
+        </a>
+        <a href="mailto:tomhusom@gmail.com" class="contact-btn contact-btn-secondary">
+          ✉ tomhusom@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/thomas-husom-0418314/" target="_blank" rel="noopener" class="contact-btn contact-btn-secondary">
+          LinkedIn
+        </a>
+        <a href="https://github.com/tomhusom-sudo" target="_blank" rel="noopener" class="contact-btn contact-btn-secondary">
+          GitHub
+        </a>
+      </div>
+    </div>
+
+    <div class="footer">
+      Built with Claude Code + gstack &nbsp;·&nbsp; Shipped to production on every push &nbsp;·&nbsp; <a href="dashboard.html" style="color:#334155;">Honest Tom's Dashboard</a>
+    </div>
+
+  </div>
+</body>
+</html>
