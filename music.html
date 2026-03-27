@@ -337,7 +337,7 @@
               var amzBtn = '<a class="amazon-link" href="' + amzUrl + '" target="_blank" rel="noopener">'
                 + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.354 15.354A9 9 0 0 1 4.646 3.646"/><path d="M21 21l-4-4"/><path d="M3 3l4 4"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/></svg>'
                 + 'Amazon ↗</a>';
-              return '<div class="pick-links">' + listenBtn + amzBtn + '</div>';
+              return '<div class="pick-links">' + listenBtn + (spotifyEmbed ? '' : amzBtn) + '</div>';
             })()
         + '</div>'
         + '<div class="pick-actions">'
