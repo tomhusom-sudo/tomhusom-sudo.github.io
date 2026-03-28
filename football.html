@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Mattel Electronic Football — Reimagined</title>
   <script>
-    var VER = 'v=20260328h';
+    var VER = 'v=20260328i';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -385,49 +385,84 @@
       justify-content: center;
     }
 
-    .team-btn {
+    /* ── TEAM ITEM wrapper ── */
+    .team-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5px;
-      background: rgba(255,255,255,0.04);
-      border: 1.5px solid rgba(255,255,255,0.08);
-      border-radius: 11px;
-      padding: 10px 7px 8px;
+      gap: 7px;
       cursor: pointer;
-      width: 70px;
-      transition: background 0.18s, border-color 0.18s, transform 0.15s;
     }
 
-    .team-btn:hover {
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.2);
-      transform: translateY(-2px);
-    }
-
-    .team-btn.active {
-      border-color: rgba(74,222,128,0.55);
-      background: rgba(34,197,94,0.1);
-    }
-
-    .team-btn svg { pointer-events: none; }
-
-    /* ── HELMET PNG tint ── */
-    .helmet-wrap {
-      width: 64px;
-      height: 54px;
-      border-radius: 8px;
+    /* ── HELMET BUTTON ── */
+    .team-btn {
+      position: relative;
+      width: 68px;
+      height: 64px;
+      border: none;
+      border-radius: 60% 60% 45% 45% / 55% 55% 45% 45%;
+      background: var(--hbg, #888);
+      cursor: pointer;
       overflow: hidden;
-      background-color: var(--hc, #888);
-      flex-shrink: 0;
+      box-shadow:
+        0 2px 0 var(--hs1),
+        0 4px 0 var(--hs2),
+        0 6px 0 var(--hs3),
+        0 8px 12px rgba(0,0,0,0.45),
+        inset 0 2px 6px rgba(255,255,255,0.45),
+        inset 0 -3px 6px rgba(0,0,0,0.25);
+      transition: box-shadow 80ms ease, transform 80ms ease;
+    }
+
+    .team-btn:hover { filter: brightness(1.12); }
+
+    .team-btn:active {
+      transform: translateY(5px);
+      box-shadow:
+        0 1px 0 var(--hs1),
+        0 2px 0 var(--hs2),
+        0 3px 6px rgba(0,0,0,0.45),
+        inset 0 2px 6px rgba(255,255,255,0.3),
+        inset 0 -2px 6px rgba(0,0,0,0.35);
+    }
+
+    /* Diagonal shine streak */
+    .team-btn::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 18%;
+      width: 44%;
+      height: 26%;
+      background: rgba(255,255,255,0.38);
+      border-radius: 50%;
+      transform: rotate(-30deg);
       pointer-events: none;
     }
-    .helmet-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      mix-blend-mode: multiply;
+
+    /* Visor bar */
+    .team-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 19%;
+      left: 9%;
+      right: 9%;
+      height: 10%;
+      background: rgba(0,0,0,0.52);
+      border-radius: 3px;
+      pointer-events: none;
+    }
+
+    /* Selected team — green glow ring */
+    .team-item.active .team-btn {
+      box-shadow:
+        0 0 0 2.5px #4ade80,
+        0 2px 0 var(--hs1),
+        0 4px 0 var(--hs2),
+        0 6px 0 var(--hs3),
+        0 8px 12px rgba(0,0,0,0.45),
+        inset 0 2px 6px rgba(255,255,255,0.45),
+        inset 0 -3px 6px rgba(0,0,0,0.25);
     }
 
     .team-btn-name {
@@ -438,17 +473,9 @@
       color: #8a7050;
       text-align: center;
       line-height: 1.3;
+      pointer-events: none;
     }
-    .team-btn.active .team-btn-name { color: #4ade80; }
-
-    .team-btn-sub {
-      font-size: 0.37rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      color: #5a4830;
-      text-align: center;
-    }
-    .team-btn.active .team-btn-sub { color: #22c55e; }
+    .team-item.active .team-btn-name { color: #4ade80; }
 
     /* ── PAGE FOOTER ── */
     .page-footer {
@@ -802,11 +829,16 @@
 
   var currentTheme = 'husom';
 
-  // ── Build helmet using helmet.png tinted with team primary color ──
-  function makeHelmetSVG(t) {
-    return '<div class="helmet-wrap" style="--hc:' + t.hPrimary + '">' +
-           '<img src="helmet.png" alt="">' +
-           '</div>';
+  // ── Darken a hex color by a fraction (0–1) ──
+  function darkenHex(hex, pct) {
+    var h = hex.replace('#','');
+    if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    var r = Math.max(0, Math.floor(parseInt(h.slice(0,2),16) * (1-pct)));
+    var g = Math.max(0, Math.floor(parseInt(h.slice(2,4),16) * (1-pct)));
+    var b = Math.max(0, Math.floor(parseInt(h.slice(4,6),16) * (1-pct)));
+    return '#' + r.toString(16).padStart(2,'0')
+               + g.toString(16).padStart(2,'0')
+               + b.toString(16).padStart(2,'0');
   }
 
   // ── Apply theme to console ──
@@ -828,9 +860,9 @@
     // Update brand company text
     var bc = document.getElementById('brand-company');
     if (bc) bc.textContent = t.name;
-    // Update active button highlight
-    document.querySelectorAll('.team-btn').forEach(function(btn) {
-      btn.classList.toggle('active', btn.dataset.key === key);
+    // Update active item highlight
+    document.querySelectorAll('.team-item').forEach(function(item) {
+      item.classList.toggle('active', item.dataset.key === key);
     });
   }
 
@@ -838,15 +870,28 @@
   function buildTeamSelect() {
     var grid = document.getElementById('team-grid');
     TEAM_ORDER.forEach(function(key) {
-      var t   = TEAMS[key];
+      var t    = TEAMS[key];
+      var bg   = t.shellLight;
+      var s1   = darkenHex(bg, 0.22);
+      var s2   = darkenHex(bg, 0.44);
+      var s3   = darkenHex(bg, 0.62);
+
+      var item = document.createElement('div');
+      item.className   = 'team-item' + (key === currentTheme ? ' active' : '');
+      item.dataset.key = key;
+
       var btn = document.createElement('button');
-      btn.className   = 'team-btn' + (key === currentTheme ? ' active' : '');
-      btn.dataset.key = key;
-      btn.innerHTML   =
-        makeHelmetSVG(t) +
-        '<div class="team-btn-name">' + t.name + '</div>';
-      btn.addEventListener('click', function() { applyTheme(key); });
-      grid.appendChild(btn);
+      btn.className = 'team-btn';
+      btn.style.cssText = '--hbg:' + bg + ';--hs1:' + s1 + ';--hs2:' + s2 + ';--hs3:' + s3;
+
+      var label = document.createElement('div');
+      label.className   = 'team-btn-name';
+      label.textContent = t.name;
+
+      item.addEventListener('click', function() { applyTheme(key); });
+      item.appendChild(btn);
+      item.appendChild(label);
+      grid.appendChild(item);
     });
   }
 
