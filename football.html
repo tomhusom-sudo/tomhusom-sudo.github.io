@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Mattel Electronic Football — Reimagined</title>
   <script>
-    var VER = 'v=20260328r';
+    var VER = 'v=20260328s';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -744,11 +744,11 @@
       helmFilter: 'brightness(4) saturate(0) sepia(0.2)' },
 
     westcoast:   { name:'West Coast', sub:'49ers',
-      shellLight:'#d4aa47', shellMid:'#b3995d', shellDark:'#7a6230',
+      shellLight:'#c4a44a', shellMid:'#a8893e', shellDark:'#7a6228',
       btnTop:'#c8a84c',  btnBot:'#8a6820',  btnShadow:'#5a3e00', btnHL:'rgba(200,180,80,0.3)',
       brandCo:'#b3995d', brandTitle:'#ffffff', tagline:'#cc9944',
       hPrimary:'#aa0000', hSecondary:'#b3995d', hFacemask:'#b3995d',
-      helmFilter: 'sepia(1) saturate(6) hue-rotate(330deg) brightness(0.85)' },
+      helmSrc: 'helmet_westcoast.svg' },
 
     motortown:   { name:'Motor Town', sub:'Lions',
       shellLight:'#40a8d8', shellMid:'#0076b6', shellDark:'#004880',
@@ -875,7 +875,7 @@
       btn.style.setProperty('--hshad2', darkenHex(t.shellDark, 0.35));
 
       var img = document.createElement('img');
-      img.src       = 'svg_helmet.svg';
+      img.src       = t.helmSrc || 'svg_helmet.svg';
       img.alt       = t.name;
       img.draggable = false;
       if (t.helmFilter) img.style.filter = t.helmFilter;
