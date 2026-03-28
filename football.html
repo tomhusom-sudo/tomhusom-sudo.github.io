@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Mattel Electronic Football — Reimagined</title>
   <script>
-    var VER = 'v=20260328o';
+    var VER = 'v=20260328p';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -400,40 +400,48 @@
 
     /* ── HELMET BUTTON ── */
     .helmet-btn {
-      background: none;
+      background: linear-gradient(175deg, var(--hbg1), var(--hbg2));
       border: none;
-      padding: 0;
+      border-radius: 14px;
+      padding: 8px 14px 5px;
       cursor: pointer;
-      display: inline-block;
-      transition: transform 80ms ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 3px 0 var(--hshad),
+        0 6px 0 var(--hshad2),
+        0 10px 20px rgba(0,0,0,0.55),
+        inset 0 1px 0 rgba(255,255,255,0.28);
+      transition: transform 80ms ease, box-shadow 80ms ease, filter 80ms ease;
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* drop-shadow lives on the img so it follows the transparent PNG alpha */
+    .helmet-btn:hover { filter: brightness(1.1); }
+
+    .helmet-btn:active {
+      transform: translateY(5px);
+      box-shadow:
+        0 1px 0 var(--hshad),
+        0 2px 0 var(--hshad2),
+        0 4px 8px rgba(0,0,0,0.4);
+    }
+
+    /* Selected team — green glow ring */
+    .team-item.active .helmet-btn {
+      box-shadow:
+        0 0 0 2.5px #4ade80,
+        0 3px 0 var(--hshad),
+        0 6px 0 var(--hshad2),
+        0 10px 20px rgba(0,0,0,0.55),
+        inset 0 1px 0 rgba(255,255,255,0.28);
+    }
+
     .helmet-btn img {
-      width: 100px;
+      width: 88px;
       display: block;
       pointer-events: none;
       user-select: none;
-      transition: filter 80ms ease;
-      filter: var(--hf) drop-shadow(0 10px 18px rgba(0,0,0,0.5));
-    }
-
-    .helmet-btn:hover img {
-      filter: var(--hf) drop-shadow(0 14px 22px rgba(0,0,0,0.6)) brightness(1.1);
-    }
-
-    .helmet-btn:active {
-      transform: scale(0.93) translateY(6px);
-    }
-
-    .helmet-btn:active img {
-      filter: var(--hf) drop-shadow(0 3px 6px rgba(0,0,0,0.4));
-    }
-
-    /* Selected team — green glow */
-    .team-item.active .helmet-btn img {
-      filter: var(--hf) drop-shadow(0 0 9px #4ade80) drop-shadow(0 10px 18px rgba(0,0,0,0.5));
     }
 
     .team-btn-name {
@@ -807,7 +815,7 @@
   };
 
   var TEAM_ORDER = ['husom','westcoast','motortown','steelcurtain','purplepeeps',
-                    'windycity','broadwayjoes','gmen','theboys','thepack','malosos'];
+                    'windycity','broadwayjoes','theboys','thepack','malosos'];
 
   var currentTheme = 'husom';
 
@@ -861,11 +869,15 @@
       var btn = document.createElement('button');
       btn.className = 'helmet-btn';
 
+      btn.style.setProperty('--hbg1',  t.shellLight);
+      btn.style.setProperty('--hbg2',  t.shellMid);
+      btn.style.setProperty('--hshad', t.shellDark);
+      btn.style.setProperty('--hshad2', darkenHex(t.shellDark, 0.35));
+
       var img = document.createElement('img');
       img.src       = 'helmet2.png';
       img.alt       = t.name;
       img.draggable = false;
-      btn.style.setProperty('--hf', t.helmFilter ? t.helmFilter + ' ' : '');
 
       var label = document.createElement('div');
       label.className   = 'team-btn-name';
