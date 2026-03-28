@@ -240,6 +240,10 @@
       if (!err && Array.isArray(data) && data.length) {
         save(data);
         render();
+      } else {
+        // Gist has no journal data yet — push whatever is in localStorage
+        var local = load();
+        if (local.length) syncPush();
       }
     });
   }
