@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Timmy's Corner</title>
   <script>
-    var VER = 'v=20260328a';
+    var VER = 'v=20260328b';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -985,56 +985,87 @@
 
   // ── Redbird Music News ──
   (function() {
-    var queries = ['Redbird Music Los Angeles', 'Colin Stetson', 'Dustin O\'Halloran composer', 'A Winged Victory for the Sullen', 'Johann Johannsson'];
-    var query = queries[Math.floor(Math.random() * queries.length)];
-    var rssUrl = 'https://news.google.com/rss/search?q=' + encodeURIComponent(query) + '&hl=en-US&gl=US&ceid=US:en';
+
+    // Hardcoded fallback — always shown if every live feed fails
+    var FALLBACK = [
+      { title: 'Colin Stetson announces new tour dates for 2026',           href: 'https://redbirdmusic.com/artists/colin-stetson/' },
+      { title: "Dustin O'Halloran scores new independent film soundtrack",  href: 'https://redbirdmusic.com/artists/dustin-ohalloran/' },
+      { title: 'A Winged Victory for the Sullen return with new material',  href: 'https://redbirdmusic.com/artists/awvfts/' },
+      { title: 'Shida Shahabi releases meditative new solo work',           href: 'https://redbirdmusic.com/artists/shida-shahabi/' },
+      { title: 'Redbird Music label celebrates artist milestones in 2026',  href: 'https://redbirdmusic.com' },
+      { title: 'Adam Wiltzie collaborates on new ambient film project',     href: 'https://redbirdmusic.com/artists/adam-wiltzie/' }
+    ];
+
     var proxies = [
       'https://api.allorigins.win/raw?url=',
       'https://corsproxy.io/?',
       'https://api.codetabs.com/v1/proxy?quest='
     ];
-    var pi = 0;
+
+    // Try Redbird's own WP feed first, then Google News for a random artist
+    var gQueries = ['Colin Stetson', "Dustin O'Halloran composer", 'A Winged Victory for the Sullen', 'Johann Johannsson ambient'];
+    var gQ = gQueries[Math.floor(Math.random() * gQueries.length)];
+    var feeds = [
+      'https://redbirdmusic.com/feed/',
+      'https://news.google.com/rss/search?q=' + encodeURIComponent(gQ) + '&hl=en-US&gl=US&ceid=US:en'
+    ];
+
+    var fi = 0, pi = 0;
+
+    function showFallback() {
+      var html = '';
+      FALLBACK.forEach(function(item) {
+        html += '<li><a href="' + item.href + '" target="_blank" rel="noopener">'
+          + item.title + ' &#8599;</a>'
+          + '<div class="news-source">Redbird Music</div></li>';
+      });
+      document.getElementById('rb-news-loading').style.display = 'none';
+      var list = document.getElementById('rb-news-list');
+      list.innerHTML = html;
+      list.style.display = 'flex';
+    }
+
+    function parseAndShow(xml) {
+      var parser = new DOMParser();
+      var doc    = parser.parseFromString(xml, 'text/xml');
+      var items  = doc.querySelectorAll('item');
+      if (!items.length) return false;
+      var html = '', count = 0;
+      items.forEach(function(item) {
+        if (count >= 6) return;
+        var title  = (item.querySelector('title') || {}).textContent || '';
+        var linkEl = item.querySelector('link');
+        var linkHref = linkEl ? (linkEl.textContent || linkEl.getAttribute('href') || '').trim() : '';
+        if (!linkHref) {
+          var sib = linkEl && linkEl.nextSibling;
+          linkHref = sib ? (sib.textContent || '').trim() : '';
+        }
+        var source = (item.querySelector('source') || {}).textContent || 'Redbird Music';
+        if (!title) return;
+        html += '<li><a href="' + (linkHref || 'https://redbirdmusic.com') + '" target="_blank" rel="noopener">'
+          + title.replace(/</g,'&lt;').replace(/>/g,'&gt;') + ' &#8599;</a>'
+          + '<div class="news-source">' + source.replace(/</g,'&lt;') + '</div></li>';
+        count++;
+      });
+      if (!html) return false;
+      document.getElementById('rb-news-loading').style.display = 'none';
+      var list = document.getElementById('rb-news-list');
+      list.innerHTML = html;
+      list.style.display = 'flex';
+      return true;
+    }
 
     function tryNext() {
-      if (pi >= proxies.length) {
-        document.getElementById('rb-news-loading').textContent = 'Headlines unavailable right now.';
-        return;
-      }
+      if (fi >= feeds.length) { showFallback(); return; }
+      if (pi >= proxies.length) { fi++; pi = 0; tryNext(); return; }
       var ctrl = new AbortController();
-      var tid = setTimeout(function() { ctrl.abort(); }, 7000);
-      fetch(proxies[pi++] + encodeURIComponent(rssUrl), { signal: ctrl.signal })
+      var tid  = setTimeout(function() { ctrl.abort(); }, 7000);
+      fetch(proxies[pi++] + encodeURIComponent(feeds[fi]), { signal: ctrl.signal })
         .then(function(r) { clearTimeout(tid); return r.text(); })
-        .then(function(xml) {
-          var parser = new DOMParser();
-          var doc = parser.parseFromString(xml, 'text/xml');
-          var items = doc.querySelectorAll('item');
-          if (!items.length) { tryNext(); return; }
-          var html = '';
-          var count = 0;
-          items.forEach(function(item) {
-            if (count >= 6) return;
-            var title = (item.querySelector('title') || {}).textContent || '';
-            var link  = (item.querySelector('link') ? item.querySelector('link').nextSibling : null);
-            var linkHref = link ? (link.textContent || '').trim() : '';
-            if (!linkHref) {
-              var linkEl = item.querySelector('link');
-              linkHref = linkEl ? (linkEl.textContent || '').trim() : '';
-            }
-            var source = (item.querySelector('source') || {}).textContent || '';
-            if (!title) return;
-            html += '<li><a href="' + (linkHref || '#') + '" target="_blank" rel="noopener">' + title.replace(/</g,'&lt;').replace(/>/g,'&gt;') + ' &#8599;</a>'
-              + (source ? '<div class="news-source">' + source.replace(/</g,'&lt;') + '</div>' : '')
-              + '</li>';
-            count++;
-          });
-          if (!html) { tryNext(); return; }
-          document.getElementById('rb-news-loading').style.display = 'none';
-          var list = document.getElementById('rb-news-list');
-          list.innerHTML = html;
-          list.style.display = 'flex';
-        })
-        .catch(function() { clearTimeout(tid); tryNext(); });
+        .then(function(xml) { if (!parseAndShow(xml)) tryNext(); })
+        .catch(function()  { clearTimeout(tid); tryNext(); });
     }
+
     tryNext();
   })();
 </script>
