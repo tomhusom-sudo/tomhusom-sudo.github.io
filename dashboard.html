@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Honest Tom's Dashboard</title>
   <script>
-    var VER = 'v=20260328d';
+    var VER = 'v=20260328e';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -461,6 +461,10 @@
     .card.active.wayne-bg,.card.active.wayne-bg:hover{background:linear-gradient(135deg,rgba(10,14,23,0.72) 0%,rgba(10,14,23,0.38) 45%,rgba(10,14,23,0.08) 100%),url('./wayne.png') 50% 25%/cover no-repeat !important;border-color:rgba(34,197,94,0.35) !important;}
     .card.active.wayne-bg .card-title{color:#ffffff;text-shadow:0 1px 6px rgba(0,0,0,0.8);}
     .card.active.wayne-bg .card-desc{color:#ddeedd;text-shadow:0 1px 4px rgba(0,0,0,0.7);}
+    .card.active.friends-bg,.card.active.friends-bg:hover{background:linear-gradient(135deg,rgba(10,14,23,0.72) 0%,rgba(10,14,23,0.38) 45%,rgba(10,14,23,0.08) 100%),url('./friends.png') 50% 35%/cover no-repeat !important;border-color:rgba(34,197,94,0.35) !important;}
+    .card.active.friends-bg .card-title{color:#ffffff;text-shadow:0 1px 6px rgba(0,0,0,0.8);}
+    .card.active.friends-bg .card-eyebrow{color:#6ef59a;text-shadow:0 1px 4px rgba(0,0,0,0.7);}
+    .card.active.friends-bg .card-desc{color:#ddeedd;text-shadow:0 1px 4px rgba(0,0,0,0.7);}
     .card.active.excel-bg,.card.active.excel-bg:hover{background:linear-gradient(135deg,rgba(10,14,23,0.72) 0%,rgba(10,14,23,0.38) 45%,rgba(10,14,23,0.08) 100%),url('./excel.png') 50% 25%/cover no-repeat !important;border-color:rgba(34,197,94,0.35) !important;}
     .card.active.excel-bg .card-title{color:#ffffff;text-shadow:0 1px 6px rgba(0,0,0,0.8);}
     .card.active.excel-bg .card-desc{color:#ddeedd;text-shadow:0 1px 4px rgba(0,0,0,0.7);}
@@ -782,21 +786,14 @@
       </div>
     </a>
 
-    <!-- Rip's Dip -->
-    <a class="card active ave-bg" href="./rips_dip.html">
-      <div class="card-icon">
-        <img
-          src="./rips_dip.png"
-          alt="Rip's Dip"
-          style="width:56px;height:56px;object-fit:cover;object-position:top;border-radius:10px;border:1px solid rgba(74,222,128,0.25);box-shadow:0 4px 16px rgba(0,0,0,0.5);"
-          onerror="this.outerHTML='<span style=&quot;font-size:2.4rem&quot;>🎸</span>'"
-        >
-      </div>
-      <div class="card-eyebrow">For Pat Ripley · Flat Buzz</div>
-      <div class="card-title">Rip's Dip</div>
-      <div class="card-desc">MN sports, smallmouth bass fishing, First Ave bands, Bitcoin &amp; ETH prices — all things Rip.</div>
+    <!-- Family & Friends hub -->
+    <a class="card active friends-bg" href="./friends.html">
+      <div class="card-icon" style="font-size:2.4rem;line-height:1;">👥</div>
+      <div class="card-eyebrow">Personal · Hub</div>
+      <div class="card-title">Family &amp; Friends</div>
+      <div class="card-desc">Rip's Dip, Wayne's Corner and the crew — pages built for the people.</div>
       <div class="card-cta">
-        Open Rip's Dip
+        Open
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M3 8h10M9 4l4 4-4 4" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -817,22 +814,6 @@
       <div class="card-desc">Tom's current suggested listening — albums, tracks, and playlists worth your time.</div>
       <div class="card-cta">
         Open Music
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M3 8h10M9 4l4 4-4 4" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-    </a>
-
-    <!-- Wayne's Corner -->
-    <a class="card active wayne-bg" href="./waynes_corner.html">
-      <div class="card-icon">
-        <img src="./wayne.png" alt="Wayne's Corner" style="width:56px;height:56px;object-fit:cover;object-position:top;border-radius:10px;border:1px solid rgba(74,222,128,0.25);box-shadow:0 4px 16px rgba(0,0,0,0.5);" onerror="this.outerHTML='🎣'">
-      </div>
-      <div class="card-eyebrow">For Wayne · SD &amp; MN</div>
-      <div class="card-title">Wayne's Corner</div>
-      <div class="card-desc">MN sports, South Dakota walleye fishing, golf tips &amp; news — all things Wayne.</div>
-      <div class="card-cta">
-        Open Wayne's Corner
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M3 8h10M9 4l4 4-4 4" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
