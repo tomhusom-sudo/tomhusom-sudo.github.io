@@ -194,6 +194,15 @@
     }
     .card.active.wayne-bg .card-title { color: #ffffff; text-shadow: 0 1px 6px rgba(0,0,0,0.8); }
     .card.active.wayne-bg .card-desc  { color: #ddeedd; text-shadow: 0 1px 4px rgba(0,0,0,0.7); }
+
+    .card.active.helms-bg,
+    .card.active.helms-bg:hover {
+      background: linear-gradient(135deg,rgba(10,14,23,0.72) 0%,rgba(10,14,23,0.38) 45%,rgba(10,14,23,0.08) 100%),
+        url('./helms.png') 50% 25%/cover no-repeat !important;
+      border-color: rgba(34,197,94,0.35) !important;
+    }
+    .card.active.helms-bg .card-title { color: #ffffff; text-shadow: 0 1px 6px rgba(0,0,0,0.8); }
+    .card.active.helms-bg .card-desc  { color: #ddeedd; text-shadow: 0 1px 4px rgba(0,0,0,0.7); }
   </style>
 </head>
 <body>
@@ -244,6 +253,26 @@
       <div class="card-desc">MN sports, South Dakota walleye fishing, golf tips &amp; news — all things Wayne.</div>
       <div class="card-cta">
         Open Wayne's Corner
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </a>
+
+    <!-- Helm's Deep -->
+    <a class="card active helms-bg" href="./helmsdeep.html">
+      <div class="card-icon">
+        <img
+          src="./spackler.webp"
+          alt="Carl Spackler"
+          style="width:56px;height:56px;object-fit:cover;object-position:top;border-radius:10px;border:1px solid rgba(74,222,128,0.25);box-shadow:0 4px 16px rgba(0,0,0,0.5);"
+        >
+      </div>
+      <div class="card-eyebrow">Brad's Lair</div>
+      <div class="card-title">Helm's Deep</div>
+      <div class="card-desc">Minnesota Sports, Burnsville Jags, Flog, SPOK in the News and more outer joins going nowhere fast. How about a Fresca?</div>
+      <div class="card-cta">
+        Enter the Deep
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M3 8h10M9 4l4 4-4 4" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
