@@ -978,8 +978,12 @@
       if (!err && data) {
         if (Array.isArray(data.tips))     { saveTips(data.tips);         renderTips(); }
         if (Array.isArray(data.articles)) { saveArticles(data.articles); renderArticles(); }
+        setSyncStatus('synced');
+      } else {
+        // Gist has no timmy data — push local entries if we have any
+        var tips = loadTips(), articles = loadArticles();
+        if (tips.length || articles.length) { syncPush(); } else { setSyncStatus(err ? 'error' : 'synced'); }
       }
-      setSyncStatus(err ? 'error' : 'synced');
     });
   }
 

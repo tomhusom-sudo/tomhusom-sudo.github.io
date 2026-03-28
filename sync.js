@@ -78,12 +78,14 @@ var GistSync = (function () {
     pull(function(d, e) { cb(e ? null : (d[key] || null), e); });
   }
 
-  // ── Set one section — merges into cache, then pushes once ──
+  // ── Set one section — pulls live Gist first, merges, then pushes ──
   function setSection(key, val, cb) {
-    var data = getCache();
-    data[key] = val;
-    data._updated = new Date().toISOString();
-    push(data, cb || function() {});
+    pull(function(live, err) {
+      var data = (live && !err) ? live : getCache();
+      data[key] = val;
+      data._updated = new Date().toISOString();
+      push(data, cb || function() {});
+    });
   }
 
   // ── First-time setup: search user's Gists for ours, else create one ──
