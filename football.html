@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Mattel Electronic Football — Reimagined</title>
   <script>
-    var VER = 'v=20260328f';
+    var VER = 'v=20260328g';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -730,7 +730,7 @@
   // =================================================================
 
   var TEAMS = {
-    husom:       { name:'Husom Electronics', sub:'Default',
+    husom:       { name:'Pheasants', sub:'Default',
       shellLight:'#f5ecd8', shellMid:'#d8c8a4', shellDark:'#b89e70',
       btnTop:'#e42222',  btnBot:'#920c0c',  btnShadow:'#5e0000', btnHL:'rgba(255,130,130,0.3)',
       brandCo:'#7a6238', brandTitle:'#b81200', tagline:'#6a5230',
@@ -827,7 +827,7 @@
     r.style.setProperty('--tagline',      t.tagline);
     // Update brand company text
     var bc = document.getElementById('brand-company');
-    if (bc) bc.textContent = key === 'husom' ? 'Husom Electronics' : t.name;
+    if (bc) bc.textContent = t.name;
     // Update active button highlight
     document.querySelectorAll('.team-btn').forEach(function(btn) {
       btn.classList.toggle('active', btn.dataset.key === key);
