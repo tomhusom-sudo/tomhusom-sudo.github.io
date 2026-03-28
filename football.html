@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Mattel Electronic Football — Reimagined</title>
   <script>
-    var VER = 'v=20260328c';
+    var VER = 'v=20260328d';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -412,6 +412,29 @@
 
     .team-btn svg { pointer-events: none; }
 
+    /* ── HELMET PNG tint ── */
+    .helmet-wrap {
+      position: relative;
+      width: 50px;
+      height: 39px;
+      isolation: isolate;
+      flex-shrink: 0;
+      pointer-events: none;
+    }
+    .helmet-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .helmet-tint {
+      position: absolute;
+      inset: 0;
+      background-color: var(--hc, #888);
+      mix-blend-mode: color;
+      border-radius: 4px;
+    }
+
     .team-btn-name {
       font-size: 0.44rem;
       font-weight: 800;
@@ -784,28 +807,12 @@
 
   var currentTheme = 'husom';
 
-  // ── Build helmet SVG (64×50 viewBox, right-facing side profile) ──
+  // ── Build helmet using helmet.png tinted with team primary color ──
   function makeHelmetSVG(t) {
-    var p = t.hPrimary, s = t.hSecondary, f = t.hFacemask;
-    return [
-      '<svg viewBox="0 0 64 50" xmlns="http://www.w3.org/2000/svg" width="50" height="39">',
-      // Shell — D-shaped dome
-      '<path d="M7 44 C3 44 3 40 3 30 C3 10 13 4 26 4 L42 4 C54 4 56 12 56 21 L56 32 C56 40 50 44 42 44 Z"',
-      '  fill="' + p + '" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>',
-      // Team stripe (diagonal band front to back)
-      '<path d="M26 4 L33 4 L45 44 L38 44 Z" fill="' + s + '" opacity="0.9"/>',
-      // Facemask — 3 horizontal bars extending right of shell
-      '<rect x="53" y="19" width="10" height="3"   rx="1.5" fill="' + f + '"/>',
-      '<rect x="53" y="25" width="10" height="3"   rx="1.5" fill="' + f + '"/>',
-      '<rect x="53" y="31" width="10" height="3"   rx="1.5" fill="' + f + '"/>',
-      // Facemask vertical bar (J-hook connector)
-      '<rect x="57"  y="19" width="2.5" height="15" rx="1.25" fill="' + f + '"/>',
-      // Ear hole
-      '<circle cx="13" cy="29" r="3.5" fill="rgba(0,0,0,0.45)"/>',
-      // Shine / glare highlight on dome
-      '<ellipse cx="38" cy="12" rx="9" ry="4" fill="rgba(255,255,255,0.2)" transform="rotate(-20 38 12)"/>',
-      '</svg>'
-    ].join('');
+    return '<div class="helmet-wrap" style="--hc:' + t.hPrimary + '">' +
+           '<img src="helmet.png" alt="">' +
+           '<div class="helmet-tint"></div>' +
+           '</div>';
   }
 
   // ── Apply theme to console ──
