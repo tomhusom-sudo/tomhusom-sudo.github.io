@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Timmy's Corner</title>
   <script>
-    var VER = 'v=20260327a';
+    var VER = 'v=20260328a';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -896,29 +896,44 @@
     if (!ticker || titleEl.value.trim()) return; // don't overwrite if already filled
     titleEl.placeholder = 'Looking up…';
 
-    var yahooUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(ticker) + '?interval=1d&range=1d';
+    // Use v1/search — more reliable across stocks, ETFs, and crypto than v8/chart
+    var searchUrl = 'https://query1.finance.yahoo.com/v1/finance/search?q=' + encodeURIComponent(ticker) + '&quotesCount=1&newsCount=0&listsCount=0';
+    var chartUrl  = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(ticker) + '?interval=1d&range=1d';
     var proxies = [
       'https://api.allorigins.win/raw?url=',
       'https://corsproxy.io/?',
       'https://api.codetabs.com/v1/proxy?quest='
     ];
 
-    function tryProxy(i) {
-      if (i >= proxies.length) {
+    function extractSearchName(d) {
+      var q = d && d.quotes && d.quotes[0];
+      return (q && (q.longname || q.shortname)) || '';
+    }
+    function extractChartName(d) {
+      var meta = d && d.chart && d.chart.result && d.chart.result[0] && d.chart.result[0].meta;
+      return (meta && (meta.longName || meta.shortName)) || '';
+    }
+
+    // Try search endpoint across proxies first, then chart endpoint as final fallback
+    var attempts = proxies.map(function(p) { return { proxy: p, url: searchUrl, extract: extractSearchName }; })
+      .concat(proxies.map(function(p) { return { proxy: p, url: chartUrl, extract: extractChartName }; }));
+
+    function tryNext(i) {
+      if (i >= attempts.length) {
         titleEl.placeholder = 'Asset name (auto-fills)';
         return;
       }
-      fetch(proxies[i] + encodeURIComponent(yahooUrl))
+      var a = attempts[i];
+      fetch(a.proxy + encodeURIComponent(a.url))
         .then(function(r) { return r.json(); })
         .then(function(d) {
-          var meta = d && d.chart && d.chart.result && d.chart.result[0] && d.chart.result[0].meta;
-          var name = (meta && (meta.longName || meta.shortName)) || '';
+          var name = a.extract(d);
           titleEl.placeholder = 'Asset name (auto-fills)';
-          if (name) { titleEl.value = name; } else { tryProxy(i + 1); }
+          if (name) { titleEl.value = name; } else { tryNext(i + 1); }
         })
-        .catch(function() { tryProxy(i + 1); });
+        .catch(function() { tryNext(i + 1); });
     }
-    tryProxy(0);
+    tryNext(0);
   }
 
   // ── Allow Enter key in single-line inputs ──
