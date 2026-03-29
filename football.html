@@ -746,10 +746,10 @@
     document.addEventListener('keydown', function (e) {
       var nr = offRow, nc = offCol;
 
-      if      (e.key === 'ArrowUp'    || e.key === 'w' || e.key === 'W') nr--;
-      else if (e.key === 'ArrowDown'  || e.key === 's' || e.key === 'S') nr++;
-      else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') nc++;
-      else if (e.key === 'ArrowLeft'  || e.key === 'a' || e.key === 'A') nc--;
+      if      (e.key === 'ArrowUp')    nr--;
+      else if (e.key === 'ArrowDown')  nr++;
+      else if (e.key === 'ArrowRight') nc++;
+      else if (e.key === 'ArrowLeft')  nc--;
       else return;
 
       // Prevent page scroll on arrow keys
