@@ -156,8 +156,14 @@
 
     .footer { margin-top: 48px; font-size: 0.67rem; color: #2e3e1e; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 16px; }
   </style>
-<!-- Plausible Analytics -->
-<script defer data-domain="tomhusom-sudo.github.io" src="https://plausible.io/js/script.js"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KFJ9RZ2QS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-9KFJ9RZ2QS');
+</script>
 </head>
 <body>
 <div class="page">
@@ -201,10 +207,10 @@
     <!-- API key setup -->
     <div id="vis-setup" style="margin-top:4px;">
       <div style="font-size:0.75rem;color:#a8bc98;margin-bottom:10px;line-height:1.55;">
-        Powered by Plausible — already tracking the site. To display stats, paste a Plausible API key:<br>
-        <span style="color:#6a8a52;">plausible.io → Settings → API Keys → Create API Key</span>
+        Powered by Google Analytics — tracking the whole site. To display stats here, paste your GA4 API secret:<br>
+        <span style="color:#6a8a52;">analytics.google.com → Admin → Data Streams → your stream → Measurement Protocol API secrets</span>
       </div>
-      <input id="vis-key-input" type="password" placeholder="Paste Plausible API key…"
+      <input id="vis-key-input" type="password" placeholder="Paste GA4 API secret…"
         style="width:100%;background:rgba(0,0,0,0.4);border:1px solid rgba(34,197,94,0.2);border-radius:8px;color:#e2e8f0;font-family:'Inter',sans-serif;font-size:13px;padding:10px 12px;outline:none;margin-bottom:10px;"
         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       <button onclick="saveVisKey()"
