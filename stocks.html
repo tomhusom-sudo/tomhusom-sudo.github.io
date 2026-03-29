@@ -19,7 +19,7 @@
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
     // Force fresh load on every deploy — update VER when pushing new prices
-    var VER = 'v=20260329b';
+    var VER = 'v=20260329c';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER + (location.hash || ''));
     }
@@ -709,14 +709,16 @@
 
     // ── DEFAULT PORTFOLIO DATA ──
     var DEFAULT_ASSETS = [
-      { ticker:'AA',   name:'Alcoa Corporation',                  type:'stock',  domain:'alcoa.com',        logoUrl:'',                                                  qty:555555, avgCost:7.00        },
-      { ticker:'MSFT', name:'Microsoft Corporation',              type:'stock',  domain:'microsoft.com',    logoUrl:'',                                                  qty:50,     avgCost:310.00       },
-      { ticker:'AMZN', name:'Amazon.com, Inc.',                   type:'stock',  domain:'amazon.com',       logoUrl:'',                                                  qty:75,     avgCost:165.00       },
-      { ticker:'BTC',  name:'Bitcoin',                            type:'crypto', domain:'',                 logoUrl:'https://cryptologos.cc/logos/bitcoin-btc-logo.png', qty:0.5,    avgCost:54846.21     },
-      { ticker:'NVDA', name:'NVIDIA Corporation',                 type:'stock',  domain:'nvidia.com',       logoUrl:'',                                                  qty:100,    avgCost:120.00       },
-      { ticker:'VOO',  name:'Vanguard S&P 500 ETF',              type:'etf',    domain:'vanguard.com',     logoUrl:'',                                                  qty:30,     avgCost:450.00       },
-      { ticker:'VONG', name:'Vanguard Russell 1000 Growth ETF',  type:'etf',    domain:'vanguard.com',     logoUrl:'',                                                  qty:40,     avgCost:95.00        },
-      { ticker:'EXE',  name:'Expand Energy Corporation',          type:'stock',  domain:'expandenergy.com', logoUrl:'',                                                  qty:60,     avgCost:85.00        },
+      { ticker:'AA',   name:'Alcoa Corporation',                  type:'stock',  domain:'alcoa.com',        logoUrl:'',                                                   qty:555555, avgCost:7.00        },
+      { ticker:'MSFT', name:'Microsoft Corporation',              type:'stock',  domain:'microsoft.com',    logoUrl:'',                                                   qty:50,     avgCost:310.00      },
+      { ticker:'AMZN', name:'Amazon.com, Inc.',                   type:'stock',  domain:'amazon.com',       logoUrl:'',                                                   qty:75,     avgCost:165.00      },
+      { ticker:'BTC',  name:'Bitcoin',                            type:'crypto', domain:'',                 logoUrl:'https://cryptologos.cc/logos/bitcoin-btc-logo.png',  qty:0.5,    avgCost:54846.21    },
+      { ticker:'ETH',  name:'Ethereum',                           type:'crypto', domain:'',                 logoUrl:'https://cryptologos.cc/logos/ethereum-eth-logo.png', qty:2,      avgCost:2500.00     },
+      { ticker:'NVDA', name:'NVIDIA Corporation',                 type:'stock',  domain:'nvidia.com',       logoUrl:'',                                                   qty:100,    avgCost:120.00      },
+      { ticker:'VOO',  name:'Vanguard S&P 500 ETF',              type:'etf',    domain:'vanguard.com',     logoUrl:'',                                                   qty:30,     avgCost:450.00      },
+      { ticker:'VONG', name:'Vanguard Russell 1000 Growth ETF',  type:'etf',    domain:'vanguard.com',     logoUrl:'',                                                   qty:40,     avgCost:95.00       },
+      { ticker:'EXE',  name:'Expand Energy Corporation',          type:'stock',  domain:'expandenergy.com', logoUrl:'',                                                   qty:60,     avgCost:85.00       },
+      { ticker:'ARKK', name:'ARK Innovation ETF',                 type:'etf',    domain:'ark-funds.com',    logoUrl:'',                                                   qty:50,     avgCost:50.00       },
     ];
 
     var editingIndex = null;
@@ -725,12 +727,14 @@
 
     // ── STORAGE ──
     var _cache = null;
+    var PORTFOLIO_VER = '20260329';  // bump this when DEFAULT_ASSETS changes
 
     function loadAssets() {
       if (_cache) return _cache;
       try {
-        var s = localStorage.getItem('mti_assets');
-        if (s) { _cache = JSON.parse(s); return _cache; }
+        var ver = localStorage.getItem('mti_assets_ver');
+        var s   = localStorage.getItem('mti_assets');
+        if (s && ver === PORTFOLIO_VER) { _cache = JSON.parse(s); return _cache; }
       } catch(e) {}
       _cache = DEFAULT_ASSETS.map(function(a){ return Object.assign({}, a); });
       return _cache;
@@ -738,17 +742,23 @@
 
     function saveAssets(assets) {
       _cache = assets;
-      try { localStorage.setItem('mti_assets', JSON.stringify(assets)); } catch(e) {}
+      try {
+        localStorage.setItem('mti_assets', JSON.stringify(assets));
+        localStorage.setItem('mti_assets_ver', PORTFOLIO_VER);
+      } catch(e) {}
     }
 
-    // Fetch portfolio.json — only seeds data if user has no local holdings yet.
-    // Never overwrites existing localStorage so user edits always survive.
+    // Fetch portfolio.json — seeds/reseeds when PORTFOLIO_VER has changed.
+    // User edits made after the last version bump are preserved.
     function fetchRemotePortfolio() {
       fetch('portfolio.json?v=' + Date.now())
         .then(function(r) { return r.json(); })
         .then(function(remote) {
           if (!Array.isArray(remote) || !remote.length) return;
-          try { if (localStorage.getItem('mti_assets')) return; } catch(e) {}
+          try {
+            var ver = localStorage.getItem('mti_assets_ver');
+            if (ver === PORTFOLIO_VER && localStorage.getItem('mti_assets')) return;
+          } catch(e) {}
           saveAssets(remote);
           render();
         })
