@@ -19,7 +19,7 @@
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
     // Force fresh load on every deploy — update VER when pushing new prices
-    var VER = 'v=20260323c';
+    var VER = 'v=20260329a';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER + (location.hash || ''));
     }
@@ -610,6 +610,11 @@
     <div class="section-actions">
       <button class="btn btn-add" id="btn-add-asset" onclick="openModal(null)">+ Add Asset</button>
       <button class="btn btn-edit" id="btn-edit-toggle" onclick="toggleEditMode()">Edit Portfolio</button>
+  </div></div>
+  <div style="font-size:0.7rem;color:#4b5563;margin:-8px 0 12px 0;padding:6px 10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;">
+    ⚠️ Holdings quantities and costs shown are sample data for demonstration purposes only and do not represent real positions.
+  </div>
+  <div style="display:none">
     </div>
   </div>
 
@@ -736,18 +741,14 @@
       try { localStorage.setItem('mti_assets', JSON.stringify(assets)); } catch(e) {}
     }
 
-    // Fetch portfolio.json — always syncs; only overwrites localStorage if remote changed.
-    // Compares against last-fetched snapshot so local UI edits survive between pushes.
+    // Fetch portfolio.json — only seeds data if user has no local holdings yet.
+    // Never overwrites existing localStorage so user edits always survive.
     function fetchRemotePortfolio() {
       fetch('portfolio.json?v=' + Date.now())
         .then(function(r) { return r.json(); })
         .then(function(remote) {
           if (!Array.isArray(remote) || !remote.length) return;
-          var remoteStr = JSON.stringify(remote);
-          try {
-            if (localStorage.getItem('mti_last_remote') === remoteStr) return;
-            localStorage.setItem('mti_last_remote', remoteStr);
-          } catch(e) {}
+          try { if (localStorage.getItem('mti_assets')) return; } catch(e) {}
           saveAssets(remote);
           render();
         })
@@ -905,6 +906,7 @@
       btn.classList.toggle('active', editMode);
       btn.textContent = editMode ? 'Done' : 'Edit Portfolio';
       addBtn.style.display = editMode ? 'inline-flex' : 'none';
+      if (!editMode) render();
     };
 
     // ── MODAL ──
