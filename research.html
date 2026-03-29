@@ -13,7 +13,7 @@
   <meta property="og:type" content="website"/>
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
-    var VER = 'v=20260326a';
+    var VER = 'v=20260328a';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -481,16 +481,20 @@
   function fhFetch(path) {
     var key = getKey();
     return fetch('https://finnhub.io/api/v1' + path + (path.indexOf('?') >= 0 ? '&' : '?') + 'token=' + encodeURIComponent(key))
-      .then(function(r) { return r.json(); })
+      .then(function(r) {
+        if (!r.ok) return r.json().then(function(d) { return { _error: d.error || ('HTTP ' + r.status), _status: r.status }; });
+        return r.json();
+      })
       .then(function(data) {
-        // Detect invalid/missing key error from Finnhub
-        if (data && data.error) throw new Error(data.error);
+        if (data && data.error) return { _error: data.error };
         return data;
       })
-      .catch(function(e) { return { _error: e.message || 'error' }; });
+      .catch(function(e) { return { _error: e.message || 'network error' }; });
   }
 
   function isApiError(data) { return data && data._error; }
+  function isAuthError(data) { return isApiError(data) && (data._status === 401 || data._status === 403 || /invalid|auth|access/i.test(data._error || '')); }
+  function isRateLimit(data) { return isApiError(data) && (data._status === 429 || /limit|rate/i.test(data._error || '')); }
 
   function delay(ms) { return new Promise(function(res) { setTimeout(res, ms); }); }
 
@@ -515,17 +519,26 @@
     function fmt(d) { return d.toISOString().slice(0,10); }
     var from = fmt(today), to = fmt(future);
 
-    // Fetch earnings for all tickers in parallel
-    var promises = tickers.map(function(ticker) {
-      return fhFetch('/calendar/earnings?symbol=' + encodeURIComponent(ticker) + '&from=' + from + '&to=' + to)
-        .then(function(data) { return { ticker: ticker, data: data }; });
+    // Stagger requests at 350ms each to stay within Finnhub free tier burst limits
+    var promises = tickers.map(function(ticker, i) {
+      return delay(i * 350).then(function() {
+        return fhFetch('/calendar/earnings?symbol=' + encodeURIComponent(ticker) + '&from=' + from + '&to=' + to)
+          .then(function(data) { return { ticker: ticker, data: data }; });
+      });
     });
 
     Promise.all(promises).then(function(results) {
-      // Check if first result is an API error
-      if (results.length && isApiError(results[0].data)) {
-        wrap.innerHTML = '<div class="no-key-msg">⚠️ Invalid or missing Finnhub API key — enter a valid key above.</div>';
-        return;
+      // Check any result for auth/rate errors
+      for (var ri = 0; ri < results.length; ri++) {
+        var d = results[ri].data;
+        if (isAuthError(d)) {
+          wrap.innerHTML = '<div class="no-key-msg">⚠️ Invalid or missing Finnhub API key — enter a valid key above.</div>';
+          return;
+        }
+        if (isRateLimit(d)) {
+          wrap.innerHTML = '<div class="no-key-msg">⚠️ Finnhub rate limit hit — wait 60 seconds and click ↻ reload.</div>';
+          return;
+        }
       }
       var cards = results.map(function(res) {
         var ticker = res.ticker;
@@ -594,20 +607,28 @@
     var wrap = document.getElementById('ratings-wrap');
     wrap.innerHTML = '<div class="loading-row"><div class="spinner"></div>Loading analyst ratings…</div>';
 
-    // Stagger requests slightly to stay within rate limits
+    // Stagger at 350ms offset from earnings calls (start at numTickers*350) to avoid burst
+    var offset = tickers.length * 350;
     var promises = tickers.map(function(ticker, i) {
-      return delay(i * 120).then(function() {
+      return delay(offset + i * 350).then(function() {
         return fhFetch('/stock/recommendation?symbol=' + encodeURIComponent(ticker))
           .then(function(data) { return { ticker: ticker, data: data }; });
       });
     });
 
     Promise.all(promises).then(function(results) {
-      if (results.length && isApiError(results[0].data)) {
-        wrap.innerHTML = '<div class="no-key-msg">⚠️ Finnhub key rejected — double-check it at finnhub.io and re-enter above.</div>';
-        var ks = document.getElementById('key-status');
-        if (ks) ks.innerHTML = '<span style="color:#f87171;">✗ key rejected</span>';
-        return;
+      for (var ri = 0; ri < results.length; ri++) {
+        var d = results[ri].data;
+        if (isAuthError(d)) {
+          wrap.innerHTML = '<div class="no-key-msg">⚠️ Finnhub key rejected — double-check it at finnhub.io and re-enter above.</div>';
+          var ks = document.getElementById('key-status');
+          if (ks) ks.innerHTML = '<span style="color:#f87171;">✗ key rejected</span>';
+          return;
+        }
+        if (isRateLimit(d)) {
+          wrap.innerHTML = '<div class="no-key-msg">⚠️ Finnhub rate limit hit — wait 60 seconds and click ↻ reload.</div>';
+          return;
+        }
       }
       var ks = document.getElementById('key-status');
       if (ks) ks.innerHTML = '<span style="color:#4ade80;">✓ loaded</span>';
