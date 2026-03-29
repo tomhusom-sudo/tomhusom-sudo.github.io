@@ -583,7 +583,7 @@
 
   <script>
   // =================================================================
-  //  LED FIELD DISPLAY — visual layout only, no game logic yet
+  //  LED FIELD DISPLAY + GAME INPUT
   // =================================================================
 
   (function () {
@@ -616,8 +616,9 @@
       for (var c = 0; c < COLS; c++) { cells[r][c] = null; }
     }
 
-    // Demo: offense at col 3, row 3 (mid-field, center row)
-    cells[3][3] = 'O';
+    // Offense position tracking
+    var offRow = 3, offCol = 3;
+    cells[offRow][offCol] = 'O';
 
     // Defense — 5 defenders in a spread formation ahead of offense
     cells[1][6] = 'D';
@@ -740,6 +741,31 @@
     }
 
     render();
+
+    // ── KEYBOARD MOVEMENT ──
+    document.addEventListener('keydown', function (e) {
+      var nr = offRow, nc = offCol;
+
+      if      (e.key === 'ArrowUp'    || e.key === 'w' || e.key === 'W') nr--;
+      else if (e.key === 'ArrowDown'  || e.key === 's' || e.key === 'S') nr++;
+      else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') nc++;
+      else if (e.key === 'ArrowLeft'  || e.key === 'a' || e.key === 'A') nc--;
+      else return;
+
+      // Prevent page scroll on arrow keys
+      e.preventDefault();
+
+      // Bounds check
+      if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) return;
+
+      // Move player
+      cells[offRow][offCol] = null;
+      offRow = nr;
+      offCol = nc;
+      cells[offRow][offCol] = 'O';
+
+      render();
+    });
 
   })();
 
