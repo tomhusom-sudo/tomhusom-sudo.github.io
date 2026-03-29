@@ -19,7 +19,7 @@
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
     // Force fresh load on every deploy — update VER when pushing new prices
-    var VER = 'v=20260329a';
+    var VER = 'v=20260329b';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER + (location.hash || ''));
     }
@@ -840,10 +840,18 @@
     }
 
     // ── RENDER TABLE ──
+    var CRYPTO_LOGOS = {
+      'BTC':  'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
+      'ETH':  'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+      'SOL':  'https://cryptologos.cc/logos/solana-sol-logo.png',
+      'DOGE': 'https://cryptologos.cc/logos/dogecoin-doge-logo.png',
+      'XRP':  'https://cryptologos.cc/logos/xrp-xrp-logo.png',
+    };
     function logoHtml(a) {
       var fallback = '<div class="asset-logo-fallback" style="display:none">' + esc(a.ticker.substring(0,4)) + '</div>';
-      if (a.logoUrl) {
-        return '<img class="asset-logo" src="' + esc(a.logoUrl) + '" alt="' + esc(a.ticker) + '" '
+      var src = a.logoUrl || CRYPTO_LOGOS[a.ticker.toUpperCase()] || '';
+      if (src) {
+        return '<img class="asset-logo" src="' + esc(src) + '" alt="' + esc(a.ticker) + '" '
              + 'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
              + fallback;
       }
