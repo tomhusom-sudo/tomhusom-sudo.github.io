@@ -18,7 +18,7 @@
   <meta property="og:type" content="website"/>
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
-    var VER = 'v=20260329b';
+    var VER = 'v=20260329c';
     if (location.search.indexOf(VER) === -1) { location.replace(location.pathname + '?' + VER); }
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -179,58 +179,6 @@
       <h1>Schneider</h1>
       <p>Maintenance Division — connection diagnostics, speed tests, and app tools.</p>
     </div>
-  </div>
-
-  <!-- ── VISITOR COUNTER ── -->
-  <div class="section-label">honesttom.ai Visitors</div>
-  <div class="tool-card green-border">
-
-    <!-- Stats display -->
-    <div class="speed-grid" id="visitor-grid">
-      <div class="speed-metric">
-        <div class="speed-label">Today</div>
-        <div class="speed-value green" id="vis-today">—</div>
-        <div class="speed-unit">visitors</div>
-      </div>
-      <div class="speed-metric">
-        <div class="speed-label">This Week</div>
-        <div class="speed-value" id="vis-week" style="color:#60a5fa;">—</div>
-        <div class="speed-unit">visitors</div>
-      </div>
-      <div class="speed-metric">
-        <div class="speed-label">All Time</div>
-        <div class="speed-value" id="vis-total" style="color:#fbbf24;">—</div>
-        <div class="speed-unit">visitors</div>
-      </div>
-    </div>
-
-    <!-- API key setup -->
-    <div id="vis-setup" style="margin-top:4px;">
-      <div style="font-size:0.75rem;color:#a8bc98;margin-bottom:10px;line-height:1.55;">
-        Powered by Google Analytics — tracking the whole site. To display stats here, paste your GA4 API secret:<br>
-        <span style="color:#6a8a52;">analytics.google.com → Admin → Data Streams → your stream → Measurement Protocol API secrets</span>
-      </div>
-      <input id="vis-key-input" type="password" placeholder="Paste GA4 API secret…"
-        style="width:100%;background:rgba(0,0,0,0.4);border:1px solid rgba(34,197,94,0.2);border-radius:8px;color:#e2e8f0;font-family:'Inter',sans-serif;font-size:13px;padding:10px 12px;outline:none;margin-bottom:10px;"
-        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-      <button onclick="saveVisKey()"
-        style="width:100%;background:#22c55e;color:#0a0e17;border:none;border-radius:8px;padding:11px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">
-        Connect &amp; Load Stats
-      </button>
-    </div>
-
-    <!-- Connected state -->
-    <div id="vis-connected" style="display:none;margin-top:4px;">
-      <button class="run-btn" onclick="loadVisitorStats()">
-        <div class="btn-spinner" id="vis-spinner"></div>
-        <span id="vis-btn-label">Refresh Stats</span>
-      </button>
-      <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;">
-        <div class="speed-status" id="vis-status">Loading…</div>
-        <button onclick="disconnectVisKey()" style="background:none;border:none;color:#475569;font-size:0.68rem;cursor:pointer;font-family:'Inter',sans-serif;padding:0;">disconnect</button>
-      </div>
-    </div>
-
   </div>
 
   <!-- ── SPEED TEST ── -->
@@ -519,74 +467,6 @@ function setMetric(id, val, cls) {
   var el = document.getElementById(id);
   el.textContent = val;
   el.className = 'speed-value' + (cls ? ' ' + cls : '');
-}
-
-// ── VISITOR STATS (Plausible API) ──
-var VIS_SITE = 'tomhusom-sudo.github.io';
-var VIS_KEY_STORAGE = 'schneider_plausible_key';
-
-(function initVisitor() {
-  var key = localStorage.getItem(VIS_KEY_STORAGE);
-  if (key) {
-    document.getElementById('vis-setup').style.display = 'none';
-    document.getElementById('vis-connected').style.display = 'block';
-    loadVisitorStats();
-  }
-})();
-
-function saveVisKey() {
-  var key = document.getElementById('vis-key-input').value.trim();
-  if (!key) return;
-  localStorage.setItem(VIS_KEY_STORAGE, key);
-  document.getElementById('vis-setup').style.display = 'none';
-  document.getElementById('vis-connected').style.display = 'block';
-  loadVisitorStats();
-}
-
-function disconnectVisKey() {
-  localStorage.removeItem(VIS_KEY_STORAGE);
-  document.getElementById('vis-setup').style.display = 'block';
-  document.getElementById('vis-connected').style.display = 'none';
-  ['vis-today','vis-week','vis-total'].forEach(function(id){ document.getElementById(id).textContent = '—'; });
-}
-
-function loadVisitorStats() {
-  var key = localStorage.getItem(VIS_KEY_STORAGE);
-  if (!key) return;
-  var btn = document.getElementById('vis-btn-label');
-  var spinner = document.getElementById('vis-spinner');
-  var status = document.getElementById('vis-status');
-  btn.textContent = 'Loading…';
-  spinner.style.display = 'block';
-  status.textContent = 'Fetching from Plausible…';
-
-  var base = 'https://plausible.io/api/v1/stats/aggregate?site_id=' + VIS_SITE + '&metrics=visitors';
-  var headers = { 'Authorization': 'Bearer ' + key };
-
-  var today  = fetch(base + '&period=day',  { headers: headers }).then(function(r){ return r.json(); });
-  var week   = fetch(base + '&period=7d',   { headers: headers }).then(function(r){ return r.json(); });
-  // All time: use custom range from site launch
-  var today_str = new Date().toISOString().slice(0,10);
-  var alltime = fetch(base + '&period=custom&date=2026-03-01,' + today_str, { headers: headers }).then(function(r){ return r.json(); });
-
-  Promise.all([today, week, alltime])
-    .then(function(results) {
-      var fmt = function(n) { return n >= 1000 ? (n/1000).toFixed(1) + 'k' : String(n); };
-      var t = results[0].results && results[0].results.visitors ? results[0].results.visitors.value : '?';
-      var w = results[1].results && results[1].results.visitors ? results[1].results.visitors.value : '?';
-      var a = results[2].results && results[2].results.visitors ? results[2].results.visitors.value : '?';
-      document.getElementById('vis-today').textContent  = typeof t === 'number' ? fmt(t) : t;
-      document.getElementById('vis-week').textContent   = typeof w === 'number' ? fmt(w) : w;
-      document.getElementById('vis-total').textContent  = typeof a === 'number' ? fmt(a) : a;
-      status.textContent = 'Last refreshed ' + new Date().toLocaleTimeString();
-      btn.textContent = 'Refresh Stats';
-      spinner.style.display = 'none';
-    })
-    .catch(function(e) {
-      status.textContent = 'Error — check API key or site ID';
-      btn.textContent = 'Refresh Stats';
-      spinner.style.display = 'none';
-    });
 }
 
 // ── APP TOOLS ──
