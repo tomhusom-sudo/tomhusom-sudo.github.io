@@ -18,7 +18,7 @@
   <meta property="og:type" content="website"/>
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
-    var VER = 'v=20260329a';
+    var VER = 'v=20260329b';
     if (location.search.indexOf(VER) === -1) { location.replace(location.pathname + '?' + VER); }
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -271,6 +271,37 @@
       <div class="info-row"><div class="info-key">Connection Type</div><div class="info-val" id="inf-conn">—</div></div>
       <div class="info-row"><div class="info-key">Effective Speed</div><div class="info-val" id="inf-speed">—</div></div>
       <div class="info-row"><div class="info-key">Public IP</div><div class="info-val" id="inf-ip">Loading…</div></div>
+    </div>
+  </div>
+
+  <!-- ── GOOGLE ANALYTICS ── -->
+  <div class="section-label">Google Analytics</div>
+  <div class="tool-card green-border">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+      <svg width="32" height="32" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="192" height="192" rx="40" fill="#F9AB00"/>
+        <rect x="116" y="44" width="36" height="144" rx="18" fill="white" opacity="0.9"/>
+        <rect x="62" y="92" width="36" height="96" rx="18" fill="white" opacity="0.7"/>
+        <rect x="8" y="128" width="36" height="60" rx="18" fill="white" opacity="0.5"/>
+      </svg>
+      <div>
+        <div style="font-size:0.85rem;font-weight:700;color:#e2eed8;">honesttom.ai Analytics</div>
+        <div style="font-size:0.72rem;color:#6a8a52;margin-top:2px;">G-9KFJ9RZ2QS · tracking all 24 pages</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <a href="https://analytics.google.com/analytics/web/#/p$(GA_PROP)/reports/intelligenthome" target="_blank" rel="noopener"
+        style="display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:12px;background:rgba(249,171,0,0.08);border:1px solid rgba(249,171,0,0.25);text-decoration:none;transition:background 0.15s;"
+        onmouseover="this.style.background='rgba(249,171,0,0.16)'" onmouseout="this.style.background='rgba(249,171,0,0.08)'">
+        <div style="font-size:0.82rem;font-weight:700;color:#fbbf24;">Open Dashboard ↗</div>
+        <div style="font-size:0.7rem;color:#6a8a52;line-height:1.4;">Full analytics — visitors, pages, sources</div>
+      </a>
+      <a href="https://analytics.google.com/analytics/web/#/realtime" target="_blank" rel="noopener"
+        style="display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:12px;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);text-decoration:none;transition:background 0.15s;"
+        onmouseover="this.style.background='rgba(74,222,128,0.12)'" onmouseout="this.style.background='rgba(74,222,128,0.06)'">
+        <div style="font-size:0.82rem;font-weight:700;color:#4ade80;">Real-Time ↗</div>
+        <div style="font-size:0.7rem;color:#6a8a52;line-height:1.4;">See who's on the site right now</div>
+      </a>
     </div>
   </div>
 
