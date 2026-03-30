@@ -18,7 +18,7 @@
   <meta property="og:type" content="website"/>
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
-    var VER = 'v=20260330f';
+    var VER = 'v=20260330g';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -425,6 +425,8 @@
 
     /* ══════════════════════════════════════════════
        NEW VIDEO GAME HELMET BUTTON — v1 West Coast
+       Key: ALL effects on the img — drop-shadow
+       traces the transparent PNG, not the div box.
     ══════════════════════════════════════════════ */
 
     .vg-btn-wrap {
@@ -437,80 +439,73 @@
       user-select: none;
     }
 
-    /* Transparent container — no background, no border-radius box */
+    /* Invisible click target — zero visual footprint */
     .vg-btn {
-      position: relative;
-      width: 110px;
-      height: 110px;
-      background: transparent;
+      background: none;
       border: none;
       padding: 0;
-      /* drop-shadow follows the circular PNG outline, not a rectangle */
-      filter:
-        drop-shadow(0 5px 0   rgba(80,50,0,0.9))
-        drop-shadow(0 9px 0   rgba(60,35,0,0.8))
-        drop-shadow(0 13px 18px rgba(0,0,0,0.75));
-      transition:
-        transform 60ms cubic-bezier(0.34, 1.56, 0.64, 1),
-        filter    60ms ease;
-      will-change: transform, filter;
+      margin: 0;
+      cursor: pointer;
+      display: block;
+      line-height: 0;
     }
 
+    /* ALL effects on the img so drop-shadow follows the circle */
     .vg-btn img {
-      width: 100%;
-      height: 100%;
+      width: 110px;
+      height: 110px;
       object-fit: contain;
       display: block;
       pointer-events: none;
+      transition: transform 60ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                  filter    60ms ease;
+      filter:
+        drop-shadow(0 5px 0   rgba(60,35,0,0.95))
+        drop-shadow(0 9px 0   rgba(40,20,0,0.85))
+        drop-shadow(0 14px 20px rgba(0,0,0,0.75));
     }
 
-    /* ── HOVER: coin rises, deeper shadow ── */
-    .vg-btn-wrap:hover .vg-btn {
-      transform: translateY(-4px) scale(1.05);
+    /* ── HOVER: floats up, bigger shadow, warm glow ── */
+    .vg-btn-wrap:hover .vg-btn img {
+      transform: translateY(-4px) scale(1.06);
       filter:
-        drop-shadow(0 7px 0   rgba(80,50,0,0.9))
-        drop-shadow(0 12px 0  rgba(60,35,0,0.8))
-        drop-shadow(0 18px 28px rgba(0,0,0,0.85))
-        drop-shadow(0 0 16px  rgba(220,170,60,0.4));
+        drop-shadow(0 8px 0   rgba(60,35,0,0.95))
+        drop-shadow(0 13px 0  rgba(40,20,0,0.85))
+        drop-shadow(0 20px 28px rgba(0,0,0,0.85))
+        drop-shadow(0 0 14px  rgba(220,160,40,0.5));
     }
 
-    /* ── ACTIVE: slams down, squishes, shadow collapses ── */
-    .vg-btn-wrap:active .vg-btn,
-    .vg-btn-wrap.pressed .vg-btn {
-      transform: translateY(9px) scaleY(0.92) scaleX(1.03);
+    /* ── ACTIVE: slams down, squishes — the satisfying thud ── */
+    .vg-btn-wrap:active .vg-btn img,
+    .vg-btn-wrap.pressed .vg-btn img {
+      transform: translateY(8px) scaleY(0.91) scaleX(1.04);
       filter:
-        drop-shadow(0 1px 0   rgba(80,50,0,0.8))
-        drop-shadow(0 2px 4px rgba(0,0,0,0.5))
-        brightness(0.86);
+        drop-shadow(0 1px 0   rgba(60,35,0,0.9))
+        drop-shadow(0 2px 5px rgba(0,0,0,0.55))
+        brightness(0.84);
     }
 
-    /* ── SELECTED: gold glow pulse around the circle ── */
-    .vg-btn-wrap.active .vg-btn {
-      filter:
-        drop-shadow(0 5px 0   rgba(80,50,0,0.9))
-        drop-shadow(0 9px 0   rgba(60,35,0,0.8))
-        drop-shadow(0 13px 18px rgba(0,0,0,0.75))
-        drop-shadow(0 0 10px  rgba(255,210,60,0.9))
-        drop-shadow(0 0 22px  rgba(255,180,0,0.6));
+    /* ── SELECTED: gold glow pulses around the helmet ── */
+    .vg-btn-wrap.active .vg-btn img {
       animation: vg-pulse 2s ease-in-out infinite;
     }
 
     @keyframes vg-pulse {
       0%, 100% {
         filter:
-          drop-shadow(0 5px 0 rgba(80,50,0,0.9))
-          drop-shadow(0 9px 0 rgba(60,35,0,0.8))
-          drop-shadow(0 13px 18px rgba(0,0,0,0.75))
-          drop-shadow(0 0 10px rgba(255,210,60,0.9))
-          drop-shadow(0 0 22px rgba(255,180,0,0.6));
+          drop-shadow(0 5px 0 rgba(60,35,0,0.95))
+          drop-shadow(0 9px 0 rgba(40,20,0,0.85))
+          drop-shadow(0 14px 20px rgba(0,0,0,0.75))
+          drop-shadow(0 0 8px  rgba(255,210,50,0.85))
+          drop-shadow(0 0 20px rgba(255,180,0,0.55));
       }
       50% {
         filter:
-          drop-shadow(0 5px 0 rgba(80,50,0,0.9))
-          drop-shadow(0 9px 0 rgba(60,35,0,0.8))
-          drop-shadow(0 13px 18px rgba(0,0,0,0.75))
-          drop-shadow(0 0 16px rgba(255,220,80,1))
-          drop-shadow(0 0 34px rgba(255,190,0,0.8));
+          drop-shadow(0 5px 0 rgba(60,35,0,0.95))
+          drop-shadow(0 9px 0 rgba(40,20,0,0.85))
+          drop-shadow(0 14px 20px rgba(0,0,0,0.75))
+          drop-shadow(0 0 14px rgba(255,220,80,1))
+          drop-shadow(0 0 30px rgba(255,190,0,0.85));
       }
     }
 
