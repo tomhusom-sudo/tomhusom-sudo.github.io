@@ -19,7 +19,7 @@
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
     // Force fresh load on every deploy — update VER when pushing new prices
-    var VER = 'v=20260329e';
+    var VER = 'v=20260329f';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER + (location.hash || ''));
     }
@@ -112,6 +112,59 @@
       opacity: 0.6;
       margin-top: 6px;
       font-weight: 500;
+    }
+
+    /* ── MARKET INDICES BAR ── */
+    .indices-bar {
+      max-width: 960px;
+      margin: 0 auto 20px;
+      display: flex;
+      gap: 0;
+      justify-content: center;
+      flex-wrap: wrap;
+      background: rgba(15,23,42,0.7);
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .idx-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 22px;
+      flex: 1;
+      min-width: 120px;
+      border-right: 1px solid #1e293b;
+      gap: 2px;
+    }
+    .idx-item:last-child { border-right: none; }
+    .idx-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #475569;
+    }
+    .idx-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.3px;
+    }
+    .idx-change {
+      font-size: 0.68rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .idx-up   { color: #4ade80; }
+    .idx-down { color: #f87171; }
+    .idx-flat { color: #64748b; }
+    @media (max-width: 640px) {
+      .idx-item   { padding: 8px 12px; min-width: 90px; }
+      .idx-value  { font-size: 0.82rem; }
+      .idx-label  { font-size: 0.55rem; }
+      .idx-change { font-size: 0.6rem; }
     }
 
     /* ── PORTFOLIO SUMMARY ── */
@@ -567,6 +620,13 @@
     </div>
   </div>
 
+  <!-- MARKET INDICES -->
+  <div class="indices-bar" id="indices-bar">
+    <div class="idx-item"><div class="idx-label">S&amp;P 500</div><div class="idx-value" id="idx-sp500">—</div><div class="idx-change" id="idx-sp500-chg">—</div></div>
+    <div class="idx-item"><div class="idx-label">DOW</div><div class="idx-value" id="idx-dow">—</div><div class="idx-change" id="idx-dow-chg">—</div></div>
+    <div class="idx-item"><div class="idx-label">NASDAQ</div><div class="idx-value" id="idx-nasdaq">—</div><div class="idx-change" id="idx-nasdaq-chg">—</div></div>
+  </div>
+
   <!-- PORTFOLIO SUMMARY -->
   <div class="summary">
     <div class="summary-top">Portfolio Value</div>
@@ -755,6 +815,28 @@
         .catch(function() {});
     }
 
+    // ── RENDER INDICES BAR ──
+    function renderIndices(indices) {
+      var map = {
+        'S&P 500': { val:'idx-sp500', chg:'idx-sp500-chg' },
+        'DOW':     { val:'idx-dow',   chg:'idx-dow-chg'   },
+        'NASDAQ':  { val:'idx-nasdaq',chg:'idx-nasdaq-chg' }
+      };
+      Object.keys(map).forEach(function(key) {
+        var d = indices && indices[key];
+        var ids = map[key];
+        var valEl = document.getElementById(ids.val);
+        var chgEl = document.getElementById(ids.chg);
+        if (!valEl || !chgEl) return;
+        if (!d) { valEl.textContent = '—'; chgEl.textContent = '—'; return; }
+        valEl.textContent = d.value.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+        var pct = d.pct || 0;
+        var arrow = pct >= 0 ? '▲' : '▼';
+        chgEl.textContent = arrow + ' ' + Math.abs(pct).toFixed(2) + '%';
+        chgEl.className = 'idx-change ' + (pct > 0 ? 'idx-up' : pct < 0 ? 'idx-down' : 'idx-flat');
+      });
+    }
+
     // Fetch prices.json and update LIVE_PRICES, then re-render with fresh prices.
     function fetchLivePrices() {
       fetch('prices.json?v=' + Date.now())
@@ -762,6 +844,7 @@
         .then(function(data) {
           if (!data || !data.prices) return;
           Object.assign(LIVE_PRICES, data.prices);
+          if (data.indices) renderIndices(data.indices);
           if (data.updated) {
             LAST_UPDATED = data.updated;
             // Staleness warning: flag prices older than 2 days
