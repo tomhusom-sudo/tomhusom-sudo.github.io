@@ -18,7 +18,7 @@
   <meta property="og:type" content="website"/>
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
-    var VER = 'v=20260330k';
+    var VER = 'v=20260330g';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -439,75 +439,73 @@
       user-select: none;
     }
 
-    /* Circle container — overflow:hidden does the clean clip */
+    /* Invisible click target — zero visual footprint */
     .vg-btn {
-      width: 132px;
-      height: 132px;
-      border-radius: 50%;
-      overflow: hidden;
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
       cursor: pointer;
       display: block;
-      flex-shrink: 0;
-      transition: transform 60ms cubic-bezier(0.34, 1.56, 0.64, 1),
-                  box-shadow 60ms ease,
-                  filter     60ms ease;
-      box-shadow:
-        0 5px 0    rgba(60,35,0,0.95),
-        0 9px 0    rgba(40,20,0,0.85),
-        0 14px 20px rgba(0,0,0,0.75);
+      line-height: 0;
     }
 
-    /* Image oversized so transparent edge pixels are outside the clip */
+    /* ALL effects on the img so drop-shadow follows the circle */
     .vg-btn img {
-      width: 116%;
-      height: 116%;
-      margin: -8%;
-      object-fit: cover;
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
       display: block;
       pointer-events: none;
+      transition: transform 60ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                  filter    60ms ease;
+      filter:
+        drop-shadow(0 5px 0   rgba(60,35,0,0.95))
+        drop-shadow(0 9px 0   rgba(40,20,0,0.85))
+        drop-shadow(0 14px 20px rgba(0,0,0,0.75));
     }
 
     /* ── HOVER: floats up, bigger shadow, warm glow ── */
-    .vg-btn-wrap:hover .vg-btn {
+    .vg-btn-wrap:hover .vg-btn img {
       transform: translateY(-4px) scale(1.06);
-      box-shadow:
-        0 8px 0    rgba(60,35,0,0.95),
-        0 13px 0   rgba(40,20,0,0.85),
-        0 20px 28px rgba(0,0,0,0.85),
-        0 0 14px   rgba(220,160,40,0.5);
+      filter:
+        drop-shadow(0 8px 0   rgba(60,35,0,0.95))
+        drop-shadow(0 13px 0  rgba(40,20,0,0.85))
+        drop-shadow(0 20px 28px rgba(0,0,0,0.85))
+        drop-shadow(0 0 14px  rgba(220,160,40,0.5));
     }
 
     /* ── ACTIVE: slams down, squishes — the satisfying thud ── */
-    .vg-btn-wrap:active .vg-btn,
-    .vg-btn-wrap.pressed .vg-btn {
+    .vg-btn-wrap:active .vg-btn img,
+    .vg-btn-wrap.pressed .vg-btn img {
       transform: translateY(8px) scaleY(0.91) scaleX(1.04);
-      filter: brightness(0.84);
-      box-shadow:
-        0 1px 0   rgba(60,35,0,0.9),
-        0 2px 5px rgba(0,0,0,0.55);
+      filter:
+        drop-shadow(0 1px 0   rgba(60,35,0,0.9))
+        drop-shadow(0 2px 5px rgba(0,0,0,0.55))
+        brightness(0.84);
     }
 
     /* ── SELECTED: gold glow pulses around the helmet ── */
-    .vg-btn-wrap.active .vg-btn {
+    .vg-btn-wrap.active .vg-btn img {
       animation: vg-pulse 2s ease-in-out infinite;
     }
 
     @keyframes vg-pulse {
       0%, 100% {
-        box-shadow:
-          0 5px 0    rgba(60,35,0,0.95),
-          0 9px 0    rgba(40,20,0,0.85),
-          0 14px 20px rgba(0,0,0,0.75),
-          0 0 8px    rgba(255,210,50,0.85),
-          0 0 20px   rgba(255,180,0,0.55);
+        filter:
+          drop-shadow(0 5px 0 rgba(60,35,0,0.95))
+          drop-shadow(0 9px 0 rgba(40,20,0,0.85))
+          drop-shadow(0 14px 20px rgba(0,0,0,0.75))
+          drop-shadow(0 0 8px  rgba(255,210,50,0.85))
+          drop-shadow(0 0 20px rgba(255,180,0,0.55));
       }
       50% {
-        box-shadow:
-          0 5px 0    rgba(60,35,0,0.95),
-          0 9px 0    rgba(40,20,0,0.85),
-          0 14px 20px rgba(0,0,0,0.75),
-          0 0 14px   rgba(255,220,80,1),
-          0 0 30px   rgba(255,190,0,0.85);
+        filter:
+          drop-shadow(0 5px 0 rgba(60,35,0,0.95))
+          drop-shadow(0 9px 0 rgba(40,20,0,0.85))
+          drop-shadow(0 14px 20px rgba(0,0,0,0.75))
+          drop-shadow(0 0 14px rgba(255,220,80,1))
+          drop-shadow(0 0 30px rgba(255,190,0,0.85));
       }
     }
 
@@ -698,17 +696,6 @@
   <div class="team-select">
     <div class="team-select-label">Choose Your Team</div>
     <div class="team-grid" id="team-grid"></div>
-  </div>
-
-  <!-- ── NEW BUTTON TEST ── -->
-  <div style="margin-top:28px; display:flex; flex-direction:column; align-items:center; gap:6px;">
-    <div style="font-size:0.52rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#7a6030; margin-bottom:8px;">New Button — v1 Prototype</div>
-    <div class="vg-btn-wrap" id="vg-test-btn" onclick="this.classList.toggle('active')">
-      <div class="vg-btn">
-        <img src="./westcoast_helmet.png" alt="West Coast" draggable="false">
-      </div>
-      <div class="vg-btn-name">West Coast</div>
-    </div>
   </div>
 
   <div class="page-footer">
@@ -1027,50 +1014,58 @@
     document.querySelectorAll('.team-item').forEach(function(item) {
       item.classList.toggle('active', item.dataset.key === key);
     });
+    // Update active state on the custom buttons
+    document.querySelectorAll('.vg-btn-wrap').forEach(function(btn) {
+      btn.classList.toggle('active', btn.dataset.key === key);
+    });
   }
 
-  // ── Build team picker grid — PLACEHOLDER (new design coming) ──
+  // ── Build team picker grid — Using the NEW video game button style ──
   function buildTeamSelect() {
     var grid = document.getElementById('team-grid');
     TEAM_ORDER.forEach(function(key) {
       var t = TEAMS[key];
 
-      var item = document.createElement('div');
-      item.className   = 'team-item' + (key === currentTheme ? ' active' : '');
-      item.dataset.key = key;
+      var wrapper = document.createElement('div');
+      wrapper.className = 'vg-btn-wrap' + (key === currentTheme ? ' active' : '');
+      wrapper.dataset.key = key;
 
-      var btn = document.createElement('button');
-      btn.className = 'helmet-btn';
+      var btn = document.createElement('div');
+      btn.className = 'vg-btn';
+
+      var img = document.createElement('img');
+      img.src = './westcoast_helmet.png?v=20260330';
+      img.alt = t.name;
+      img.draggable = false;
+      if (t.helmFilter) img.style.filter = t.helmFilter;
 
       var label = document.createElement('div');
-      label.className   = 'team-btn-name';
+      label.className = 'vg-btn-name';
       label.textContent = t.name;
 
-      item.addEventListener('click', function() { applyTheme(key); });
-      item.appendChild(btn);
-      item.appendChild(label);
-      grid.appendChild(item);
+      btn.appendChild(img);
+      wrapper.appendChild(btn);
+      wrapper.appendChild(label);
+
+      // Add click behavior
+      wrapper.addEventListener('click', function() { applyTheme(key); });
+
+      // Add touch feedback
+      wrapper.addEventListener('touchstart', function(e) {
+        wrapper.classList.add('pressed');
+      }, { passive: true });
+      wrapper.addEventListener('touchend', function() {
+        wrapper.classList.remove('pressed');
+      });
+      wrapper.addEventListener('touchcancel', function() {
+        wrapper.classList.remove('pressed');
+      });
+
+      grid.appendChild(wrapper);
     });
   }
 
   buildTeamSelect();
-
-  // ── Touch feedback for new vg-btn prototype ──
-  (function() {
-    var btn = document.getElementById('vg-test-btn');
-    if (!btn) return;
-    btn.addEventListener('touchstart', function(e) {
-      e.preventDefault();
-      btn.classList.add('pressed');
-    }, { passive: false });
-    btn.addEventListener('touchend', function() {
-      btn.classList.remove('pressed');
-      btn.classList.toggle('active');
-    });
-    btn.addEventListener('touchcancel', function() {
-      btn.classList.remove('pressed');
-    });
-  })();
 
   /* ═══════════════════════════════════════════════════════════════
      SAVED buildTeamSelect — restore by swapping in this function
