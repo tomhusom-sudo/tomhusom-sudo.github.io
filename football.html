@@ -8,17 +8,9 @@
   <link rel="apple-touch-icon" href="/lincoln.jpg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>HonestTom | AI-Assisted Development &amp; Data Engineering</title>
-  <meta name="google-site-verification" content="xNW511C_p0gxCEqdU2Acuy_SEHVKBnK4dfmmdsonc6M" />
-  <meta name="description" content="Tom Hugunin — retired Oracle DBA with 25+ years experience, now building AI-assisted projects at honesttom.ai using Claude Code and modern data tools.">
-  <meta name="keywords" content="HonestTom, Tom Hugunin, AI development, Claude Code, Oracle DBA, data engineering, honesttom.ai">
-  <meta property="og:title" content="HonestTom"/>
-  <meta property="og:description" content="AI-assisted development and data engineering by Tom Hugunin"/>
-  <meta property="og:url" content="https://honesttom.ai"/>
-  <meta property="og:type" content="website"/>
-  <link rel="canonical" href="https://honesttom.ai"/>
+    <title>HonestTom | Football</title>
   <script>
-    var VER = 'v=20260330g';
+    var VER = 'v=20260330_FINAL_V1';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -28,7 +20,6 @@
     /* ── RESET ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── THEME VARIABLES (defaults = Husom Electronics) ── */
     :root {
       --shell-light: #f5ecd8;
       --shell-mid:   #d8c8a4;
@@ -42,7 +33,6 @@
       --tagline:     #6a5230;
     }
 
-    /* ── PAGE ── */
     html, body {
       min-height: 100vh;
       background:
@@ -57,7 +47,6 @@
       user-select: none;
     }
 
-    /* ── BACK LINK ── */
     .nav-back {
       display: inline-flex;
       align-items: center;
@@ -69,407 +58,78 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       margin-bottom: 28px;
-      transition: color 0.2s;
     }
-    .nav-back:hover { color: #9a8450; }
 
-    /* ── CONSOLE SHELL ── */
     .console {
       width: min(620px, 100%);
-      background:
-        linear-gradient(170deg,
-          var(--shell-light) 0%,
-          var(--shell-mid)   50%,
-          var(--shell-dark)  100%);
+      background: linear-gradient(170deg, var(--shell-light) 0%, var(--shell-mid) 50%, var(--shell-dark) 100%);
       border-radius: 24px 24px 36px 36px;
       padding: 22px 24px 30px;
       position: relative;
-      box-shadow:
-        0 40px 100px rgba(0,0,0,0.85),
-        0 16px 40px rgba(0,0,0,0.6),
-        inset 0 2px 0 rgba(255,255,255,0.6),
-        inset 0 -5px 10px rgba(0,0,0,0.3),
-        inset 3px 0 4px rgba(255,255,255,0.2),
-        inset -3px 0 4px rgba(0,0,0,0.1);
-      transition: background 0.45s;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.85), inset 0 2px 0 rgba(255,255,255,0.6);
     }
 
-    /* Outer rim highlight */
-    .console::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 24px 24px 36px 36px;
-      border: 1.5px solid rgba(255,255,255,0.35);
-      pointer-events: none;
-    }
-
-    /* Subtle mold-line crease at bottom third */
-    .console::after {
-      content: '';
-      position: absolute;
-      left: 0; right: 0;
-      bottom: 88px;
-      height: 1px;
-      background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(0,0,0,0.12) 15%,
-        rgba(0,0,0,0.18) 50%,
-        rgba(0,0,0,0.12) 85%,
-        transparent 100%);
-      pointer-events: none;
-    }
-
-    /* ── BRAND BAR ── */
     .brand-bar {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
       padding: 0 6px 12px;
       margin-bottom: 12px;
       border-bottom: 1px solid rgba(120,90,40,0.2);
     }
 
-    .brand-company {
-      font-size: 0.54rem;
-      font-weight: 800;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: var(--brand-co);
-      font-style: italic;
-      transition: color 0.4s;
-    }
+    .brand-company { font-size: 0.54rem; font-weight: 800; color: var(--brand-co); text-transform: uppercase; }
+    .brand-title { font-size: 1.05rem; font-weight: 900; color: var(--brand-title); text-transform: uppercase; }
 
-    .brand-title {
-      font-size: 1.05rem;
-      font-weight: 900;
-      letter-spacing: 0.38em;
-      text-transform: uppercase;
-      color: var(--brand-title);
-      text-shadow:
-        0 1px 0 rgba(255,255,255,0.35),
-        0 -1px 0 rgba(0,0,0,0.2);
-      transition: color 0.4s;
-    }
+    .display-section { display: flex; gap: 12px; margin-bottom: 20px; }
+    .stat-col { display: flex; flex-direction: column; gap: 8px; width: 56px; }
+    .stat-box { background: #050302; border-radius: 7px; padding: 7px 9px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .stat-label { font-size: 0.42rem; font-weight: 700; color: #3a1c06; text-transform: uppercase; }
+    .stat-value { font-family: 'Courier New', monospace; font-size: 1.25rem; font-weight: 900; color: #ff4a00; text-shadow: 0 0 6px #ff3000; }
 
-    /* ── DISPLAY SECTION ── */
-    .display-section {
-      display: flex;
-      gap: 12px;
-      align-items: stretch;
-      margin-bottom: 20px;
-    }
+    .led-bezel { flex: 1; background: #060401; border-radius: 10px; padding: 14px 16px; position: relative; overflow: hidden; }
+    #led-canvas { display: block; max-width: 100%; height: auto; }
 
-    /* Stat columns flanking the field */
-    .stat-col {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 56px;
-      flex-shrink: 0;
-    }
+    .controls-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .gbtn { background: linear-gradient(175deg, var(--btn-top) 0%, var(--btn-bot) 100%); color: #fff; border: none; border-radius: 5px; padding: 7px 9px; font-size: 0.45rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 var(--btn-shadow); }
+    .gbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--btn-shadow); }
 
-    .stat-box {
-      background: #050302;
-      border-radius: 7px;
-      padding: 7px 9px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      box-shadow:
-        inset 0 3px 8px rgba(0,0,0,0.95),
-        inset 0 0 0 1px rgba(0,0,0,0.6),
-        0 1px 0 rgba(255,255,255,0.1);
-    }
+    .d-pad { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+    .dbtn { background: linear-gradient(175deg, var(--btn-top) 0%, var(--btn-bot) 100%); border: none; border-radius: 4px; width: 34px; height: 30px; cursor: pointer; color: #fff; box-shadow: 0 3px 0 var(--btn-shadow); }
+    .dbtn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--btn-shadow); }
 
-    .stat-label {
-      display: block;
-      font-size: 0.42rem;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: #3a1c06;
-      margin-bottom: 4px;
-    }
-
-    .stat-value {
-      display: block;
-      font-family: 'Courier New', monospace;
-      font-size: 1.25rem;
-      font-weight: 900;
-      line-height: 1;
-      color: #ff4a00;
-      text-shadow:
-        0 0 6px #ff3000,
-        0 0 14px rgba(255,50,0,0.5),
-        0 0 28px rgba(220,30,0,0.25);
-      letter-spacing: 0.04em;
-    }
-
-    /* ── LED BEZEL ── */
-    .led-bezel {
-      flex: 1;
-      background: #060401;
-      border-radius: 10px;
-      padding: 14px 16px;
-      position: relative;
-      overflow: hidden;
-      box-shadow:
-        inset 0 5px 18px rgba(0,0,0,0.98),
-        inset 0 2px 5px rgba(0,0,0,0.9),
-        inset 0 0 0 2px #020100,
-        0 2px 0 rgba(255,255,255,0.1);
-    }
-
-    /* Lens tint — warm dark amber overlay */
-    .led-bezel::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 40%,
-        rgba(80,30,0,0.08) 0%,
-        rgba(20,8,0,0.22) 100%);
-      pointer-events: none;
-      z-index: 2;
-      border-radius: 10px;
-    }
-
-    /* Subtle scanline grid */
-    .led-bezel::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 3px,
-        rgba(0,0,0,0.06) 3px,
-        rgba(0,0,0,0.06) 4px
-      );
-      pointer-events: none;
-      z-index: 3;
-      border-radius: 10px;
-    }
-
-    #led-canvas {
-      display: block;
-      position: relative;
-      z-index: 1;
-      max-width: 100%;
-      height: auto;
-    }
-
-    /* Field label */
-    .field-label {
-      position: absolute;
-      bottom: 5px;
-      left: 0; right: 0;
-      text-align: center;
-      font-size: 0.38rem;
-      font-weight: 700;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: #2a1205;
-      z-index: 4;
-    }
-
-    /* ── CONTROLS ROW ── */
-    .controls-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 0 4px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .btn-cluster {
-      display: flex;
-      gap: 7px;
-    }
-
-    /* Game button */
-    .gbtn {
-      background: linear-gradient(175deg, var(--btn-top) 0%, var(--btn-bot) 100%);
-      color: rgba(255,255,255,0.92);
-      border: none;
-      border-radius: 5px;
-      padding: 7px 9px;
-      font-size: 0.45rem;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      cursor: pointer;
-      min-width: 40px;
-      text-align: center;
-      line-height: 1.4;
-      box-shadow:
-        0 4px 0 var(--btn-shadow),
-        0 5px 10px rgba(0,0,0,0.45),
-        inset 0 1px 0 var(--btn-hl);
-      transition: transform 0.07s, box-shadow 0.07s, background 0.4s;
-    }
-
-    .gbtn:active {
-      transform: translateY(3px);
-      box-shadow: 0 1px 0 var(--btn-shadow), 0 2px 4px rgba(0,0,0,0.4);
-    }
-
-    /* Direction pad */
-    .d-pad {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      align-items: center;
-    }
-
-    .d-row {
-      display: flex;
-      gap: 4px;
-    }
-
-    .dbtn {
-      background: linear-gradient(175deg, var(--btn-top) 0%, var(--btn-bot) 100%);
-      border: none;
-      border-radius: 4px;
-      width: 34px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.9);
-      box-shadow:
-        0 3px 0 var(--btn-shadow),
-        0 4px 8px rgba(0,0,0,0.4),
-        inset 0 1px 0 var(--btn-hl);
-      transition: transform 0.07s, box-shadow 0.07s, background 0.4s;
-    }
-
-    .dbtn:active {
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 var(--btn-shadow);
-    }
-
-    .dbtn.center-btn {
-      font-size: 0.38rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.85);
-      filter: brightness(0.82);
-    }
-
-    /* ── BOTTOM TAGLINE ── */
-    .console-tagline {
-      text-align: center;
-      font-size: 0.5rem;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--tagline);
-      margin-top: 14px;
-      opacity: 0.75;
-      transition: color 0.4s;
-    }
-
-    /* ── TEAM SELECT ── */
-    .team-select {
-      width: min(620px, 100%);
-      margin-top: 22px;
-      background: rgba(240,232,215,0.92);
-      border-radius: 18px;
-      padding: 18px 14px 22px;
-      border: 1px solid rgba(180,160,120,0.4);
-    }
-
-    .team-select-label {
-      font-size: 0.58rem;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: #3a2c10;
-      text-align: center;
-      margin-bottom: 13px;
-    }
-
-    /* ── NEW SQUISHY HELMET BUTTON ── */
-    .team-grid {
-      display: flex;
-      justify-content: center;
-      padding: 20px;
-    }
+    /* ── SQUISHY VIKINGS BUTTON ── */
+    .team-select { width: min(620px, 100%); margin-top: 22px; background: rgba(240,232,215,0.92); border-radius: 18px; padding: 20px; text-align: center; }
+    .team-grid { display: flex; justify-content: center; margin-top: 15px; }
 
     .squishy-btn {
-      background: none;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      user-select: none;
+      background: none; border: none; padding: 0; cursor: pointer; outline: none;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
     }
 
     .helmet-circle {
-      width: 80px;  /* Strict size to prevent whole-page issue */
-      height: 80px;
-      border-radius: 50%;
-      overflow: hidden;
-      background: #0b162a; /* Windy City Navy */
-      border: 3px solid #de5025; /* Windy City Orange */
-      box-shadow: 
-        0 6px 0 #070e1c, /* Deep Navy 3D base */
-        0 10px 15px rgba(0,0,0,0.4);
+      width: 100px; height: 100px; /* FIXED SIZE */
+      border-radius: 50%; overflow: hidden;
+      border: 4px solid #4f2683; /* Vikings Purple */
+      background: #000;
+      box-shadow: 0 10px 0 #2c1250, 0 15px 25px rgba(0,0,0,0.5);
       transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.1s ease;
     }
 
-    .helmet-circle img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .helmet-circle img { width: 100%; height: 100%; object-fit: cover; }
 
     .squishy-btn:hover .helmet-circle {
-      transform: translateY(-3px);
-      box-shadow: 0 9px 0 #070e1c, 0 15px 20px rgba(0,0,0,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 14px 0 #2c1250, 0 20px 30px rgba(0,0,0,0.6);
     }
 
     .squishy-btn:active .helmet-circle {
-      transform: translateY(6px) scale(0.95, 0.9);
-      box-shadow: 0 0 0 #070e1c, 0 2px 4px rgba(0,0,0,0.3);
+      transform: translateY(10px) scale(0.95, 0.85); /* THE SQUISH */
+      box-shadow: 0 0 0 #2c1250, 0 2px 5px rgba(0,0,0,0.3);
     }
 
-    .squishy-name {
-      font-size: 0.58rem;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #de5025; /* Orange text */
-      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-    }
+    .squishy-name { font-size: 0.7rem; font-weight: 900; color: #4f2683; text-transform: uppercase; }
 
-    /* ── PAGE FOOTER ── */
-    .page-footer {
-      margin-top: 28px;
-      text-align: center;
-    }
-
-    .page-footer p {
-      font-size: 0.7rem;
-      color: #4a3818;
-      letter-spacing: 0.08em;
-    }
-
-    .page-footer p span {
-      color: #6a5228;
-    }
+    .page-footer { margin-top: 28px; text-align: center; color: #4a3818; font-size: 0.7rem; }
   </style>
 </head>
 <body>
@@ -477,483 +137,57 @@
   <a href="./dashboard.html" class="nav-back">← Dashboard</a>
 
   <div class="console">
-
-    <!-- Brand -->
     <div class="brand-bar">
       <span class="brand-company" id="brand-company">Husom Electronics</span>
       <span class="brand-title">Football</span>
     </div>
-
-    <!-- Display: [SCORE/DOWN] [LED FIELD] [TIME/YDS] -->
     <div class="display-section">
-
-      <!-- Left stat column -->
       <div class="stat-col">
-        <div class="stat-box">
-          <span class="stat-label">Score</span>
-          <span class="stat-value" id="disp-score">00</span>
-        </div>
-        <div class="stat-box">
-          <span class="stat-label">Down</span>
-          <span class="stat-value" id="disp-down">1</span>
-        </div>
+        <div class="stat-box"><span class="stat-label">Score</span><span class="stat-value" id="disp-score">00</span></div>
+        <div class="stat-box"><span class="stat-label">Down</span><span class="stat-value" id="disp-down">1</span></div>
       </div>
-
-      <!-- Center LED field -->
-      <div class="led-bezel">
-        <canvas id="led-canvas"></canvas>
-        <div class="field-label">· · · · · · · · · ·</div>
-      </div>
-
-      <!-- Right stat column -->
+      <div class="led-bezel"><canvas id="led-canvas"></canvas></div>
       <div class="stat-col">
-        <div class="stat-box">
-          <span class="stat-label">Time</span>
-          <span class="stat-value" id="disp-time">99</span>
-        </div>
-        <div class="stat-box">
-          <span class="stat-label">Yds</span>
-          <span class="stat-value" id="disp-yds">10</span>
-        </div>
+        <div class="stat-box"><span class="stat-label">Time</span><span class="stat-value" id="disp-time">99</span></div>
+        <div class="stat-box"><span class="stat-label">Yds</span><span class="stat-value" id="disp-yds">10</span></div>
       </div>
-
     </div>
-
-    <!-- Controls -->
     <div class="controls-row">
-
-      <!-- Left cluster: status buttons -->
-      <div class="btn-cluster">
-        <button class="gbtn">Score</button>
-        <button class="gbtn">Down</button>
-        <button class="gbtn">Status</button>
-      </div>
-
-      <!-- Center: directional pad -->
+      <div class="btn-cluster"><button class="gbtn">Score</button><button class="gbtn">Down</button></div>
       <div class="d-pad">
-        <div class="d-row">
-          <button class="dbtn">▲</button>
-        </div>
-        <div class="d-row">
-          <button class="dbtn" id="btn-left">◀</button>
-          <button class="dbtn center-btn">Run</button>
-          <button class="dbtn" id="btn-right">▶</button>
-        </div>
-        <div class="d-row">
-          <button class="dbtn">▼</button>
-        </div>
+        <button class="dbtn">▲</button>
+        <div style="display:flex; gap:4px;"><button class="dbtn">◀</button><button class="dbtn">▶</button></div>
+        <button class="dbtn">▼</button>
       </div>
-
-      <!-- Right cluster: game mode buttons -->
-      <div class="btn-cluster">
-        <button class="gbtn">Pro 1</button>
-        <button class="gbtn">K · O</button>
-        <button class="gbtn">Pro 2</button>
-      </div>
-
+      <div class="btn-cluster"><button class="gbtn">Pro 1</button><button class="gbtn">Pro 2</button></div>
     </div>
-
-    <div class="console-tagline">The 1977 Classic — Rebuilt for the Browser</div>
-
   </div>
 
-  <!-- Team Select -->
   <div class="team-select">
-    <div class="team-select-label">Choose Your Team</div>
-    <div class="team-grid" id="team-grid"></div>
+    <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; color:#3a2c10;">Select Team</div>
+    <div class="team-grid" id="team-grid">
+      <button class="squishy-btn" onclick="location.reload()">
+        <div class="helmet-circle">
+          <img src="./helmet_vikings.png" alt="Vikings">
+        </div>
+        <div class="squishy-name">Purple Peeps</div>
+      </button>
+    </div>
   </div>
 
   <div class="page-footer">
-    <p>Tom's Love of Mattel Electronic Football Reimagined &nbsp;·&nbsp; <span>Vanilla JS · HTML5 Canvas · Retro Gaming</span></p>
+    <p>Reimagined by Honest Tom &nbsp;·&nbsp; Vanilla JS · HTML5 Canvas</p>
   </div>
 
   <script>
-  // =================================================================
-  //  LED FIELD DISPLAY + GAME INPUT
-  // =================================================================
-
-  (function () {
-    var canvas = document.getElementById('led-canvas');
-    var ctx    = canvas.getContext('2d');
-
-    // ── GRID CONFIG ──
-    var COLS   = 10;   // field columns (left end → right end zone)
-    var ROWS   = 7;    // field rows (top to bottom)
-    var CW     = 32;   // cell width  (LED dash width)
-    var CH     = 13;   // cell height (LED dash height)
-    var GX     = 5;    // horizontal gap between cells
-    var GY     = 7;    // vertical gap between cells
-
-    canvas.width  = COLS * (CW + GX) - GX;   // 365px
-    canvas.height = ROWS * (CH + GY) - GY;   // 133px
-
-    // ── COLORS ──
-    var COL_BG      = '#060401';
-    var COL_UNLIT   = '#1e0b02';   // barely-there dark brown — unlit LED
-    var COL_DEF     = '#ff3e00';   // defenders — orange-red
-    var COL_OFF     = '#ffb040';   // offense — brighter amber-orange (ball carrier)
-    var COL_OFF_TOP = '#ffe080';   // inner bright highlight on offense dash
-
-    // ── FIELD STATE ──
-    // null = empty  'O' = offense (you)  'D' = defense
-    var cells = [];
-    for (var r = 0; r < ROWS; r++) {
-      cells[r] = [];
-      for (var c = 0; c < COLS; c++) { cells[r][c] = null; }
-    }
-
-    // Offense position tracking
-    var offRow = 3, offCol = 3;
-    cells[offRow][offCol] = 'O';
-
-    // Defense — 5 defenders in a spread formation ahead of offense
-    cells[1][6] = 'D';
-    cells[2][5] = 'D';
-    cells[3][7] = 'D';
-    cells[4][5] = 'D';
-    cells[5][6] = 'D';
-
-    // ── HELPERS ──
-    function cx(col) { return col * (CW + GX); }
-    function cy(row) { return row * (CH + GY); }
-
-    // Draw a single LED cell
-    function drawCell(col, row, type) {
-      var x  = cx(col);
-      var y  = cy(row);
-      var rx = CH / 2;   // corner radius = half height → perfect pill shape
-
-      ctx.save();
-
-      if (!type) {
-        // ── Unlit LED: just a dim pill ──
-        ctx.fillStyle = COL_UNLIT;
-        ctx.beginPath();
-        ctx.roundRect(x, y, CW, CH, rx);
-        ctx.fill();
-
-      } else if (type === 'O') {
-        // ── Offense: two stacked mini-dashes ("=" shape) with bright glow ──
-        var dashH = Math.floor((CH - 3) / 2);
-        var dashW = CW - 6;
-
-        // Outer glow layer
-        ctx.shadowColor = '#ff5000';
-        ctx.shadowBlur  = 20;
-        ctx.fillStyle   = '#ff6020';
-        ctx.beginPath();
-        ctx.roundRect(x - 2, y - 2, CW + 4, CH + 4, rx + 2);
-        ctx.fill();
-
-        // Top dash
-        ctx.shadowBlur = 12;
-        ctx.fillStyle  = COL_OFF;
-        ctx.beginPath();
-        ctx.roundRect(x + 3, y + 1, dashW, dashH, dashH / 2);
-        ctx.fill();
-
-        // Bottom dash
-        ctx.beginPath();
-        ctx.roundRect(x + 3, y + CH - dashH - 1, dashW, dashH, dashH / 2);
-        ctx.fill();
-
-        // Inner bright highlight (top dash)
-        ctx.shadowBlur = 4;
-        ctx.fillStyle  = COL_OFF_TOP;
-        ctx.beginPath();
-        ctx.roundRect(x + 6, y + 2, dashW - 6, dashH - 2, 1);
-        ctx.fill();
-
-      } else if (type === 'D') {
-        // ── Defense: single centered dash ──
-        var defY = y + Math.floor((CH - 5) / 2);
-
-        // Outer glow
-        ctx.shadowColor = '#cc2800';
-        ctx.shadowBlur  = 14;
-        ctx.fillStyle   = '#cc2800';
-        ctx.beginPath();
-        ctx.roundRect(x, y, CW, CH, rx);
-        ctx.fill();
-
-        // Core dash
-        ctx.shadowBlur = 6;
-        ctx.fillStyle  = COL_DEF;
-        ctx.beginPath();
-        ctx.roundRect(x + 2, defY, CW - 4, 5, 2);
-        ctx.fill();
-
-        // Inner highlight
-        ctx.shadowBlur = 0;
-        ctx.fillStyle  = '#ff7040';
-        ctx.beginPath();
-        ctx.roundRect(x + 5, defY + 1, CW - 14, 2, 1);
-        ctx.fill();
-      }
-
-      ctx.restore();
-    }
-
-    // Draw subtle yard-line markers between columns
-    function drawYardMarkers() {
-      for (var c = 1; c < COLS; c++) {
-        if (c % 2 === 0) continue;
-        var x = cx(c) - Math.ceil(GX / 2);
-        ctx.save();
-        ctx.fillStyle = '#150800';
-        ctx.fillRect(x, 2, 1, canvas.height - 4);
-        ctx.restore();
-      }
-    }
-
-    // ── MAIN RENDER ──
-    function render() {
-      ctx.fillStyle = COL_BG;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      drawYardMarkers();
-
-      for (var r = 0; r < ROWS; r++) {
-        for (var c = 0; c < COLS; c++) {
-          drawCell(c, r, cells[r][c]);
-        }
-      }
-
-      // End-zone shimmer
-      ctx.save();
-      ctx.fillStyle = 'rgba(255,80,0,0.03)';
-      ctx.fillRect(cx(COLS - 1) - GX, 0, CW + GX + 4, canvas.height);
-      ctx.restore();
-    }
-
-    render();
-
-    // ── KEYBOARD MOVEMENT ──
-    document.addEventListener('keydown', function (e) {
-      var nr = offRow, nc = offCol;
-
-      if      (e.key === 'ArrowUp')    nr--;
-      else if (e.key === 'ArrowDown')  nr++;
-      else if (e.key === 'ArrowRight') nc++;
-      else if (e.key === 'ArrowLeft')  nc--;
-      else return;
-
-      // Prevent page scroll on arrow keys
-      e.preventDefault();
-
-      // Bounds check
-      if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) return;
-
-      // Move player
-      cells[offRow][offCol] = null;
-      offRow = nr;
-      offCol = nc;
-      cells[offRow][offCol] = 'O';
-
-      render();
-    });
-
-  })();
-
-
-  // =================================================================
-  //  TEAM COLOR THEMES
-  // =================================================================
-
-  var TEAMS = {
-    husom:       { name:'Pheasants', sub:'Default',
-      shellLight:'#c8a050', shellMid:'#9a7428', shellDark:'#6a4c08',
-      btnTop:'#e42222',  btnBot:'#920c0c',  btnShadow:'#5e0000', btnHL:'rgba(255,130,130,0.3)',
-      brandCo:'#7a6238', brandTitle:'#b81200', tagline:'#c8901a',
-      hPrimary:'#ffffff', hSecondary:'#8b6020', hFacemask:'#888870',
-      helmFilter: 'sepia(0.4) saturate(1.3) brightness(1.35)' },
-
-    westcoast:   { name:'West Coast', sub:'Gold Rush',
-      shellLight:'#c4a44a', shellMid:'#a8893e', shellDark:'#7a6228',
-      btnTop:'#c8a84c',  btnBot:'#8a6820',  btnShadow:'#5a3e00', btnHL:'rgba(200,180,80,0.3)',
-      brandCo:'#b3995d', brandTitle:'#ffffff', tagline:'#cc9944',
-      hPrimary:'#aa0000', hSecondary:'#b3995d', hFacemask:'#b3995d',
-      helmFilter: 'sepia(1) saturate(4) hue-rotate(5deg) brightness(1.05)' },
-
-    motortown:   { name:'Motor Town', sub:'Lions',
-      shellLight:'#d0d5d8', shellMid:'#b0b7bc', shellDark:'#808890',
-      btnTop:'#c0c8cc',  btnBot:'#6a7480',  btnShadow:'#384048', btnHL:'rgba(180,210,230,0.3)',
-      brandCo:'#0076b6', brandTitle:'#ffffff', tagline:'#0076b6',
-      hPrimary:'#b0b7bc', hSecondary:'#0076b6', hFacemask:'#0076b6',
-      helmFilter: 'saturate(0.08) brightness(1.25)' },
-
-    steelcurtain:{ name:'Steel Curtain', sub:'Steelers',
-      shellLight:'#ffd040', shellMid:'#ffb612', shellDark:'#b08000',
-      btnTop:'#383838',  btnBot:'#101820',  btnShadow:'#000000', btnHL:'rgba(255,200,60,0.2)',
-      brandCo:'#ffb612', brandTitle:'#ffffff', tagline:'#ccaa40',
-      hPrimary:'#101820', hSecondary:'#ffb612', hFacemask:'#888888',
-      helmFilter: 'sepia(1) saturate(3.5) hue-rotate(8deg) brightness(1.0)' },
-
-    purplepeeps: { name:'Purple Peeps', sub:'Vikings',
-      shellLight:'#7a3dbb', shellMid:'#4f2683', shellDark:'#2c1250',
-      btnTop:'#ffc840',  btnBot:'#c08800',  btnShadow:'#604800', btnHL:'rgba(255,200,80,0.3)',
-      brandCo:'#ffc62f', brandTitle:'#ffffff', tagline:'#cc88ff',
-      hPrimary:'#4f2683', hSecondary:'#ffc62f', hFacemask:'#888888',
-      helmFilter: 'hue-rotate(265deg) saturate(3.5) brightness(0.75)' },
-
-    windycity:   { name:'Windy City', sub:'Bears',
-      shellLight:'#243456', shellMid:'#0b162a', shellDark:'#070e1c',
-      btnTop:'#de5025',  btnBot:'#c83803',  btnShadow:'#7a1800', btnHL:'rgba(255,120,60,0.3)',
-      brandCo:'#c83803', brandTitle:'#ffffff', tagline:'#aa6644',
-      hPrimary:'#152038', hSecondary:'#c83803', hFacemask:'#888888',
-      helmFilter: 'hue-rotate(195deg) saturate(4) brightness(0.38)' },
-
-    broadwayjoes:{ name:'Broadway Joes', sub:'Jets',
-      shellLight:'#1e9068', shellMid:'#125740', shellDark:'#0a3020',
-      btnTop:'#404040',  btnBot:'#202020',  btnShadow:'#000000', btnHL:'rgba(80,180,140,0.2)',
-      brandCo:'#4ade80', brandTitle:'#ffffff', tagline:'#55bb80',
-      hPrimary:'#125740', hSecondary:'#ffffff', hFacemask:'#888888',
-      helmFilter: 'sepia(1) hue-rotate(100deg) saturate(2.5) brightness(0.72)' },
-
-    gmen:        { name:'G Men', sub:'Giants',
-      shellLight:'#1e3a9c', shellMid:'#0b2265', shellDark:'#060f38',
-      btnTop:'#c84060',  btnBot:'#a71930',  btnShadow:'#600010', btnHL:'rgba(200,80,100,0.3)',
-      brandCo:'#a5acaf', brandTitle:'#ffffff', tagline:'#7788bb',
-      hPrimary:'#142288', hSecondary:'#a71930', hFacemask:'#a5acaf',
-      helmFilter: 'hue-rotate(205deg) saturate(4) brightness(0.5)' },
-
-    theboys:     { name:'The Boys', sub:'Cowboys',
-      shellLight:'#1a50e0', shellMid:'#003594', shellDark:'#001a58',
-      btnTop:'#9aa4b0',  btnBot:'#5a6470',  btnShadow:'#2a3040', btnHL:'rgba(160,185,210,0.3)',
-      brandCo:'#869397', brandTitle:'#ffffff', tagline:'#8898a8',
-      hPrimary:'#0840aa', hSecondary:'#869397', hFacemask:'#869397',
-      helmFilter: 'saturate(0.3) brightness(2)' },
-
-    thepack:     { name:'The Pack', sub:'Packers',
-      shellLight:'#305848', shellMid:'#203731', shellDark:'#101c18',
-      btnTop:'#ffd040',  btnBot:'#ffb612',  btnShadow:'#805800', btnHL:'rgba(255,200,50,0.3)',
-      brandCo:'#ffb612', brandTitle:'#ffffff', tagline:'#66aa66',
-      hPrimary:'#203731', hSecondary:'#ffb612', hFacemask:'#888888',
-      helmFilter: 'sepia(1) saturate(3.5) hue-rotate(8deg) brightness(0.95)' },
-
-    malosos:     { name:'Malosos', sub:'Raiders',
-      shellLight:'#3a3a3a', shellMid:'#1a1a1a', shellDark:'#000000',
-      btnTop:'#aab0b8',  btnBot:'#707880',  btnShadow:'#202020', btnHL:'rgba(200,210,220,0.3)',
-      brandCo:'#a5acaf', brandTitle:'#ffffff', tagline:'#808890',
-      hPrimary:'#252525', hSecondary:'#a5acaf', hFacemask:'#a5acaf',
-      helmFilter: 'grayscale(1) brightness(0.65)' }
-  };
-
-  var TEAM_ORDER = ['husom','westcoast','motortown','steelcurtain','purplepeeps',
-                    'windycity','broadwayjoes','gmen','theboys','thepack','malosos'];
-
-  var currentTheme = 'husom';
-
-  // ── Darken a hex color by a fraction (0–1) ──
-  function darkenHex(hex, pct) {
-    var h = hex.replace('#','');
-    if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
-    var r = Math.max(0, Math.floor(parseInt(h.slice(0,2),16) * (1-pct)));
-    var g = Math.max(0, Math.floor(parseInt(h.slice(2,4),16) * (1-pct)));
-    var b = Math.max(0, Math.floor(parseInt(h.slice(4,6),16) * (1-pct)));
-    return '#' + r.toString(16).padStart(2,'0')
-               + g.toString(16).padStart(2,'0')
-               + b.toString(16).padStart(2,'0');
-  }
-
-  // ── Apply theme to console ──
-  function applyTheme(key) {
-    var t = TEAMS[key];
-    if (!t) return;
-    currentTheme = key;
-    var r = document.documentElement;
-    r.style.setProperty('--shell-light',  t.shellLight);
-    r.style.setProperty('--shell-mid',    t.shellMid);
-    r.style.setProperty('--shell-dark',   t.shellDark);
-    r.style.setProperty('--btn-top',      t.btnTop);
-    r.style.setProperty('--btn-bot',      t.btnBot);
-    r.style.setProperty('--btn-shadow',   t.btnShadow);
-    r.style.setProperty('--btn-hl',       t.btnHL);
-    r.style.setProperty('--brand-co',     t.brandCo);
-    r.style.setProperty('--brand-title',  t.brandTitle);
-    r.style.setProperty('--tagline',      t.tagline);
-    // Update brand company text
-    var bc = document.getElementById('brand-company');
-    if (bc) bc.textContent = t.name;
-    // Update active item highlight
-    document.querySelectorAll('.helmet-btn').forEach(function(btn) {
-      btn.classList.toggle('active', btn.dataset.key === key);
-    });
-  }
-
-  // ── Build Team Select Grid — Clean Helmet-Only Buttons ──
-  function buildTeamSelect() {
-    var grid = document.getElementById('team-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
-
-    TEAM_ORDER.forEach(function(key) {
-      var t = TEAMS[key];
-
-      var btn = document.createElement('button');
-      btn.className = 'helmet-btn' + (key === currentTheme ? ' active' : '');
-      btn.dataset.key = key;
-
-      var img = document.createElement('img');
-      img.src = './westcoast_helmet.png?v=20260330';
-      img.alt = t.name;
-      img.draggable = false;
-      if (t.helmFilter) img.style.filter = t.helmFilter;
-
-      var label = document.createElement('div');
-      label.className = 'team-btn-name';
-      label.textContent = t.name;
-
-      btn.appendChild(img);
-      btn.appendChild(label);
-
-      btn.addEventListener('click', function() { applyTheme(key); });
-
-      grid.appendChild(btn);
-    });
-  }
-
-  buildTeamSelect();
-
-  /* ═══════════════════════════════════════════════════════════════
-     SAVED buildTeamSelect — restore by swapping in this function
-  ═══════════════════════════════════════════════════════════════
-  function buildTeamSelect() {
-    var grid = document.getElementById('team-grid');
-    TEAM_ORDER.forEach(function(key) {
-      var t = TEAMS[key];
-      var item = document.createElement('div');
-      item.className   = 'team-item' + (key === currentTheme ? ' active' : '');
-      item.dataset.key = key;
-      var btn = document.createElement('button');
-      btn.className = 'helmet-btn';
-      btn.style.setProperty('--hbg1',  t.shellLight);
-      btn.style.setProperty('--hbg2',  t.shellMid);
-      btn.style.setProperty('--hshad', t.shellDark);
-      btn.style.setProperty('--hshad2', darkenHex(t.shellDark, 0.35));
-      var img = document.createElement('img');
-      img.src       = (t.helmSrc || 'svg_helmet.svg') + '?v=20260329b';
-      img.alt       = t.name;
-      img.draggable = false;
-      if (t.helmFilter) img.style.filter = t.helmFilter;
-      if (t.helmBlend)  img.style.mixBlendMode = t.helmBlend;
-      var label = document.createElement('div');
-      label.className   = 'team-btn-name';
-      label.textContent = t.name;
-      btn.appendChild(img);
-      item.addEventListener('click', function() { applyTheme(key); });
-      item.appendChild(btn);
-      item.appendChild(label);
-      grid.appendChild(item);
-    });
-  }
-  ═══════════════════════════════════════════════════════════════ */
-
+    (function () {
+      var canvas = document.getElementById('led-canvas');
+      var ctx    = canvas.getContext('2d');
+      canvas.width = 365; canvas.height = 133;
+      ctx.fillStyle = '#060401'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // LED Placeholder
+      ctx.fillStyle = '#ff3e00'; ctx.fillRect(50, 50, 20, 10);
+    })();
   </script>
-
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
-</body>
-</html>
-('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
 </body>
 </html>
