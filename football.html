@@ -18,7 +18,7 @@
   <meta property="og:type" content="website"/>
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
-    var VER = 'v=20260330h';
+    var VER = 'v=20260330i';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -452,9 +452,10 @@
 
     /* ALL effects on the img — border-radius clips to circle, box-shadow follows it */
     .vg-btn img {
-      width: 110px;
-      height: 110px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
+      object-fit: cover;
       display: block;
       pointer-events: none;
       transition: transform 60ms cubic-bezier(0.34, 1.56, 0.64, 1),
