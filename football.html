@@ -698,6 +698,17 @@
     <div class="team-grid" id="team-grid"></div>
   </div>
 
+  <!-- ── NEW BUTTON TEST ── -->
+  <div style="margin-top:28px; display:flex; flex-direction:column; align-items:center; gap:6px;">
+    <div style="font-size:0.52rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#7a6030; margin-bottom:8px;">New Button — v1 Prototype</div>
+    <div class="vg-btn-wrap" id="vg-test-btn" onclick="this.classList.toggle('active')">
+      <div class="vg-btn">
+        <img src="./westcoast_helmet.png" alt="West Coast" draggable="false">
+      </div>
+      <div class="vg-btn-name">West Coast</div>
+    </div>
+  </div>
+
   <div class="page-footer">
     <p>Tom's Love of Mattel Electronic Football Reimagined &nbsp;·&nbsp; <span>Vanilla JS · HTML5 Canvas · Retro Gaming</span></p>
   </div>
@@ -1014,58 +1025,50 @@
     document.querySelectorAll('.team-item').forEach(function(item) {
       item.classList.toggle('active', item.dataset.key === key);
     });
-    // Update active state on the custom buttons
-    document.querySelectorAll('.vg-btn-wrap').forEach(function(btn) {
-      btn.classList.toggle('active', btn.dataset.key === key);
-    });
   }
 
-  // ── Build team picker grid — Using the NEW video game button style ──
+  // ── Build team picker grid — PLACEHOLDER (new design coming) ──
   function buildTeamSelect() {
     var grid = document.getElementById('team-grid');
     TEAM_ORDER.forEach(function(key) {
       var t = TEAMS[key];
 
-      var wrapper = document.createElement('div');
-      wrapper.className = 'vg-btn-wrap' + (key === currentTheme ? ' active' : '');
-      wrapper.dataset.key = key;
+      var item = document.createElement('div');
+      item.className   = 'team-item' + (key === currentTheme ? ' active' : '');
+      item.dataset.key = key;
 
-      var btn = document.createElement('div');
-      btn.className = 'vg-btn';
-
-      var img = document.createElement('img');
-      img.src = './westcoast_helmet.png?v=20260330';
-      img.alt = t.name;
-      img.draggable = false;
-      if (t.helmFilter) img.style.filter = t.helmFilter;
+      var btn = document.createElement('button');
+      btn.className = 'helmet-btn';
 
       var label = document.createElement('div');
-      label.className = 'vg-btn-name';
+      label.className   = 'team-btn-name';
       label.textContent = t.name;
 
-      btn.appendChild(img);
-      wrapper.appendChild(btn);
-      wrapper.appendChild(label);
-
-      // Add click behavior
-      wrapper.addEventListener('click', function() { applyTheme(key); });
-
-      // Add touch feedback
-      wrapper.addEventListener('touchstart', function(e) {
-        wrapper.classList.add('pressed');
-      }, { passive: true });
-      wrapper.addEventListener('touchend', function() {
-        wrapper.classList.remove('pressed');
-      });
-      wrapper.addEventListener('touchcancel', function() {
-        wrapper.classList.remove('pressed');
-      });
-
-      grid.appendChild(wrapper);
+      item.addEventListener('click', function() { applyTheme(key); });
+      item.appendChild(btn);
+      item.appendChild(label);
+      grid.appendChild(item);
     });
   }
 
   buildTeamSelect();
+
+  // ── Touch feedback for new vg-btn prototype ──
+  (function() {
+    var btn = document.getElementById('vg-test-btn');
+    if (!btn) return;
+    btn.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      btn.classList.add('pressed');
+    }, { passive: false });
+    btn.addEventListener('touchend', function() {
+      btn.classList.remove('pressed');
+      btn.classList.toggle('active');
+    });
+    btn.addEventListener('touchcancel', function() {
+      btn.classList.remove('pressed');
+    });
+  })();
 
   /* ═══════════════════════════════════════════════════════════════
      SAVED buildTeamSelect — restore by swapping in this function
