@@ -18,7 +18,7 @@
   <meta property="og:type" content="website"/>
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
-    var VER = 'v=20260330c';
+    var VER = 'v=20260330d';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER);
     }
@@ -423,6 +423,147 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    /* ══════════════════════════════════════════════
+       NEW VIDEO GAME HELMET BUTTON — v1 West Coast
+    ══════════════════════════════════════════════ */
+
+    .vg-btn-wrap {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    /* The raised platform the helmet sits on */
+    .vg-btn {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      border-radius: 20px;
+      background: linear-gradient(160deg, #c8a050 0%, #9a7428 55%, #7a5418 100%);
+      border: 2px solid rgba(255,210,100,0.35);
+      /* Stacked hard shadows = thick arcade button edge */
+      box-shadow:
+        0 2px 0   #6a4c08,
+        0 4px 0   #5a3e00,
+        0 6px 0   #4a3000,
+        0 8px 0   #3a2400,
+        0 10px 0  #2a1800,
+        0 14px 28px rgba(0,0,0,0.75),
+        inset 0 2px 0 rgba(255,230,140,0.45),
+        inset 0 -2px 4px rgba(0,0,0,0.3);
+      transition:
+        transform    60ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow   60ms ease,
+        filter       60ms ease;
+      will-change: transform;
+    }
+
+    /* Helmet image inside */
+    .vg-btn img {
+      position: absolute;
+      inset: -12px -8px -8px -8px;
+      width: calc(100% + 16px);
+      height: calc(100% + 20px);
+      object-fit: contain;
+      pointer-events: none;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
+      transition: transform 60ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                  filter    60ms ease;
+    }
+
+    /* Shine overlay */
+    .vg-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      background: linear-gradient(145deg,
+        rgba(255,255,255,0.22) 0%,
+        rgba(255,255,255,0.06) 40%,
+        transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ── HOVER: helmet floats up, glow brightens ── */
+    .vg-btn-wrap:hover .vg-btn {
+      transform: translateY(-3px);
+      filter: brightness(1.1);
+      box-shadow:
+        0 2px 0   #6a4c08,
+        0 4px 0   #5a3e00,
+        0 6px 0   #4a3000,
+        0 8px 0   #3a2400,
+        0 10px 0  #2a1800,
+        0 12px 0  #1a0c00,
+        0 18px 36px rgba(0,0,0,0.85),
+        0 0 22px  rgba(200,160,80,0.25),
+        inset 0 2px 0 rgba(255,230,140,0.5),
+        inset 0 -2px 4px rgba(0,0,0,0.3);
+    }
+    .vg-btn-wrap:hover .vg-btn img {
+      transform: translateY(-2px) scale(1.04);
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.7));
+    }
+
+    /* ── ACTIVE: full squish — button slams down ── */
+    .vg-btn-wrap:active .vg-btn,
+    .vg-btn-wrap.pressed .vg-btn {
+      transform: translateY(8px) scaleY(0.94) scaleX(1.02);
+      box-shadow:
+        0 1px 0   #6a4c08,
+        0 2px 0   #5a3e00,
+        0 4px 8px rgba(0,0,0,0.5),
+        inset 0 3px 6px rgba(0,0,0,0.35);
+      filter: brightness(0.88);
+    }
+    .vg-btn-wrap:active .vg-btn img,
+    .vg-btn-wrap.pressed .vg-btn img {
+      transform: translateY(4px) scaleY(0.93);
+      filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
+    }
+
+    /* ── SELECTED: gold glow ring + subtle pulse ── */
+    .vg-btn-wrap.active .vg-btn {
+      box-shadow:
+        0 0 0 3px #ffd060,
+        0 0 0 5px rgba(255,200,60,0.35),
+        0 2px 0   #6a4c08,
+        0 4px 0   #5a3e00,
+        0 6px 0   #4a3000,
+        0 8px 0   #3a2400,
+        0 10px 0  #2a1800,
+        0 14px 28px rgba(0,0,0,0.75),
+        inset 0 2px 0 rgba(255,230,140,0.45);
+      animation: vg-pulse 2s ease-in-out infinite;
+    }
+    @keyframes vg-pulse {
+      0%, 100% { box-shadow:
+        0 0 0 3px #ffd060,
+        0 0 0 5px rgba(255,200,60,0.35),
+        0 2px 0 #6a4c08, 0 4px 0 #5a3e00, 0 6px 0 #4a3000, 0 8px 0 #3a2400, 0 10px 0 #2a1800,
+        0 14px 28px rgba(0,0,0,0.75), inset 0 2px 0 rgba(255,230,140,0.45); }
+      50%  { box-shadow:
+        0 0 0 3px #ffe090,
+        0 0 0 8px rgba(255,210,80,0.45),
+        0 2px 0 #6a4c08, 0 4px 0 #5a3e00, 0 6px 0 #4a3000, 0 8px 0 #3a2400, 0 10px 0 #2a1800,
+        0 14px 28px rgba(0,0,0,0.75), inset 0 2px 0 rgba(255,230,140,0.6); }
+    }
+
+    .vg-btn-name {
+      font-size: 0.56rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 8px rgba(0,0,0,0.9);
+      text-align: center;
+    }
+    .vg-btn-wrap.active .vg-btn-name { color: #ffd060; }
+
     .team-btn-name {
       font-size: 0.52rem;
       font-weight: 900;
@@ -599,6 +740,17 @@
   <div class="team-select">
     <div class="team-select-label">Choose Your Team</div>
     <div class="team-grid" id="team-grid"></div>
+  </div>
+
+  <!-- ── NEW BUTTON TEST ── -->
+  <div style="margin-top:28px; display:flex; flex-direction:column; align-items:center; gap:6px;">
+    <div style="font-size:0.52rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#7a6030; margin-bottom:8px;">New Button — v1 Prototype</div>
+    <div class="vg-btn-wrap" id="vg-test-btn" onclick="this.classList.toggle('active')">
+      <div class="vg-btn">
+        <img src="./helmet_westcoast.svg" alt="West Coast" draggable="false">
+      </div>
+      <div class="vg-btn-name">West Coast</div>
+    </div>
   </div>
 
   <div class="page-footer">
@@ -944,6 +1096,23 @@
   }
 
   buildTeamSelect();
+
+  // ── Touch feedback for new vg-btn prototype ──
+  (function() {
+    var btn = document.getElementById('vg-test-btn');
+    if (!btn) return;
+    btn.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      btn.classList.add('pressed');
+    }, { passive: false });
+    btn.addEventListener('touchend', function() {
+      btn.classList.remove('pressed');
+      btn.classList.toggle('active');
+    });
+    btn.addEventListener('touchcancel', function() {
+      btn.classList.remove('pressed');
+    });
+  })();
 
   /* ═══════════════════════════════════════════════════════════════
      SAVED buildTeamSelect — restore by swapping in this function
