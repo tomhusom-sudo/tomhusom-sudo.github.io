@@ -19,7 +19,7 @@
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
     // Force fresh load on every deploy — update VER when pushing new prices
-    var VER = 'v=20260329d';
+    var VER = 'v=20260329e';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER + (location.hash || ''));
     }
@@ -638,6 +638,7 @@
         <div class="form-group">
           <label class="form-label" for="f-ticker">Ticker</label>
           <input class="form-input" id="f-ticker" type="text" placeholder="e.g. AAPL" maxlength="12" autocorrect="off" autocapitalize="characters">
+          <span id="f-ticker-status" style="font-size:0.63rem;margin-top:5px;display:block;min-height:1.1em;letter-spacing:0.03em;"></span>
         </div>
         <div class="form-group">
           <label class="form-label" for="f-type">Type</label>
@@ -649,7 +650,7 @@
         </div>
         <div class="form-group full">
           <label class="form-label" for="f-name">Full Name</label>
-          <input class="form-input" id="f-name" type="text" placeholder="e.g. Apple Inc.">
+          <input class="form-input" id="f-name" type="text" placeholder="Auto-filled from ticker lookup">
         </div>
         <div class="form-group full">
           <label class="form-label" for="f-domain">Logo Domain</label>
@@ -662,7 +663,7 @@
         </div>
         <div class="form-group">
           <label class="form-label" for="f-avgcost">Avg Cost ($)</label>
-          <input class="form-input" id="f-avgcost" type="number" placeholder="0.00" step="any" min="0" inputmode="decimal">
+          <input class="form-input" id="f-avgcost" type="number" placeholder="Defaults to current price" step="any" min="0" inputmode="decimal">
         </div>
         <div class="form-group full">
           <label class="form-label" for="f-price">Price Override ($)</label>
@@ -916,11 +917,83 @@
       if (!editMode) render();
     };
 
+    // ── TICKER LOOKUP ──
+    var _lookupXhr = null;
+    function fetchTickerInfo(ticker, isNewAsset) {
+      var statusEl = document.getElementById('f-ticker-status');
+      if (!ticker) { statusEl.textContent = ''; return; }
+
+      statusEl.textContent = '🔍 Looking up ' + ticker + '…';
+      statusEl.style.color = '#94a3b8';
+
+      if (_lookupXhr) { try { _lookupXhr.abort(); } catch(e){} }
+
+      var url = 'https://query1.finance.yahoo.com/v8/finance/chart/'
+                + encodeURIComponent(ticker)
+                + '?interval=1d&range=1d&includePrePost=false';
+      var proxies = [
+        'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
+        'https://corsproxy.io/?' + encodeURIComponent(url),
+      ];
+      var tried = 0;
+
+      function tryProxy(i) {
+        if (i >= proxies.length) {
+          statusEl.textContent = '⚠ Not found — check ticker symbol';
+          statusEl.style.color = '#f87171';
+          return;
+        }
+        var ctrl = new AbortController();
+        _lookupXhr = ctrl;
+        var timer = setTimeout(function(){ ctrl.abort(); }, 7000);
+
+        fetch(proxies[i], { signal: ctrl.signal })
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            clearTimeout(timer);
+            var res  = data && data.chart && data.chart.result && data.chart.result[0];
+            if (!res || !res.meta) throw new Error('no data');
+            var meta  = res.meta;
+            var name  = meta.longName || meta.shortName || ticker.toUpperCase();
+            var price = meta.regularMarketPrice || 0;
+            var qtype = (meta.instrumentType || '').toLowerCase();
+
+            // Auto-detect type
+            if (qtype === 'etf')         document.getElementById('f-type').value = 'etf';
+            else if (qtype === 'cryptocurrency') document.getElementById('f-type').value = 'crypto';
+            else if (qtype === 'equity') document.getElementById('f-type').value = 'stock';
+
+            // Fill name if blank
+            var nameEl = document.getElementById('f-name');
+            if (!nameEl.value) nameEl.value = name;
+
+            // Fill avg cost with live price on new adds (only if blank)
+            if (isNewAsset && price > 0) {
+              var avgEl = document.getElementById('f-avgcost');
+              if (!avgEl.value) avgEl.value = price.toFixed(2);
+            }
+
+            // Cache the live price
+            if (price > 0) LIVE_PRICES[ticker.toUpperCase()] = price;
+
+            statusEl.textContent = '✓ ' + name + (price > 0 ? '  ·  $' + price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '');
+            statusEl.style.color = '#4ade80';
+          })
+          .catch(function() {
+            clearTimeout(timer);
+            tryProxy(i + 1);
+          });
+      }
+      tryProxy(0);
+    }
+
     // ── MODAL ──
     window.openModal = function(index) {
       editingIndex = index;
       var assets = loadAssets();
       var a = (index !== null && index !== undefined) ? assets[index] : null;
+      var isNew = !a;
+
       document.getElementById('modal-title').textContent = a ? 'Edit Asset' : 'Add Asset';
       document.getElementById('f-ticker').value   = a ? a.ticker   : '';
       document.getElementById('f-name').value     = a ? a.name     : '';
@@ -930,6 +1003,30 @@
       document.getElementById('f-qty').value      = a ? (a.qty     != null ? a.qty     : '') : '';
       document.getElementById('f-avgcost').value  = a ? (a.avgCost != null ? a.avgCost : '') : '';
       document.getElementById('f-price').value    = a ? (a.priceOverride != null ? a.priceOverride : '') : '';
+
+      // Reset status line
+      var statusEl = document.getElementById('f-ticker-status');
+      statusEl.textContent = '';
+      if (a) {
+        // Editing — show current cached price
+        var lp = LIVE_PRICES[a.ticker];
+        if (lp) {
+          statusEl.textContent = '✓ ' + a.name + '  ·  $' + lp.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+          statusEl.style.color = '#4ade80';
+        }
+      }
+
+      // Wire up ticker blur to trigger lookup
+      var tickerEl = document.getElementById('f-ticker');
+      tickerEl.onblur = function() {
+        var t = tickerEl.value.trim().toUpperCase();
+        if (t) fetchTickerInfo(t, isNew);
+      };
+      // Also run on Enter key in ticker field
+      tickerEl.onkeydown = function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); tickerEl.blur(); }
+      };
+
       document.getElementById('modal-overlay').classList.add('open');
       // Focus first field after a short delay (iOS keyboard)
       setTimeout(function(){ document.getElementById('f-ticker').focus(); }, 100);
