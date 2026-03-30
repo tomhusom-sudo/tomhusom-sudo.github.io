@@ -19,7 +19,7 @@
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
     // Force fresh load on every deploy — update VER when pushing new prices
-    var VER = 'v=20260329f';
+    var VER = 'v=20260329g';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER + (location.hash || ''));
     }
@@ -310,25 +310,39 @@
 
     thead th {
       background: #0f172a;
-      padding: 12px 18px;
-      font-size: 0.7rem;
+      padding: 8px 10px;
+      font-size: 0.66rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.07em;
       color: #475569;
       text-align: right;
       white-space: nowrap;
       cursor: pointer;
       user-select: none;
-      transition: color 0.15s;
+      transition: color 0.15s, background 0.12s;
       -webkit-tap-highlight-color: transparent;
+      position: relative;
     }
 
     thead th:hover { color: #94a3b8; }
     thead th.sort-asc, thead th.sort-desc { color: #22c55e; }
-    thead th .sort-icon { margin-left: 4px; opacity: 0.4; font-style: normal; }
+    thead th .sort-icon { margin-left: 3px; opacity: 0.4; font-style: normal; }
     thead th.sort-asc .sort-icon, thead th.sort-desc .sort-icon { opacity: 1; }
-    thead th:first-child { text-align: left; }
+    thead th[data-key="asset"] { text-align: left; }
+    thead th.drag-over { background: #162032; color: #60a5fa; }
+    thead th.dragging  { opacity: 0.45; }
+    thead th[draggable="true"] { cursor: grab; }
+    thead th[draggable="true"]:active { cursor: grabbing; }
+    .drag-handle {
+      display: inline-block;
+      margin-right: 4px;
+      opacity: 0.25;
+      font-size: 0.75rem;
+      vertical-align: middle;
+      cursor: grab;
+    }
+    thead th:hover .drag-handle { opacity: 0.7; }
 
     tbody tr {
       background: #0d1321;
@@ -339,33 +353,33 @@
     tbody tr:hover { background: #131c2e; }
 
     td {
-      padding: 16px 18px;
-      font-size: 0.9rem;
+      padding: 10px 10px;
+      font-size: 0.82rem;
       text-align: right;
       white-space: nowrap;
     }
 
-    td:first-child { text-align: left; }
+    td[data-key="asset"] { text-align: left; }
 
-    .asset-cell { display: flex; align-items: center; gap: 12px; }
+    .asset-cell { display: flex; align-items: center; gap: 8px; }
 
     .asset-logo {
-      width: 36px; height: 36px;
+      width: 28px; height: 28px;
       border-radius: 50%;
       background: #1e293b;
       object-fit: contain;
-      padding: 4px;
+      padding: 3px;
       flex-shrink: 0;
     }
 
     .asset-logo-fallback {
-      width: 36px; height: 36px;
+      width: 28px; height: 28px;
       border-radius: 50%;
       background: #1e293b;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.65rem;
+      font-size: 0.58rem;
       font-weight: 700;
       color: #94a3b8;
       flex-shrink: 0;
@@ -551,11 +565,12 @@
       .card-value           { font-size: 1rem; }
 
       /* Table */
-      thead th  { padding: 9px 10px; font-size: 0.6rem; }
-      td        { padding: 11px 10px; font-size: 0.8rem; }
-      .asset-logo, .asset-logo-fallback { width: 26px; height: 26px; }
-      .ticker   { font-size: 0.82rem; }
+      thead th  { padding: 7px 8px; font-size: 0.58rem; }
+      td        { padding: 8px 8px; font-size: 0.75rem; }
+      .asset-logo, .asset-logo-fallback { width: 22px; height: 22px; }
+      .ticker   { font-size: 0.78rem; }
       .asset-name, .type-badge { display: none; }
+      .drag-handle { display: none; }
 
       /* Section header */
       .section-header       { margin-bottom: 10px; }
@@ -669,18 +684,7 @@
 
   <div class="table-wrapper">
     <table>
-      <thead>
-        <tr>
-          <th data-col="0">Asset <i class="sort-icon">⇅</i></th>
-          <th data-col="1">Price <i class="sort-icon">⇅</i></th>
-          <th data-col="2">Quantity <i class="sort-icon">⇅</i></th>
-          <th data-col="3">Avg Cost <i class="sort-icon">⇅</i></th>
-          <th data-col="4">Cost Basis <i class="sort-icon">⇅</i></th>
-          <th data-col="5">Mkt Value <i class="sort-icon">⇅</i></th>
-          <th data-col="6">Gain / Loss <i class="sort-icon">⇅</i></th>
-          <th data-col="7">Return <i class="sort-icon">⇅</i></th>
-        </tr>
-      </thead>
+      <thead><tr id="col-header-row"></tr></thead>
       <tbody id="holdings-tbody"></tbody>
       <tfoot>
         <tr><td colspan="8">Prices sourced from public market data. For informational purposes only.</td></tr>
@@ -773,7 +777,39 @@
 
     var editingIndex = null;
     var editMode = false;
-    var lastCol = -1, sortAsc = true;
+    var _lastSortKey = null, _sortAsc = true;
+
+    // ── COLUMN DEFINITIONS ──
+    var ALL_COLS = [
+      { key:'asset',     label:'Asset',      align:'left'  },
+      { key:'price',     label:'Price',      align:'right' },
+      { key:'qty',       label:'Qty',        align:'right' },
+      { key:'avgcost',   label:'Avg Cost',   align:'right' },
+      { key:'costbasis', label:'Cost Basis', align:'right' },
+      { key:'mktvalue',  label:'Mkt Value',  align:'right' },
+      { key:'gain',      label:'Gain/Loss',  align:'right' },
+      { key:'ret',       label:'Return',     align:'right' },
+    ];
+    var COL_ORDER = (function() {
+      try {
+        var s = localStorage.getItem('mti_col_order');
+        if (s) {
+          var saved = JSON.parse(s);
+          var allKeys = ALL_COLS.map(function(c){ return c.key; });
+          var valid   = saved.filter(function(k){ return allKeys.indexOf(k) >= 0; });
+          var missing = allKeys.filter(function(k){ return valid.indexOf(k) < 0; });
+          return valid.concat(missing);
+        }
+      } catch(e) {}
+      return ALL_COLS.map(function(c){ return c.key; });
+    })();
+    function saveColOrder() {
+      try { localStorage.setItem('mti_col_order', JSON.stringify(COL_ORDER)); } catch(e) {}
+    }
+    function colByKey(k) {
+      for (var i=0;i<ALL_COLS.length;i++) if (ALL_COLS[i].key===k) return ALL_COLS[i];
+      return null;
+    }
 
     // ── STORAGE ──
     var _cache = null;
@@ -922,6 +958,84 @@
       crEl.className = 'card-value ' + signCls(totRet);
     }
 
+    // ── RENDER HEADERS (drag-to-reorder) ──
+    var _dragSrcKey = null;
+    function renderHeaders() {
+      var tr = document.getElementById('col-header-row');
+      if (!tr) return;
+      tr.innerHTML = '';
+      COL_ORDER.forEach(function(key) {
+        var col = colByKey(key);
+        if (!col) return;
+        var th = document.createElement('th');
+        th.dataset.key = key;
+        th.style.textAlign = col.align;
+        if (_lastSortKey === key) th.classList.add(_sortAsc ? 'sort-asc' : 'sort-desc');
+        var dragIcon = key !== 'asset' ? '<span class="drag-handle" title="Drag to reorder">⠿</span>' : '';
+        th.innerHTML = dragIcon + col.label + ' <i class="sort-icon">'
+          + (_lastSortKey===key ? (_sortAsc?'↑':'↓') : '⇅') + '</i>';
+        if (key !== 'asset') th.draggable = true;
+
+        th.addEventListener('click', function(e) {
+          if (e.target.classList.contains('drag-handle')) return;
+          sortByKey(key);
+        });
+        th.addEventListener('touchend', function(e) { e.preventDefault(); sortByKey(key); });
+
+        th.addEventListener('dragstart', function(e) {
+          _dragSrcKey = key; th.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        th.addEventListener('dragend', function() {
+          th.classList.remove('dragging');
+          tr.querySelectorAll('th').forEach(function(h){ h.classList.remove('drag-over'); });
+        });
+        th.addEventListener('dragover', function(e) {
+          e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+          tr.querySelectorAll('th').forEach(function(h){ h.classList.remove('drag-over'); });
+          if (_dragSrcKey && _dragSrcKey !== key) th.classList.add('drag-over');
+        });
+        th.addEventListener('dragleave', function() { th.classList.remove('drag-over'); });
+        th.addEventListener('drop', function(e) {
+          e.preventDefault(); th.classList.remove('drag-over');
+          if (!_dragSrcKey || _dragSrcKey === key) return;
+          var fi = COL_ORDER.indexOf(_dragSrcKey), ti = COL_ORDER.indexOf(key);
+          if (fi < 0 || ti < 0) return;
+          COL_ORDER.splice(fi, 1); COL_ORDER.splice(ti, 0, _dragSrcKey);
+          saveColOrder();
+          renderHeaders();
+          renderTable(withPrices(loadAssets()));
+        });
+        tr.appendChild(th);
+      });
+      var tfoot = document.querySelector('tfoot td');
+      if (tfoot) tfoot.colSpan = COL_ORDER.length;
+    }
+
+    // ── SORT BY KEY ──
+    function sortByKey(key) {
+      _sortAsc = (_lastSortKey === key) ? !_sortAsc : true;
+      _lastSortKey = key;
+      renderHeaders();
+      var tbody = document.getElementById('holdings-tbody');
+      var rows  = Array.from(tbody.querySelectorAll('tr'));
+      rows.sort(function(a,b){
+        var va = getSortVal(a,key), vb = getSortVal(b,key);
+        return va < vb ? (_sortAsc?-1:1) : va > vb ? (_sortAsc?1:-1) : 0;
+      });
+      rows.forEach(function(r){ tbody.appendChild(r); });
+    }
+    function getSortVal(row, key) {
+      if (key === 'asset') {
+        var t = row.querySelector('.ticker');
+        return t ? t.childNodes[0].textContent.trim().toLowerCase() : '';
+      }
+      var td = row.querySelector('td[data-key="'+key+'"]');
+      if (!td) return '';
+      var n = parseFloat(td.dataset.val);
+      return isNaN(n) ? td.innerText.trim().toLowerCase() : n;
+    }
+
     // ── RENDER TABLE ──
     var CRYPTO_LOGOS = {
       'BTC':  'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
@@ -946,16 +1060,12 @@
       return '<div class="asset-logo-fallback">' + esc(a.ticker.substring(0,4)) + '</div>';
     }
 
-    function renderTable(assets) {
-      var html = '';
-      assets.forEach(function(a, i) {
-        var r = calcRow(a);
-        var gc = signCls(r.gain);
-        var rocket = r.gain >= 0 ? '<span class="rocket">&#128640;</span>' : '';
-        var typeLabel = { stock:'Stock', etf:'ETF', crypto:'Crypto' }[a.type] || a.type;
-
-        html += '<tr data-index="' + i + '">'
-          + '<td><div class="asset-cell">'
+    function getCellHtml(a, r, key, i, gc) {
+      switch(key) {
+        case 'asset':
+          var rocket = r.gain >= 0 ? '<span class="rocket">&#128640;</span>' : '';
+          var typeLabel = { stock:'Stock', etf:'ETF', crypto:'Crypto' }[a.type] || a.type;
+          return '<td data-key="asset"><div class="asset-cell">'
             + logoHtml(a)
             + '<div class="asset-info">'
               + '<span class="ticker">' + esc(a.ticker) + rocket + '</span>'
@@ -963,18 +1073,36 @@
               + '<span class="type-badge type-' + esc(a.type) + '">' + typeLabel + '</span>'
             + '</div>'
             + '<div class="row-actions">'
-              + '<button class="row-action-btn edit-row" title="Edit" onclick="openModal(' + i + ')">✎</button>'
-              + '<button class="row-action-btn del-row"  title="Remove" onclick="deleteAsset(' + i + ')">✕</button>'
+              + '<button class="row-action-btn edit-row" title="Edit" onclick="openModal('+i+')">✎</button>'
+              + '<button class="row-action-btn del-row"  title="Remove" onclick="deleteAsset('+i+')">✕</button>'
             + '</div>'
-          + '</div></td>'
-          + '<td class="price-col num">' + (a.price > 0 ? fmtMoney(a.price) : '—') + '</td>'
-          + '<td class="num">' + fmtQty(a.qty || 0) + '</td>'
-          + '<td class="num">' + (a.avgCost > 0 ? fmtMoney(a.avgCost) : '—') + '</td>'
-          + '<td class="num">' + fmtMoney(r.costBasis) + '</td>'
-          + '<td class="value-col num">' + fmtMoney(r.mktValue) + '</td>'
-          + '<td class="' + gc + ' num">' + sign(r.gain)  + fmtMoney(r.gain) + '</td>'
-          + '<td class="' + gc + ' num">' + sign(r.ret)   + Math.abs(r.ret).toFixed(2) + '%</td>'
-          + '</tr>';
+          + '</div></td>';
+        case 'price':
+          return '<td data-key="price" data-val="'+(a.price||0)+'" class="price-col num">'+(a.price>0?fmtMoney(a.price):'—')+'</td>';
+        case 'qty':
+          return '<td data-key="qty" data-val="'+(a.qty||0)+'" class="num">'+fmtQty(a.qty||0)+'</td>';
+        case 'avgcost':
+          return '<td data-key="avgcost" data-val="'+(a.avgCost||0)+'" class="num">'+(a.avgCost>0?fmtMoney(a.avgCost):'—')+'</td>';
+        case 'costbasis':
+          return '<td data-key="costbasis" data-val="'+r.costBasis+'" class="num">'+fmtMoney(r.costBasis)+'</td>';
+        case 'mktvalue':
+          return '<td data-key="mktvalue" data-val="'+r.mktValue+'" class="value-col num">'+fmtMoney(r.mktValue)+'</td>';
+        case 'gain':
+          return '<td data-key="gain" data-val="'+r.gain+'" class="'+gc+' num">'+sign(r.gain)+fmtMoney(r.gain)+'</td>';
+        case 'ret':
+          return '<td data-key="ret" data-val="'+r.ret+'" class="'+gc+' num">'+sign(r.ret)+Math.abs(r.ret).toFixed(2)+'%</td>';
+        default: return '<td></td>';
+      }
+    }
+
+    function renderTable(assets) {
+      var html = '';
+      assets.forEach(function(a, i) {
+        var r  = calcRow(a);
+        var gc = signCls(r.gain);
+        html += '<tr data-index="' + i + '">';
+        COL_ORDER.forEach(function(key){ html += getCellHtml(a, r, key, i, gc); });
+        html += '</tr>';
       });
       document.getElementById('holdings-tbody').innerHTML = html;
     }
@@ -984,6 +1112,7 @@
       var raw    = loadAssets();
       var assets = withPrices(raw);
       renderSummary(assets);
+      renderHeaders();
       renderTable(assets);
       document.getElementById('last-updated').textContent = 'Last updated: ' + LAST_UPDATED + ' (auto-refreshed)';
     }
@@ -1162,40 +1291,6 @@
       saveAssets(assets);
       render();
     };
-
-    // ── SORTING ──
-    function sortVal(row, col) {
-      if (col === 0) {
-        var t = row.querySelector('.ticker');
-        return t ? t.childNodes[0].textContent.trim().toLowerCase() : '';
-      }
-      var n = parseFloat(row.cells[col].innerText.replace(/[$+%,]/g,''));
-      return isNaN(n) ? row.cells[col].innerText.trim().toLowerCase() : n;
-    }
-
-    function sortBy(th) {
-      var col = parseInt(th.dataset.col);
-      sortAsc = (lastCol === col) ? !sortAsc : true;
-      lastCol = col;
-      document.querySelectorAll('thead th').forEach(function(h) {
-        h.classList.remove('sort-asc','sort-desc');
-        h.querySelector('.sort-icon').textContent = '⇅';
-      });
-      th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
-      th.querySelector('.sort-icon').textContent = sortAsc ? '↑' : '↓';
-      var tbody = document.getElementById('holdings-tbody');
-      var rows  = Array.from(tbody.querySelectorAll('tr'));
-      rows.sort(function(a,b){
-        var va = sortVal(a,col), vb = sortVal(b,col);
-        return va < vb ? (sortAsc?-1:1) : va > vb ? (sortAsc?1:-1) : 0;
-      });
-      rows.forEach(function(r){ tbody.appendChild(r); });
-    }
-
-    document.querySelectorAll('thead th').forEach(function(th) {
-      th.addEventListener('click',    function()  { sortBy(th); });
-      th.addEventListener('touchend', function(e) { e.preventDefault(); sortBy(th); });
-    });
 
     // ── INIT ──
     render();
