@@ -19,7 +19,7 @@
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
     // Force fresh load on every deploy — update VER when pushing new prices
-    var VER = 'v=20260329g';
+    var VER = 'v=20260329h';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER + (location.hash || ''));
     }
@@ -673,6 +673,7 @@
     <div class="section-title">Holdings</div>
     <div class="section-actions">
       <button class="btn btn-add" id="btn-add-asset" onclick="openModal(null)">+ Add Asset</button>
+      <button class="btn btn-edit" id="btn-col-reset" onclick="resetColOrder()" title="Reset column order to default" style="border-color:#334155;color:#64748b;">↺ Cols</button>
       <button class="btn btn-edit" id="btn-edit-toggle" onclick="toggleEditMode()">Edit Portfolio</button>
   </div></div>
   <div style="font-size:0.7rem;color:#4b5563;margin:-8px 0 12px 0;padding:6px 10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;">
@@ -806,6 +807,14 @@
     function saveColOrder() {
       try { localStorage.setItem('mti_col_order', JSON.stringify(COL_ORDER)); } catch(e) {}
     }
+    window.resetColOrder = function() {
+      try { localStorage.removeItem('mti_col_order'); } catch(e) {}
+      COL_ORDER.length = 0;
+      ALL_COLS.forEach(function(c){ COL_ORDER.push(c.key); });
+      render();
+      var btn = document.getElementById('btn-col-reset');
+      if (btn) { btn.textContent = '✓ Reset'; setTimeout(function(){ btn.textContent = '↺ Cols'; }, 1200); }
+    };
     function colByKey(k) {
       for (var i=0;i<ALL_COLS.length;i++) if (ALL_COLS[i].key===k) return ALL_COLS[i];
       return null;
