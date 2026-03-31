@@ -66,16 +66,16 @@
     .led-bezel::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px); pointer-events: none; z-index: 3; border-radius: 10px; }
     #led-canvas { display: block; position: relative; z-index: 1; max-width: 100%; height: auto; }
 
-    .controls-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 4px; position: relative; z-index: 1; }
-    .btn-cluster { display: flex; gap: 7px; }
-    .gbtn { background: linear-gradient(175deg, var(--btn-top) 0%, var(--btn-bot) 100%); color: #fff; border: none; border-radius: 5px; padding: 7px 9px; font-size: 0.45rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 var(--btn-shadow); transition: transform 0.07s; }
-    .gbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--btn-shadow); }
+    .controls-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 0 8px; position: relative; z-index: 1; }
+    .btn-cluster { display: flex; gap: 14px; }
+    .gbtn { background: linear-gradient(175deg, var(--btn-top) 0%, var(--btn-bot) 100%); color: #fff; border: none; border-radius: 10px; padding: 14px 18px; font-size: 0.9rem; font-weight: 800; cursor: pointer; box-shadow: 0 8px 0 var(--btn-shadow); transition: transform 0.07s; }
+    .gbtn:active { transform: translateY(6px); box-shadow: 0 2px 0 var(--btn-shadow); }
 
-    .d-pad { display: flex; flex-direction: column; gap: 4px; align-items: center; }
-    .dbtn { background: linear-gradient(175deg, var(--btn-top) 0%, var(--btn-bot) 100%); border: none; border-radius: 4px; width: 34px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; box-shadow: 0 3px 0 var(--btn-shadow); transition: transform 0.07s; }
-    .dbtn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--btn-shadow); }
+    .d-pad { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+    .dbtn { background: linear-gradient(175deg, var(--btn-top) 0%, var(--btn-bot) 100%); border: none; border-radius: 8px; width: 68px; height: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; font-size: 1.5rem; box-shadow: 0 6px 0 var(--btn-shadow); transition: transform 0.07s; }
+    .dbtn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--btn-shadow); }
 
-    .console-tagline { text-align: center; font-size: 0.5rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--tagline); margin-top: 14px; opacity: 0.75; }
+    .console-tagline { text-align: center; font-size: 1rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--tagline); margin-top: 28px; opacity: 0.75; }
 
     /* ── SQUISHY TEAM SELECT ── */
     .team-select { width: min(620px, 100%); margin-top: 22px; border-radius: 18px; padding: 18px 14px 22px; text-align: center; }
@@ -140,6 +140,35 @@
   <div class="team-select">
     <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; color:#3a2c10;">Select Team</div>
     <div class="team-grid" id="team-grid">
+      <button class="squishy-btn" onclick="location.reload()">
+        <div class="helmet-circle"><img src="./helmet_vikings.png" alt="Vikings"></div>
+        <div class="squishy-name">Purple Peeps</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <p>Tom's Love of Mattel Electronic Football Reimagined &nbsp;·&nbsp; <span>Vanilla JS · HTML5 Canvas · Retro Gaming</span></p>
+  </div>
+
+  <script>
+  (function () {
+    var canvas = document.getElementById('led-canvas');
+    var ctx    = canvas.getContext('2d');
+    canvas.width = 365; canvas.height = 133;
+    function render() {
+      ctx.fillStyle = '#060401'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Yard markers
+      for (var c = 1; c < 10; c++) { if (c % 2 !== 0) { ctx.fillStyle = '#150800'; ctx.fillRect(c * 37, 2, 1, canvas.height - 4); } }
+      // Placeholder player
+      ctx.fillStyle = '#ffb040'; ctx.shadowColor = '#ff5000'; ctx.shadowBlur = 15; ctx.fillRect(100, 60, 28, 10);
+    }
+    render();
+  })();
+  </script>
+</body>
+</html>
+team-grid">
       <button class="squishy-btn" onclick="location.reload()">
         <div class="helmet-circle"><img src="./helmet_vikings.png" alt="Vikings"></div>
         <div class="squishy-name">Purple Peeps</div>
