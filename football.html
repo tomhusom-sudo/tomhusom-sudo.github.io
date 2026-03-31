@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>HonestTom | Retro Wide Console</title>
+  <title>HonestTom | Stadium View</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     /* ── BASE ── */
@@ -11,156 +11,87 @@
     
     html, body {
       min-height: 100vh;
-      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('./football_stiff.png') center/cover no-repeat fixed;
+      background: #000; /* Pitch black surrounding the stadium */
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 20px; font-family: 'Inter', sans-serif; user-select: none;
+      padding: 40px 20px; font-family: 'Inter', sans-serif; user-select: none;
+      overflow: hidden;
     }
 
-    /* ── WIDE CONSOLE UNIT ── */
-    .console-wide {
-      width: min(1280px, 95vw);
-      background: #e8dab2; /* Aged cream plastic */
-      border-radius: 40px;
-      padding: 40px;
+    /* ── REALISTIC AERIAL STADIUM ── */
+    .stadium-aerial {
+      width: min(1200px, 95vw);
+      height: min(680px, 70vh);
+      background: url('./green.png') center/cover no-repeat; /* Using green.png as the field base */
+      border-radius: 340px; /* Large Stadium Oval */
       position: relative;
-      display: flex; flex-direction: column; align-items: center;
       box-shadow: 
-        0 60px 120px rgba(0,0,0,0.9),
-        inset 0 4px 0 rgba(255,255,255,0.6),
-        inset 0 -10px 20px rgba(0,0,0,0.2);
-      border: 3px solid rgba(0,0,0,0.1);
+        0 0 100px rgba(0,255,0,0.1), /* Grass glow */
+        0 40px 100px rgba(0,0,0,0.8),
+        inset 0 0 100px rgba(0,0,0,0.5);
+      border: 15px solid #222; /* Stadium outer wall/rim */
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
     }
 
-    /* ── TOP BRAND ── */
-    .brand-header {
-      width: 100%; display: flex; justify-content: center; margin-bottom: 30px;
-    }
-    .brand-blue-bar {
-      background: #3a8cc1; padding: 10px 40px; border: 4px solid #fff; border-radius: 8px;
-      color: white; font-weight: 900; letter-spacing: 0.25em; font-size: 1.5rem; font-style: italic;
-    }
-
-    /* ── MAIN DASHBOARD CONTENT (3 Columns) ── */
-    .dash-layout {
-      width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 30px;
-    }
-
-    /* Button Clusters */
-    .side-panel {
-      width: 200px; display: flex; flex-direction: column; align-items: center; gap: 20px;
-    }
-
-    /* ── CENTRAL VIDEO STADIUM ── */
-    .video-stadium {
-      flex: 1; height: 500px;
-      background: #dfcfaf; /* Darker stadium plastic */
-      border-radius: 250px; /* Stadium Oval */
-      padding: 15px; display: flex; align-items: center; justify-content: center;
-      box-shadow: inset 0 15px 40px rgba(0,0,0,0.2);
-      position: relative; overflow: hidden;
-      border: 4px solid rgba(0,0,0,0.05);
-    }
-
-    /* Ribbed Stadium Bezel Effect */
-    .video-stadium::before {
-      content: ''; position: absolute; inset: 0;
-      background: repeating-radial-gradient(circle, transparent, transparent 10px, rgba(0,0,0,0.04) 10px, rgba(0,0,0,0.04) 12px);
+    /* Yard Lines & Field Markings */
+    .field-markings {
+      position: absolute; inset: 0;
+      background: 
+        repeating-linear-gradient(90deg, transparent, transparent 9.8%, rgba(255,255,255,0.15) 9.8%, rgba(255,255,255,0.15) 10%),
+        linear-gradient(rgba(0,0,0,0.2) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.2) 100%);
       pointer-events: none;
     }
 
-    .video-screen {
-      width: 85%; height: 80%;
-      background: #000; border-radius: 30px;
-      border: 8px solid #fff;
-      box-shadow: 0 0 50px rgba(0,0,0,0.5);
+    /* Central "Screen" area within stadium */
+    .video-core {
+      width: 70%; height: 75%;
+      background: rgba(0,0,0,0.9);
+      border-radius: 40px;
+      box-shadow: 0 0 60px rgba(0,0,0,1);
       display: flex; align-items: center; justify-content: center;
-      color: #333; font-weight: 900; font-size: 2rem;
-      position: relative; z-index: 5;
+      border: 4px solid #444;
+      z-index: 10;
     }
 
-    /* ── RETRO BUTTONS ── */
-    .btn-retro {
-      width: 90px; height: 90px; border-radius: 12px; border: none; cursor: pointer;
-      font-weight: 900; font-size: 1.5rem; color: white;
-      box-shadow: 0 8px 0 rgba(0,0,0,0.4);
-      transition: transform 0.05s, box-shadow 0.05s;
-    }
-    .btn-retro:active { transform: translateY(6px); box-shadow: 0 2px 0 rgba(0,0,0,0.4); }
-
-    .btn-blue { background: #3a8cc1; }
-    .btn-red { background: #e64522; }
-    .btn-orange { background: #f28d21; }
-    .btn-teal { background: #3a8cc1; width: 120px; height: 120px; font-size: 2.5rem; }
-
-    /* ── CENTER FOOTER (K Button + Team) ── */
-    .dash-footer {
-      width: 100%; display: flex; align-items: center; justify-content: center; gap: 60px; margin-top: 40px;
+    /* ── SQUISHY TEAM SELECT (The Keeper) ── */
+    .footer-action {
+      margin-top: 50px;
+      display: flex; flex-direction: column; align-items: center; gap: 15px;
     }
 
-    /* ── SQUISHY TEAM SELECT ── */
-    .squishy-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; outline: none; }
+    .squishy-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 10px; outline: none; }
     .helmet-circle {
       width: 110px; height: 110px; border-radius: 50%; overflow: hidden; border: 4px solid #4f2683; background: #000;
       box-shadow: 0 8px 0 #2c1250, 0 15px 25px rgba(0,0,0,0.4); transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.1s ease;
       display: flex; align-items: center; justify-content: center;
     }
-    .helmet-circle img { width: 115%; height: 115%; object-fit: cover; clip-path: circle(43%); margin-left: -1%; pointer-events: none; }
+    .helmet-circle img { 
+      width: 115%; height: 115%; object-fit: cover; 
+      clip-path: circle(43%); margin-left: -1%; pointer-events: none; 
+    }
     .squishy-btn:active .helmet-circle { transform: translateY(8px) scale(0.95, 0.88); box-shadow: 0 0 0 #2c1250, 0 2px 5px rgba(0,0,0,0.3); }
-    .squishy-name { font-size: 0.85rem; font-weight: 900; color: #ffd060; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,1); }
+    .squishy-name { font-size: 0.85rem; font-weight: 900; color: #ffd060; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,1); letter-spacing: 0.05em; }
 
   </style>
 </head>
 <body>
 
-  <div class="console-wide">
+  <!-- Aerial Stadium Centerpiece -->
+  <div class="stadium-aerial">
+    <div class="field-markings"></div>
     
-    <!-- Top Branding -->
-    <div class="brand-header">
-      <div class="brand-blue-bar">HonestTom Electronics™</div>
+    <!-- Video Placement Area -->
+    <div class="video-core">
+      <span style="color:#222; font-weight:900; font-size:2rem; letter-spacing:0.2em;">STADIUM CORE</span>
     </div>
+  </div>
 
-    <!-- Layout Grid -->
-    <div class="dash-layout">
-      
-      <!-- Left Controls -->
-      <div class="side-panel">
-        <button class="btn-retro btn-blue">ST</button>
-        <button class="btn-retro btn-blue">SC</button>
-      </div>
-
-      <!-- Center Video Screen -->
-      <div class="video-stadium">
-        <div class="video-screen">
-          <!-- Video Placeholder -->
-          <span style="opacity:0.2;">VIDEO SCREEN</span>
-        </div>
-      </div>
-
-      <!-- Right Controls -->
-      <div class="side-panel">
-        <button class="btn-retro btn-red">▲</button>
-        <div style="display:flex; gap:15px;">
-          <button class="btn-retro btn-orange" style="font-size:1.2rem;">◀▶</button>
-          <button class="btn-retro btn-red">▼</button>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Dashboard Footer -->
-    <div class="dash-footer">
-      
-      <!-- Big K Button -->
-      <button class="btn-retro btn-teal">K</button>
-
-      <!-- Team Select -->
-      <button class="squishy-btn" onclick="location.reload()">
-        <div class="helmet-circle"><img src="./helmet_vikings.png" alt="Vikings"></div>
-        <div class="squishy-name">Purple Peeps</div>
-      </button>
-
-    </div>
-
+  <!-- Keep the Button -->
+  <div class="footer-action">
+    <button class="squishy-btn" onclick="location.reload()">
+      <div class="helmet-circle"><img src="./helmet_vikings.png" alt="Vikings"></div>
+      <div class="squishy-name">Purple Peeps</div>
+    </button>
   </div>
 
 </body>
