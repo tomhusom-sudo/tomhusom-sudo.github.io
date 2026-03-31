@@ -92,11 +92,11 @@
       display: flex; align-items: center; justify-content: center;
     }
     .helmet-circle img { 
-      width: 130%; height: 130%; 
+      width: 115%; height: 115%; /* Zoomed out to pull face mask away from border */
       object-fit: cover; 
       pointer-events: none; 
-      clip-path: circle(44%); /* EXPANDED: Recovers the full face mask */
-      margin-left: -5%; /* SHIFTED LEFT: Centers the helmet logo better */
+      clip-path: circle(43%); /* Surgical cut to keep checkers hidden */
+      margin-left: -1%; /* Re-centered */
     }
     .squishy-btn:hover .helmet-circle { transform: translateY(-3px); box-shadow: 0 11px 0 #2c1250, 0 18px 25px rgba(0,0,0,0.5); }
     .squishy-btn:active .helmet-circle { transform: translateY(8px) scale(0.95, 0.88); box-shadow: 0 0 0 #2c1250, 0 2px 5px rgba(0,0,0,0.3); }
