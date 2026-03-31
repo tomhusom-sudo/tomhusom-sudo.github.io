@@ -88,11 +88,11 @@
       display: flex; align-items: center; justify-content: center;
     }
     .helmet-circle img { 
-      width: 128%; height: 128%; /* Slightly larger to cover the sliver */
+      width: 128%; height: 128%; 
       object-fit: cover; 
       pointer-events: none; 
-      clip-path: circle(41.5%); /* Refined cut to remove sliver while keeping mask */
-      margin-left: -2%; /* Adjusted centering */
+      clip-path: circle(40.5%); /* Tightened to remove remaining slivers on both sides */
+      margin-left: -2%; 
     }
     .squishy-btn:hover .helmet-circle { transform: translateY(-3px); box-shadow: 0 11px 0 #2c1250, 0 18px 25px rgba(0,0,0,0.5); }
     .squishy-btn:active .helmet-circle { transform: translateY(8px) scale(0.95, 0.88); box-shadow: 0 0 0 #2c1250, 0 2px 5px rgba(0,0,0,0.3); }
