@@ -63,24 +63,21 @@
     }
 
     .news-corner {
-      position: absolute;
-      top: 0;
-      right: 0;
-      background: transparent;
-      border: 1px solid #22c55e;
-      color: #4ade80;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      text-decoration: none;
-      padding: 5px 11px;
-      border-radius: 999px;
-      white-space: nowrap;
-      transition: background 0.15s, color 0.15s;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; background: transparent;
+      border: 1px solid #22c55e; border-radius: 8px;
+      color: #4ade80; font-size: 0.78rem; font-weight: 600;
+      text-decoration: none; letter-spacing: 0.04em;
+      transition: background 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .news-corner:hover { background: #14532d; color: #86efac; }
+    .news-corner:hover { background: #14532d; }
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
 
     .logo-wrapper { margin-bottom: 18px; }
 
@@ -147,29 +144,29 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 10px 22px;
+      padding: 7px 16px;
       flex: 1;
-      min-width: 120px;
+      min-width: 100px;
       border-right: 1px solid #1e293b;
-      gap: 2px;
+      gap: 1px;
     }
     .idx-item:last-child { border-right: none; }
     .idx-label {
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #475569;
     }
     .idx-value {
-      font-size: 1rem;
+      font-size: 0.85rem;
       font-weight: 600;
       color: #f1f5f9;
       font-variant-numeric: tabular-nums;
       letter-spacing: -0.3px;
     }
     .idx-change {
-      font-size: 0.68rem;
+      font-size: 0.62rem;
       font-weight: 600;
       font-variant-numeric: tabular-nums;
     }
@@ -566,7 +563,7 @@
       h1                    { font-size: 1.6rem; letter-spacing: 0.1em; }
       .logo-bar             { margin-top: 4px; }
       .logo-tagline         { font-size: 0.58rem; letter-spacing: 0.3em; }
-      .news-corner          { font-size: 0.55rem; padding: 4px 8px; top: 2px; }
+      .news-corner          { font-size: 0.7rem; padding: 6px 10px; }
 
       /* Portfolio value — prominent, breathable */
       .summary              { margin-bottom: 24px; }
@@ -609,11 +606,13 @@
 </head>
 <body>
 
-  <a class="back-btn" href="./dashboard.html">&#8592; Dashboard</a>
+  <div class="top-nav">
+    <a class="back-btn" href="./dashboard.html">&#8592; Dashboard</a>
+    <a class="news-corner" href="news.html">&#9656; Portfolio News</a>
+  </div>
 
   <!-- HEADER -->
   <div class="header">
-    <a class="news-corner" href="news.html">&#9656; Portfolio News</a>
     <div class="logo-wrapper">
       <svg width="460" height="115" viewBox="-5 -12 470 132" fill="none" xmlns="http://www.w3.org/2000/svg"
            style="max-width:100%; height:auto; display:block; margin:0 auto;">
