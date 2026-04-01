@@ -904,27 +904,42 @@
       var symbols = ['GC=F', 'CL=F', 'BTC-USD'];
       var results = {};
       var done = 0;
+
+      function onDone() {
+        done++;
+        if (done === symbols.length) renderCommodities(results);
+      }
+
       symbols.forEach(function(sym) {
         var url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(sym) + '?interval=1d&range=1d';
-        var proxy = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-        var ctrl = new AbortController();
-        setTimeout(function(){ ctrl.abort(); }, 8000);
-        fetch(proxy, { signal: ctrl.signal })
-          .then(function(r) { return r.json(); })
-          .then(function(json) {
-            var meta = json && json.chart && json.chart.result && json.chart.result[0] && json.chart.result[0].meta;
-            if (meta) {
+        var proxies = [
+          'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
+          'https://corsproxy.io/?' + encodeURIComponent(url),
+          'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url)
+        ];
+
+        function tryProxy(i) {
+          if (i >= proxies.length) { onDone(); return; }
+          var ctrl = new AbortController();
+          var timer = setTimeout(function(){ ctrl.abort(); }, 8000);
+          fetch(proxies[i], { signal: ctrl.signal })
+            .then(function(r) { return r.json(); })
+            .then(function(json) {
+              clearTimeout(timer);
+              var meta = json && json.chart && json.chart.result && json.chart.result[0] && json.chart.result[0].meta;
+              if (!meta) throw new Error('no meta');
               var price = meta.regularMarketPrice || 0;
               var prev  = meta.chartPreviousClose || meta.previousClose || price;
               var pct   = prev > 0 ? ((price - prev) / prev) * 100 : 0;
               results[sym] = { price: price, pct: pct };
-            }
-          })
-          .catch(function() {})
-          .finally(function() {
-            done++;
-            if (done === symbols.length) renderCommodities(results);
-          });
+              onDone();
+            })
+            .catch(function() {
+              clearTimeout(timer);
+              tryProxy(i + 1);
+            });
+        }
+        tryProxy(0);
       });
     }
 
