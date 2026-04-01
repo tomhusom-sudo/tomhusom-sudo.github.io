@@ -45,7 +45,10 @@
     }
 
     .video-core {
-      width: 70%; height: 75%;
+      width: 75%;
+      aspect-ratio: 16 / 9;
+      height: auto;
+      max-height: 80%;
       background: rgba(0,0,0,0.9);
       border-radius: 40px;
       box-shadow: 0 0 60px rgba(0,0,0,1);
@@ -59,7 +62,7 @@
     #stadium-video {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
       display: none;
     }
 
@@ -89,7 +92,7 @@
   <div class="stadium-aerial">
     <div class="field-markings"></div>
     <div class="video-core">
-      <video id="stadium-video" playsinline muted loop>
+      <video id="stadium-video" playsinline loop>
         <source src="./Jets_Running_10.mp4" type="video/mp4">
       </video>
       <span id="core-text" style="color:#222; font-weight:900; font-size:2rem; letter-spacing:0.2em;">STADIUM CORE</span>
