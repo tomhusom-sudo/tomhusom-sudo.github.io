@@ -111,62 +111,42 @@
       font-weight: 500;
     }
 
-    /* ── MARKET PANEL ── */
-    .market-panel {
+    /* ── MARKET OVERVIEW ── */
+    .market-overview {
       max-width: 960px;
-      margin: 0 auto 20px;
+      margin: 0 auto 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .mkt-pill {
+      flex: 1 1 130px;
       background: rgba(15,23,42,0.85);
       border: 1px solid #1e293b;
-      border-radius: 14px;
-      overflow: hidden;
-    }
-    .market-panel-header {
-      padding: 8px 18px;
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #334155;
-      border-bottom: 1px solid #1e293b;
-    }
-    .indices-bar {
-      display: flex;
-      gap: 0;
-      flex-wrap: wrap;
-    }
-    .commodities-bar {
-      display: flex;
-      gap: 0;
-      flex-wrap: wrap;
-      border-top: 1px solid #1e293b;
-    }
-    .idx-item {
+      border-radius: 12px;
+      padding: 10px 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 7px 16px;
-      flex: 1;
-      min-width: 100px;
-      border-right: 1px solid #1e293b;
-      gap: 1px;
+      gap: 3px;
+      min-width: 120px;
     }
-    .idx-item:last-child { border-right: none; }
-    .idx-label {
-      font-size: 0.55rem;
+    .mkt-label {
+      font-size: 0.72rem;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: #475569;
+      color: #64748b;
     }
-    .idx-value {
-      font-size: 0.85rem;
+    .mkt-value {
+      font-size: 1rem;
       font-weight: 600;
       color: #f1f5f9;
       font-variant-numeric: tabular-nums;
       letter-spacing: -0.3px;
     }
-    .idx-change {
-      font-size: 0.62rem;
+    .mkt-change {
+      font-size: 0.68rem;
       font-weight: 600;
       font-variant-numeric: tabular-nums;
     }
@@ -174,10 +154,10 @@
     .idx-down { color: #f87171; }
     .idx-flat { color: #64748b; }
     @media (max-width: 640px) {
-      .idx-item   { padding: 8px 12px; min-width: 90px; }
-      .idx-value  { font-size: 0.82rem; }
-      .idx-label  { font-size: 0.55rem; }
-      .idx-change { font-size: 0.6rem; }
+      .mkt-pill  { padding: 8px 10px; flex-basis: 100px; min-width: 90px; }
+      .mkt-value { font-size: 0.85rem; }
+      .mkt-label { font-size: 0.65rem; }
+      .mkt-change{ font-size: 0.6rem; }
     }
 
     /* ── PORTFOLIO SUMMARY ── */
@@ -650,19 +630,14 @@
     </div>
   </div>
 
-  <!-- MARKET PANEL -->
-  <div class="market-panel">
-    <div class="market-panel-header">Market Overview</div>
-    <div class="indices-bar" id="indices-bar">
-      <div class="idx-item"><div class="idx-label">S&amp;P 500</div><div class="idx-value" id="idx-sp500">—</div><div class="idx-change" id="idx-sp500-chg">—</div></div>
-      <div class="idx-item"><div class="idx-label">DOW</div><div class="idx-value" id="idx-dow">—</div><div class="idx-change" id="idx-dow-chg">—</div></div>
-      <div class="idx-item"><div class="idx-label">NASDAQ</div><div class="idx-value" id="idx-nasdaq">—</div><div class="idx-change" id="idx-nasdaq-chg">—</div></div>
-    </div>
-    <div class="commodities-bar">
-      <div class="idx-item"><div class="idx-label">Gold</div><div class="idx-value" id="idx-gold">—</div><div class="idx-change" id="idx-gold-chg">—</div></div>
-      <div class="idx-item"><div class="idx-label">Oil (WTI)</div><div class="idx-value" id="idx-oil">—</div><div class="idx-change" id="idx-oil-chg">—</div></div>
-      <div class="idx-item"><div class="idx-label">Bitcoin</div><div class="idx-value" id="idx-btc">—</div><div class="idx-change" id="idx-btc-chg">—</div></div>
-    </div>
+  <!-- MARKET OVERVIEW -->
+  <div class="market-overview">
+    <div class="mkt-pill"><div class="mkt-label">S&amp;P 500</div><div class="mkt-value" id="idx-sp500">—</div><div class="mkt-change" id="idx-sp500-chg">—</div></div>
+    <div class="mkt-pill"><div class="mkt-label">DOW</div><div class="mkt-value" id="idx-dow">—</div><div class="mkt-change" id="idx-dow-chg">—</div></div>
+    <div class="mkt-pill"><div class="mkt-label">NASDAQ</div><div class="mkt-value" id="idx-nasdaq">—</div><div class="mkt-change" id="idx-nasdaq-chg">—</div></div>
+    <div class="mkt-pill"><div class="mkt-label">Gold</div><div class="mkt-value" id="idx-gold">—</div><div class="mkt-change" id="idx-gold-chg">—</div></div>
+    <div class="mkt-pill"><div class="mkt-label">Oil WTI</div><div class="mkt-value" id="idx-oil">—</div><div class="mkt-change" id="idx-oil-chg">—</div></div>
+    <div class="mkt-pill"><div class="mkt-label">Bitcoin</div><div class="mkt-value" id="idx-btc">—</div><div class="mkt-change" id="idx-btc-chg">—</div></div>
   </div>
 
   <!-- PORTFOLIO SUMMARY -->
@@ -883,7 +858,7 @@
         .catch(function() {});
     }
 
-    // ── RENDER INDICES BAR ──
+    // ── RENDER INDICES ──
     function renderIndices(indices) {
       var map = {
         'S&P 500': { val:'idx-sp500', chg:'idx-sp500-chg' },
@@ -901,7 +876,7 @@
         var pct = d.pct || 0;
         var arrow = pct >= 0 ? '▲' : '▼';
         chgEl.textContent = arrow + ' ' + Math.abs(pct).toFixed(2) + '%';
-        chgEl.className = 'idx-change ' + (pct > 0 ? 'idx-up' : pct < 0 ? 'idx-down' : 'idx-flat');
+        chgEl.className = 'mkt-change ' + (pct > 0 ? 'idx-up' : pct < 0 ? 'idx-down' : 'idx-flat');
       });
     }
 
@@ -921,7 +896,7 @@
         var pct = d.pct || 0;
         var arrow = pct >= 0 ? '▲' : '▼';
         chgEl.textContent = arrow + ' ' + Math.abs(pct).toFixed(2) + '%';
-        chgEl.className = 'idx-change ' + (pct > 0 ? 'idx-up' : pct < 0 ? 'idx-down' : 'idx-flat');
+        chgEl.className = 'mkt-change ' + (pct > 0 ? 'idx-up' : pct < 0 ? 'idx-down' : 'idx-flat');
       });
     }
 
@@ -932,7 +907,9 @@
       symbols.forEach(function(sym) {
         var url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(sym) + '?interval=1d&range=1d';
         var proxy = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-        fetch(proxy, { signal: AbortSignal.timeout(8000) })
+        var ctrl = new AbortController();
+        setTimeout(function(){ ctrl.abort(); }, 8000);
+        fetch(proxy, { signal: ctrl.signal })
           .then(function(r) { return r.json(); })
           .then(function(json) {
             var meta = json && json.chart && json.chart.result && json.chart.result[0] && json.chart.result[0].meta;
