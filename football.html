@@ -1,96 +1,625 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="HonestTom">
+  <link rel="apple-touch-icon" href="/lincoln.jpg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>HonestTom | Stadium View</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-  <script>
-    var VER = 'v=FinalClean';
-    if (location.search.indexOf(VER) === -1) {
-      location.replace(location.pathname + '?' + VER);
-    }
-  </script>
+  <title>HonestTom | Electronic Football Stadium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    /* ── BASE ── */
+    /* ── RESET & BASE ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     
-    html, body {
-      height: 100vh;
-      background: #000;
-      display: flex; flex-direction: column; align-items: center; justify-content: space-evenly;
-      padding: 20px; font-family: 'Inter', sans-serif; user-select: none;
-      overflow: hidden;
+    :root {
+      --shell-light: #f5ecd8;
+      --shell-mid:   #d8c8a4;
+      --shell-dark:  #b89e70;
+      --btn-top:     #e42222;
+      --btn-bot:     #920c0c;
+      --btn-shadow:  #5e0000;
+      --btn-hl:      rgba(255,130,130,0.3);
+      --brand-co:    #7a6238;
+      --brand-title: #b81200;
+      --tagline:     #6a5230;
     }
 
-    /* ── REALISTIC AERIAL STADIUM ── */
+    html, body {
+      min-height: 100vh;
+      background: #050804;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 10px 40px;
+      font-family: 'Inter', system-ui, sans-serif;
+      user-select: none;
+      overflow-x: hidden;
+      color: #f0fae8;
+    }
+
+    /* ── BACK LINK ── */
+    .nav-back {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #4ade80;
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      transition: opacity 0.2s;
+    }
+    .nav-back:hover { opacity: 0.8; }
+
+    /* ── AERIAL STADIUM WRAPPER ── */
     .stadium-aerial {
-      width: min(1200px, 95vw);
-      height: min(550px, 60vh);
-      background: #1a1a1a; 
-      border-radius: 300px;
+      width: min(1000px, 95vw);
+      height: min(480px, 50vh);
+      background: #111; 
+      border-radius: 200px;
       position: relative;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.8), inset 0 0 100px rgba(0,0,0,0.5);
-      border: 12px solid #333;
-      display: flex; align-items: center; justify-content: center;
+      box-shadow: 
+        0 40px 100px rgba(0,0,0,0.9), 
+        inset 0 0 80px rgba(0,0,0,0.6),
+        0 0 0 10px #222;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
       overflow: hidden;
+      margin-bottom: 30px;
     }
 
     .field-markings {
       position: absolute; inset: 0;
       background: 
-        repeating-linear-gradient(90deg, transparent, transparent 9.8%, rgba(255,255,255,0.1) 9.8%, rgba(255,255,255,0.1) 10%),
-        linear-gradient(rgba(0,0,0,0.2) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.2) 100%);
+        repeating-linear-gradient(90deg, transparent, transparent 9.8%, rgba(255,255,255,0.05) 9.8%, rgba(255,255,255,0.05) 10%),
+        linear-gradient(rgba(0,0,0,0.3) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.3) 100%);
       pointer-events: none;
     }
 
+    /* ── VIDEO BOARD (GAME FIELD) ── */
     .video-core {
-      width: 70%; height: 75%;
-      background: rgba(0,0,0,0.9);
-      border-radius: 40px;
-      box-shadow: 0 0 60px rgba(0,0,0,1);
-      display: flex; align-items: center; justify-content: center;
-      border: 4px solid #444;
+      width: 80%; 
+      height: 75%;
+      background: #000;
+      border-radius: 20px;
+      box-shadow: 
+        0 0 40px rgba(0,0,0,1),
+        inset 0 0 20px rgba(0,0,0,0.8);
+      display: flex; 
+      flex-direction: column;
+      align-items: center; 
+      justify-content: center;
+      border: 3px solid #333;
+      position: relative;
       z-index: 10;
+      padding: 0;
+      overflow: hidden;
     }
 
-    /* ── SQUISHY TEAM SELECT ── */
-    .footer-action {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    /* Lens tint overlay */
+    .video-core::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 40%,
+        rgba(80,30,0,0.05) 0%,
+        rgba(20,8,0,0.15) 100%);
+      pointer-events: none;
+      z-index: 5;
+      border-radius: 17px;
     }
 
-    .squishy-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 10px; outline: none; }
+    #led-canvas {
+      display: block;
+      position: relative;
+      z-index: 1;
+      max-width: 100%;
+      height: auto;
+    }
+
+    #stadium-video {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 2;
+      display: none;
+    }
+
+    /* ── STATS OVERLAY ── */
+    .stadium-stats {
+      position: absolute;
+      top: 20px;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      z-index: 15;
+    }
+
+    .stat-cluster {
+      display: flex;
+      gap: 15px;
+    }
+
+    .stat-box {
+      background: rgba(0,0,0,0.8);
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 6px 12px;
+      min-width: 70px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 0.5rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 2px;
+      letter-spacing: 0.1em;
+    }
+
+    .stat-value {
+      display: block;
+      font-family: 'Courier New', monospace;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #ff4a00;
+      text-shadow: 0 0 8px rgba(255,74,0,0.6);
+    }
+
+    /* ── CONTROLLER UNIT ── */
+    .controller {
+      width: min(600px, 100%);
+      background: linear-gradient(170deg, var(--shell-light) 0%, var(--shell-mid) 50%, var(--shell-dark) 100%);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 
+        0 20px 50px rgba(0,0,0,0.7),
+        inset 0 2px 0 rgba(255,255,255,0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+    }
+
+    .brand-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .brand-company {
+      font-size: 0.6rem;
+      font-weight: 900;
+      color: var(--brand-co);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    .brand-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--brand-title);
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+    }
+
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-cluster {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .gbtn {
+      background: linear-gradient(175deg, var(--btn-top) 0%, var(--btn-bot) 100%);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.5rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--btn-shadow), 0 5px 10px rgba(0,0,0,0.3);
+      transition: transform 0.05s;
+    }
+    .gbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--btn-shadow); }
+
+    .d-pad {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    .d-row { display: flex; gap: 5px; }
+
+    .dbtn {
+      width: 45px;
+      height: 40px;
+      background: linear-gradient(175deg, var(--btn-top) 0%, var(--btn-bot) 100%);
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--btn-shadow), 0 5px 10px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--btn-shadow); }
+    .dbtn.center-btn { font-size: 0.5rem; font-weight: 900; filter: brightness(0.9); }
+
+    /* ── TEAM SELECT ── */
+    .team-select {
+      margin-top: 30px;
+      width: min(1000px, 95vw);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid #333;
+      border-radius: 20px;
+      padding: 20px;
+    }
+
+    .team-select-title {
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .team-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .team-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .team-item:hover { transform: scale(1.05); }
+
     .helmet-circle {
-      width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 4px solid #4f2683; background: #000;
-      box-shadow: 0 8px 0 #2c1250, 0 12px 20px rgba(0,0,0,0.4); transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.1s ease;
-      display: flex; align-items: center; justify-content: center;
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: #111;
+      border: 2px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
-    .helmet-circle img { 
-      width: 115%; height: 115%; object-fit: cover; 
-      clip-path: circle(43%); margin-left: -1%; pointer-events: none; 
+    .team-item.active .helmet-circle {
+      border-color: #4ade80;
+      box-shadow: 0 0 15px rgba(74,222,128,0.3);
     }
-    .squishy-btn:active .helmet-circle { transform: translateY(8px) scale(0.95, 0.88); box-shadow: 0 0 0 #2c1250, 0 2px 5px rgba(0,0,0,0.3); }
-    .squishy-name { font-size: 0.7rem; font-weight: 900; color: #ffd060; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,1); letter-spacing: 0.05em; margin-top: 8px; }
+
+    .helmet-circle img {
+      width: 120%;
+      height: 120%;
+      object-fit: contain;
+    }
+
+    .team-name {
+      font-size: 0.55rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #888;
+    }
+    .team-item.active .team-name { color: #4ade80; }
 
   </style>
 </head>
 <body>
 
-  <!-- Aerial Stadium -->
+  <a href="./dashboard.html" class="nav-back">← Dashboard</a>
+
+  <!-- STADIUM -->
   <div class="stadium-aerial">
     <div class="field-markings"></div>
+    
+    <div class="stadium-stats">
+      <div class="stat-cluster">
+        <div class="stat-box">
+          <span class="stat-label">Score</span>
+          <span class="stat-value" id="disp-score">00</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Down</span>
+          <span class="stat-value" id="disp-down">1</span>
+        </div>
+      </div>
+      <div class="stat-cluster">
+        <div class="stat-box">
+          <span class="stat-label">Time</span>
+          <span class="stat-value" id="disp-time">99</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Yds</span>
+          <span class="stat-value" id="disp-yds">10</span>
+        </div>
+      </div>
+    </div>
+
     <div class="video-core">
-      <span style="color:#222; font-weight:900; font-size:2rem; letter-spacing:0.2em;">STADIUM CORE</span>
+      <video id="stadium-video" playsinline muted loop>
+        <source src="./Jets_Running_10.mp4" type="video/mp4">
+      </video>
+      <canvas id="led-canvas"></canvas>
     </div>
   </div>
 
-  <!-- Squishy Button Footer -->
-  <div class="footer-action">
-    <button class="squishy-btn" onclick="location.reload()">
-      <div class="helmet-circle"><img src="./helmet_vikings.png" alt="Vikings"></div>
-      <div class="squishy-name">Purple Peeps</div>
-    </button>
+  <!-- CONTROLLER -->
+  <div class="controller">
+    <div class="brand-bar">
+      <span class="brand-company" id="brand-company">Husom Electronics</span>
+      <span class="brand-title">Football</span>
+    </div>
+
+    <div class="controls-row">
+      <div class="btn-cluster">
+        <button class="gbtn">Score</button>
+        <button class="gbtn">Down</button>
+        <button class="gbtn">Status</button>
+      </div>
+
+      <div class="d-pad">
+        <div class="d-row">
+          <button class="dbtn" id="btn-up">▲</button>
+        </div>
+        <div class="d-row">
+          <button class="dbtn" id="btn-left">◀</button>
+          <button class="dbtn center-btn" id="btn-run">Run</button>
+          <button class="dbtn" id="btn-right">▶</button>
+        </div>
+        <div class="d-row">
+          <button class="dbtn" id="btn-down">▼</button>
+        </div>
+      </div>
+
+      <div class="btn-cluster">
+        <button class="gbtn">Pro 1</button>
+        <button class="gbtn" id="btn-ko">K · O</button>
+        <button class="gbtn">Pro 2</button>
+      </div>
+    </div>
   </div>
 
+  <!-- TEAM SELECT -->
+  <div class="team-select">
+    <div class="team-select-title">Choose Your Team</div>
+    <div class="team-grid" id="team-grid"></div>
+  </div>
+
+  <script>
+  (function () {
+    var canvas = document.getElementById('led-canvas');
+    var ctx    = canvas.getContext('2d');
+
+    // ── GRID CONFIG ──
+    var COLS   = 10;
+    var ROWS   = 7;
+    var CW     = 32;
+    var CH     = 13;
+    var GX     = 5;
+    var GY     = 7;
+
+    canvas.width  = COLS * (CW + GX) - GX;
+    canvas.height = ROWS * (CH + GY) - GY;
+
+    var COL_BG      = '#060401';
+    var COL_UNLIT   = '#1e0b02';
+    var COL_DEF     = '#ff3e00';
+    var COL_OFF     = '#ffb040';
+    var COL_OFF_TOP = '#ffe080';
+
+    // ── GAME STATE ──
+    var cells = [];
+    var offRow = 3, offCol = 0;
+    var defenders = [
+      { r: 1, c: 6, dr: 1 },
+      { r: 2, c: 5, dr: -1 },
+      { r: 3, c: 7, dr: 1 },
+      { r: 4, c: 5, dr: -1 },
+      { r: 5, c: 6, dr: 1 }
+    ];
+    var score = 0;
+    var time = 99;
+    var down = 1;
+    var yds = 10;
+    var isGameOver = false;
+
+    function resetPositions() {
+      offRow = 3; offCol = 0;
+      defenders = [
+        { r: 1, c: 4 + Math.floor(Math.random()*3), dr: Math.random() > 0.5 ? 1 : -1 },
+        { r: 2, c: 4 + Math.floor(Math.random()*3), dr: Math.random() > 0.5 ? 1 : -1 },
+        { r: 3, c: 4 + Math.floor(Math.random()*3), dr: Math.random() > 0.5 ? 1 : -1 },
+        { r: 4, c: 4 + Math.floor(Math.random()*3), dr: Math.random() > 0.5 ? 1 : -1 },
+        { r: 5, c: 4 + Math.floor(Math.random()*3), dr: Math.random() > 0.5 ? 1 : -1 }
+      ];
+    }
+
+    function cx(col) { return col * (CW + GX); }
+    function cy(row) { return row * (CH + GY); }
+
+    function drawCell(col, row, type) {
+      var x  = cx(col);
+      var y  = cy(row);
+      var rx = CH / 2;
+      ctx.save();
+      if (!type) {
+        ctx.fillStyle = COL_UNLIT;
+        ctx.beginPath(); ctx.roundRect(x, y, CW, CH, rx); ctx.fill();
+      } else if (type === 'O') {
+        var dashH = Math.floor((CH - 3) / 2);
+        var dashW = CW - 6;
+        ctx.shadowColor = '#ff5000'; ctx.shadowBlur = 20;
+        ctx.fillStyle = '#ff6020'; ctx.beginPath(); ctx.roundRect(x - 2, y - 2, CW + 4, CH + 4, rx + 2); ctx.fill();
+        ctx.shadowBlur = 12; ctx.fillStyle = COL_OFF; ctx.beginPath(); ctx.roundRect(x + 3, y + 1, dashW, dashH, dashH / 2); ctx.fill();
+        ctx.beginPath(); ctx.roundRect(x + 3, y + CH - dashH - 1, dashW, dashH, dashH / 2); ctx.fill();
+        ctx.shadowBlur = 4; ctx.fillStyle = COL_OFF_TOP; ctx.beginPath(); ctx.roundRect(x + 6, y + 2, dashW - 6, dashH - 2, 1); ctx.fill();
+      } else if (type === 'D') {
+        var defY = y + Math.floor((CH - 5) / 2);
+        ctx.shadowColor = '#cc2800'; ctx.shadowBlur = 14;
+        ctx.fillStyle = '#cc2800'; ctx.beginPath(); ctx.roundRect(x, y, CW, CH, rx); ctx.fill();
+        ctx.shadowBlur = 6; ctx.fillStyle = COL_DEF; ctx.beginPath(); ctx.roundRect(x + 2, defY, CW - 4, 5, 2); ctx.fill();
+        ctx.shadowBlur = 0; ctx.fillStyle = '#ff7040'; ctx.beginPath(); ctx.roundRect(x + 5, defY + 1, CW - 14, 2, 1); ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    function render() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // We don't fill COL_BG if video is playing
+      var isVideoPlaying = document.getElementById('stadium-video').style.display === 'block';
+      if (!isVideoPlaying) {
+        ctx.fillStyle = COL_BG;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      
+      for (var r = 0; r < ROWS; r++) { for (var c = 0; c < COLS; c++) { drawCell(c, r, null); } }
+      drawCell(offCol, offRow, 'O');
+      defenders.forEach(d => { drawCell(d.c, d.r, 'D'); });
+      document.getElementById('disp-score').textContent = score.toString().padStart(2, '0');
+      document.getElementById('disp-time').textContent = time.toString().padStart(2, '0');
+      document.getElementById('disp-down').textContent = down;
+      document.getElementById('disp-yds').textContent = yds.toString().padStart(2, '0');
+    }
+
+    function moveDefenders() {
+      defenders.forEach(d => {
+        d.r += d.dr;
+        if (d.r < 0 || d.r >= ROWS) { d.dr *= -1; d.r += d.dr * 2; }
+        if (d.r === offRow && d.c === offCol) { tackle(); }
+      });
+      render();
+    }
+
+    function tackle() {
+      if (isGameOver) return;
+      alert("Tackled!");
+      down++;
+      if (down > 4) { alert("Turnover!"); down = 1; score = 0; time = 99; }
+      resetPositions();
+    }
+
+    function moveOffense(dr, dc) {
+      if (isGameOver) return;
+      var nr = offRow + dr;
+      var nc = offCol + dc;
+      if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) return;
+      offRow = nr; offCol = nc;
+      if (offCol === COLS - 1) {
+        score += 7;
+        alert("TOUCHDOWN!");
+        resetPositions();
+      }
+      defenders.forEach(d => { if (d.r === offRow && d.c === offCol) { tackle(); } });
+      time--;
+      if (time <= 0) { alert("Game Over!"); isGameOver = true; }
+      moveDefenders();
+    }
+
+    // Controls
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowUp') moveOffense(-1, 0);
+      else if (e.key === 'ArrowDown') moveOffense(1, 0);
+      else if (e.key === 'ArrowRight') moveOffense(0, 1);
+      else if (e.key === 'ArrowLeft') moveOffense(0, -1);
+    });
+
+    document.getElementById('btn-up').onclick = () => moveOffense(-1, 0);
+    document.getElementById('btn-down').onclick = () => moveOffense(1, 0);
+    document.getElementById('btn-right').onclick = () => moveOffense(0, 1);
+    document.getElementById('btn-left').onclick = () => moveOffense(0, -1);
+    document.getElementById('btn-ko').onclick = () => { score=0; time=99; down=1; isGameOver=false; resetPositions(); render(); };
+
+    // Set canvas to transparent for video
+    render();
+  })();
+
+  // ── TEAMS ──
+  var TEAMS = {
+    husom: { name:'Pheasants', shellLight:'#c8a050', shellMid:'#9a7428', shellDark:'#6a4c08', btnTop:'#e42222', btnBot:'#920c0c', btnShadow:'#5e0000', brandCo:'#7a6238', brandTitle:'#b81200', helm:'./helmet_husom.png' },
+    westcoast: { name:'West Coast', shellLight:'#c4a44a', shellMid:'#a8893e', shellDark:'#7a6228', btnTop:'#c8a84c', btnBot:'#8a6820', btnShadow:'#5a3e00', brandCo:'#b3995d', brandTitle:'#ffffff', helm:'./westcoast_helmet.png' },
+    motortown: { name:'Motor Town', shellLight:'#d0d5d8', shellMid:'#b0b7bc', shellDark:'#808890', btnTop:'#c0c8cc', btnBot:'#6a7480', btnShadow:'#384048', brandCo:'#0076b6', brandTitle:'#ffffff', helm:'./helmet_lions.png' },
+    purplepeeps: { name:'Purple Peeps', shellLight:'#7a3dbb', shellMid:'#4f2683', shellDark:'#2c1250', btnTop:'#ffc840', btnBot:'#c08800', btnShadow:'#604800', brandCo:'#ffc62f', brandTitle:'#ffffff', helm:'./helmet_vikings.png', video: true },
+    theboys: { name:'The Boys', shellLight:'#1a50e0', shellMid:'#003594', shellDark:'#001a58', btnTop:'#9aa4b0', btnBot:'#5a6470', btnShadow:'#2a3040', brandCo:'#869397', brandTitle:'#ffffff', helm:'./helmet_cowboys.png' },
+    malosos: { name:'Malosos', shellLight:'#3a3a3a', shellMid:'#1a1a1a', shellDark:'#000000', btnTop:'#aab0b8', btnBot:'#707880', btnShadow:'#202020', brandCo:'#a5acaf', brandTitle:'#ffffff', helm:'./helmet_raiders.png' }
+  };
+
+  function applyTheme(key) {
+    var t = TEAMS[key];
+    var r = document.documentElement;
+    var vid = document.getElementById('stadium-video');
+    
+    // Toggle Video for Purple Peeps
+    if (t.video) {
+      vid.style.display = 'block';
+      vid.load();
+      vid.play();
+    } else {
+      vid.pause();
+      vid.style.display = 'none';
+    }
+
+    r.style.setProperty('--shell-light', t.shellLight);
+    r.style.setProperty('--shell-mid', t.shellMid);
+    r.style.setProperty('--shell-dark', t.shellDark);
+    r.style.setProperty('--btn-top', t.btnTop);
+    r.style.setProperty('--btn-bot', t.btnBot);
+    r.style.setProperty('--btn-shadow', t.btnShadow);
+    r.style.setProperty('--brand-co', t.brandCo);
+    r.style.setProperty('--brand-title', t.brandTitle);
+    document.getElementById('brand-company').textContent = t.name;
+    document.querySelectorAll('.team-item').forEach(i => i.classList.toggle('active', i.dataset.key === key));
+    
+    // Trigger a render to update background transparency
+    var event = new Event('render');
+    // In our IIFE, render is private, but we can just rely on the next movement
+  }
+
+  var grid = document.getElementById('team-grid');
+  Object.keys(TEAMS).forEach(key => {
+    var t = TEAMS[key];
+    var item = document.createElement('div');
+    item.className = 'team-item';
+    item.dataset.key = key;
+    item.innerHTML = `<div class="helmet-circle"><img src="${t.helm}" alt="${t.name}"></div><div class="team-name">${t.name}</div>`;
+    item.onclick = () => applyTheme(key);
+    grid.appendChild(item);
+  });
+  applyTheme('husom');
+
+  </script>
 </body>
 </html>

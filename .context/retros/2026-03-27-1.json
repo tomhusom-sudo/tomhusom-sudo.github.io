@@ -1,0 +1,55 @@
+{
+  "date": "2026-03-27",
+  "window": "7d",
+  "metrics": {
+    "commits": 36,
+    "contributors": 1,
+    "prs_merged": 0,
+    "insertions": 22557,
+    "deletions": 1012,
+    "net_loc": 21545,
+    "net_loc_organic": 2608,
+    "test_loc": 0,
+    "test_ratio": 0.0,
+    "active_days": 2,
+    "sessions": 6,
+    "deep_sessions": 3,
+    "avg_session_minutes": 37,
+    "loc_per_session_hour": 6050,
+    "loc_per_session_hour_organic": 700,
+    "feat_pct": 0.47,
+    "fix_pct": 0.17,
+    "chore_pct": 0.36,
+    "peak_hour": 8,
+    "ai_assisted_commits": 14,
+    "ai_assisted_pct": 0.39
+  },
+  "authors": {
+    "Tom Husom": {
+      "commits": 36,
+      "insertions": 22557,
+      "deletions": 1012,
+      "test_ratio": 0.0,
+      "top_area": "index.html"
+    }
+  },
+  "streak_days": 6,
+  "backlog": {
+    "total_open": 10,
+    "p0_p1": 0,
+    "p2": 10,
+    "completed_this_period": 2,
+    "added_this_period": 10
+  },
+  "skill_usage": {
+    "qa": 4,
+    "plan-ceo-review": 2,
+    "retro": 2,
+    "gstack": 2,
+    "autoplan": 1,
+    "plan-design-review": 1,
+    "plan-eng-review": 1,
+    "office-hours": 1
+  },
+  "tweetable": "Week of Mar 20: 36 commits, 22.6k LOC (+2.6k organic), 6 sessions (3 deep), all-nighter sprint | Streak: 6d | 39% AI-assisted"
+}
