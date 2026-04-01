@@ -19,7 +19,7 @@
   <link rel="canonical" href="https://honesttom.ai"/>
   <script>
     // Force fresh load on every deploy — update VER when pushing new prices
-    var VER = 'v=20260329h';
+    var VER = 'v=20260331a';
     if (location.search.indexOf(VER) === -1) {
       location.replace(location.pathname + '?' + VER + (location.hash || ''));
     }
@@ -114,18 +114,34 @@
       font-weight: 500;
     }
 
-    /* ── MARKET INDICES BAR ── */
-    .indices-bar {
+    /* ── MARKET PANEL ── */
+    .market-panel {
       max-width: 960px;
       margin: 0 auto 20px;
+      background: rgba(15,23,42,0.85);
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .market-panel-header {
+      padding: 8px 18px;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #334155;
+      border-bottom: 1px solid #1e293b;
+    }
+    .indices-bar {
       display: flex;
       gap: 0;
-      justify-content: center;
       flex-wrap: wrap;
-      background: rgba(15,23,42,0.7);
-      border: 1px solid #1e293b;
-      border-radius: 10px;
-      overflow: hidden;
+    }
+    .commodities-bar {
+      display: flex;
+      gap: 0;
+      flex-wrap: wrap;
+      border-top: 1px solid #1e293b;
     }
     .idx-item {
       display: flex;
@@ -635,11 +651,19 @@
     </div>
   </div>
 
-  <!-- MARKET INDICES -->
-  <div class="indices-bar" id="indices-bar">
-    <div class="idx-item"><div class="idx-label">S&amp;P 500</div><div class="idx-value" id="idx-sp500">—</div><div class="idx-change" id="idx-sp500-chg">—</div></div>
-    <div class="idx-item"><div class="idx-label">DOW</div><div class="idx-value" id="idx-dow">—</div><div class="idx-change" id="idx-dow-chg">—</div></div>
-    <div class="idx-item"><div class="idx-label">NASDAQ</div><div class="idx-value" id="idx-nasdaq">—</div><div class="idx-change" id="idx-nasdaq-chg">—</div></div>
+  <!-- MARKET PANEL -->
+  <div class="market-panel">
+    <div class="market-panel-header">Market Overview</div>
+    <div class="indices-bar" id="indices-bar">
+      <div class="idx-item"><div class="idx-label">S&amp;P 500</div><div class="idx-value" id="idx-sp500">—</div><div class="idx-change" id="idx-sp500-chg">—</div></div>
+      <div class="idx-item"><div class="idx-label">DOW</div><div class="idx-value" id="idx-dow">—</div><div class="idx-change" id="idx-dow-chg">—</div></div>
+      <div class="idx-item"><div class="idx-label">NASDAQ</div><div class="idx-value" id="idx-nasdaq">—</div><div class="idx-change" id="idx-nasdaq-chg">—</div></div>
+    </div>
+    <div class="commodities-bar">
+      <div class="idx-item"><div class="idx-label">Gold</div><div class="idx-value" id="idx-gold">—</div><div class="idx-change" id="idx-gold-chg">—</div></div>
+      <div class="idx-item"><div class="idx-label">Oil (WTI)</div><div class="idx-value" id="idx-oil">—</div><div class="idx-change" id="idx-oil-chg">—</div></div>
+      <div class="idx-item"><div class="idx-label">Bitcoin</div><div class="idx-value" id="idx-btc">—</div><div class="idx-change" id="idx-btc-chg">—</div></div>
+    </div>
   </div>
 
   <!-- PORTFOLIO SUMMARY -->
@@ -879,6 +903,52 @@
         var arrow = pct >= 0 ? '▲' : '▼';
         chgEl.textContent = arrow + ' ' + Math.abs(pct).toFixed(2) + '%';
         chgEl.className = 'idx-change ' + (pct > 0 ? 'idx-up' : pct < 0 ? 'idx-down' : 'idx-flat');
+      });
+    }
+
+    // ── RENDER COMMODITIES ──
+    function renderCommodities(data) {
+      var items = [
+        { id: 'idx-gold',  chgId: 'idx-gold-chg',  key: 'GC=F',    fmt: function(v){ return '$' + v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); } },
+        { id: 'idx-oil',   chgId: 'idx-oil-chg',   key: 'CL=F',    fmt: function(v){ return '$' + v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); } },
+        { id: 'idx-btc',   chgId: 'idx-btc-chg',   key: 'BTC-USD', fmt: function(v){ return '$' + Math.round(v).toLocaleString('en-US'); } }
+      ];
+      items.forEach(function(item) {
+        var d = data[item.key];
+        var valEl = document.getElementById(item.id);
+        var chgEl = document.getElementById(item.chgId);
+        if (!valEl || !chgEl || !d) return;
+        valEl.textContent = item.fmt(d.price);
+        var pct = d.pct || 0;
+        var arrow = pct >= 0 ? '▲' : '▼';
+        chgEl.textContent = arrow + ' ' + Math.abs(pct).toFixed(2) + '%';
+        chgEl.className = 'idx-change ' + (pct > 0 ? 'idx-up' : pct < 0 ? 'idx-down' : 'idx-flat');
+      });
+    }
+
+    function fetchCommodities() {
+      var symbols = ['GC=F', 'CL=F', 'BTC-USD'];
+      var results = {};
+      var done = 0;
+      symbols.forEach(function(sym) {
+        var url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(sym) + '?interval=1d&range=1d';
+        var proxy = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+        fetch(proxy, { signal: AbortSignal.timeout(8000) })
+          .then(function(r) { return r.json(); })
+          .then(function(json) {
+            var meta = json && json.chart && json.chart.result && json.chart.result[0] && json.chart.result[0].meta;
+            if (meta) {
+              var price = meta.regularMarketPrice || 0;
+              var prev  = meta.chartPreviousClose || meta.previousClose || price;
+              var pct   = prev > 0 ? ((price - prev) / prev) * 100 : 0;
+              results[sym] = { price: price, pct: pct };
+            }
+          })
+          .catch(function() {})
+          .finally(function() {
+            done++;
+            if (done === symbols.length) renderCommodities(results);
+          });
       });
     }
 
@@ -1305,6 +1375,7 @@
     render();
     fetchLivePrices();      // pull prices.json → updates LIVE_PRICES, re-renders
     fetchRemotePortfolio(); // pull portfolio.json → syncs holdings across devices
+    fetchCommodities();     // pull live Gold, Oil, BTC from Yahoo Finance
 
   })();
   </script>
