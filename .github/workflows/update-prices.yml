@@ -1,0 +1,38 @@
+name: Update Prices
+
+on:
+  schedule:
+    # 9 PM UTC = 5 PM EDT = after US market close, Mon–Fri
+    - cron: '0 21 * * 1-5'
+  workflow_dispatch:  # allow manual trigger from GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  update-prices:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install yfinance
+        run: pip install yfinance
+
+      - name: Run price updater
+        run: python .github/scripts/update_prices.py
+
+      - name: Commit updated prices.json
+        run: |
+          git config user.name  "price-bot"
+          git config user.email "price-bot@honesttom.ai"
+          git add prices.json
+          git diff --staged --quiet && echo "No changes" || (
+            git commit -m "Auto-update prices $(date -u +'%Y-%m-%d') [skip ci]"
+            git push
+          )
