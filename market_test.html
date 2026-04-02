@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Honest Tom's Market — Aberdeen, SD</title>
+  <meta name="description" content="Fresh produce, meat, and bread — delivered to Aberdeen, SD every Friday. Order by Wednesday, pick up Friday. No storefront. No surprises.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ht-bg:          #F5EDD6;
+      --ht-text:        #2C1810;
+      --ht-accent:      #5C7A3E;
+      --ht-brown:       #8B5E3C;
+      --ht-cream:       #EDE0C4;
+      --ht-border:      #C4A882;
+      --ht-muted:       #7A6450;
+      --ht-error:       #8B2500;
+      --ht-white:       #FDFAF4;
+      --ht-green-light: #EBF2E4;
+
+      --font-display: 'Lora', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ht-bg);
+      color: var(--ht-text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── UTILITIES ── */
+    .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ht-accent);
+    }
+
+    .section-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── NAV ── */
+    .site-nav {
+      border-bottom: 1px solid var(--ht-border);
+      padding: 0 24px;
+    }
+
+    .nav-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ht-text);
+    }
+
+    .brand-mark {
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ht-text);
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ht-muted);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--ht-accent);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 7px;
+      padding: 10px 18px;
+      transition: background 0.15s;
+      white-space: nowrap;
+      min-height: 44px;
+    }
+
+    .nav-cta:hover { background: #4a6630; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 72px 24px 64px;
+      border-bottom: 1px solid var(--ht-border);
+    }
+
+    .hero-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--ht-text);
+      margin-bottom: 20px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--ht-accent);
+    }
+
+    .hero-body {
+      font-size: 1.05rem;
+      color: var(--ht-muted);
+      max-width: 480px;
+      margin-bottom: 32px;
+      line-height: 1.65;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--ht-accent);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 14px 26px;
+      transition: background 0.15s, transform 0.1s;
+      min-height: 44px;
+    }
+
+    .btn-primary:hover { background: #4a6630; transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ht-accent);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.15s;
+      min-height: 44px;
+      padding: 10px 0;
+    }
+
+    .btn-ghost:hover { color: #4a6630; }
+
+    .hero-portrait {
+      flex-shrink: 0;
+      width: 200px;
+      height: 220px;
+      border-radius: 14px;
+      background: var(--ht-cream);
+      border: 1.5px solid var(--ht-border);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .portrait-fallback {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 24px;
+    }
+
+    /* ── SCHEDULE BAR ── */
+    .schedule-bar {
+      background: var(--ht-text);
+      color: var(--ht-white);
+      padding: 0 24px;
+    }
+
+    .schedule-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      height: 52px;
+      overflow-x: auto;
+    }
+
+    .schedule-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px;
+      white-space: nowrap;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      height: 100%;
+    }
+
+    .schedule-step:first-child { padding-left: 0; }
+    .schedule-step:last-child { border-right: none; }
+
+    .step-day {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(197,168,130,0.8);
+    }
+
+    .step-action {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-style: italic;
+      color: var(--ht-white);
+    }
+
+    .step-arrow {
+      color: var(--ht-accent);
+      font-size: 0.75rem;
+      margin-left: 4px;
+    }
+
+    /* ── WEEKLY PICK PREVIEW ── */
+    .this-week {
+      padding: 64px 24px;
+      border-bottom: 1px solid var(--ht-border);
+    }
+
+    .this-week-inner {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .this-week-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 24px;
+      gap: 16px;
+    }
+
+    .this-week-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .this-week-link {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--ht-accent);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .this-week-link:hover { text-decoration: underline; }
+
+    .pick-feature {
+      background: var(--ht-text);
+      border-radius: 14px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .pick-feature::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(92,122,62,0.2) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    .pick-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(92,122,62,0.85);
+      margin-bottom: 8px;
+    }
+
+    .pick-name {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: #FDFAF4;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+
+    .pick-price {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      background: rgba(92,122,62,0.3);
+      color: #c8e6b0;
+      border-radius: 4px;
+      padding: 2px 10px;
+      margin-bottom: 12px;
+    }
+
+    .pick-note {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 0.95rem;
+      color: rgba(253,250,244,0.78);
+      line-height: 1.55;
+    }
+
+    .pick-tom { margin-top: 10px; font-size: 0.75rem; font-weight: 600; color: rgba(92,122,62,0.85); }
+
+    .pick-loading, .pick-error, .pick-empty {
+      display: none;
+      font-size: 0.88rem;
+      color: var(--ht-muted);
+      font-style: italic;
+      padding: 16px 0;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how {
+      padding: 64px 24px;
+      border-bottom: 1px solid var(--ht-border);
+    }
+
+    .how-inner {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .how-eyebrow { margin-bottom: 10px; }
+
+    .how-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+    }
+
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .how-step {}
+
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--ht-border);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .step-day-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ht-accent);
+      margin-bottom: 4px;
+    }
+
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .step-desc {
+      font-size: 0.85rem;
+      color: var(--ht-muted);
+      line-height: 1.5;
+    }
+
+    /* ── THE HONEST BIT ── */
+    .honest {
+      padding: 64px 24px;
+      background: var(--ht-cream);
+      border-top: 1px solid var(--ht-border);
+      border-bottom: 1px solid var(--ht-border);
+    }
+
+    .honest-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .honest-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .honest-title em {
+      font-style: italic;
+      color: var(--ht-accent);
+    }
+
+    .honest-body {
+      font-size: 0.92rem;
+      color: var(--ht-muted);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .honest-body strong {
+      color: var(--ht-text);
+      font-weight: 600;
+    }
+
+    .honest-aside {
+      background: var(--ht-white);
+      border: 1px solid var(--ht-border);
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    .aside-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .aside-list {
+      list-style: none;
+    }
+
+    .aside-list li {
+      font-size: 0.85rem;
+      color: var(--ht-muted);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--ht-border);
+      display: flex;
+      gap: 10px;
+      line-height: 1.4;
+    }
+
+    .aside-list li:last-child { border-bottom: none; }
+
+    .aside-list .check {
+      color: var(--ht-accent);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      padding: 64px 24px;
+      border-bottom: 1px solid var(--ht-border);
+    }
+
+    .about-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      gap: 36px;
+      align-items: flex-start;
+    }
+
+    .about-portrait {
+      flex-shrink: 0;
+      width: 120px;
+      height: 130px;
+      border-radius: 12px;
+      background: var(--ht-cream);
+      border: 1.5px solid var(--ht-border);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .about-portrait-fallback {
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-text { flex: 1; }
+
+    .about-eyebrow { margin-bottom: 8px; }
+
+    .about-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .about-body {
+      font-size: 0.9rem;
+      color: var(--ht-muted);
+      line-height: 1.7;
+    }
+
+    .about-body strong { color: var(--ht-text); font-weight: 600; }
+
+    /* ── CTA BANNER ── */
+    .cta-banner {
+      padding: 64px 24px;
+    }
+
+    .cta-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--ht-text);
+      border-radius: 16px;
+      padding: 48px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(92,122,62,0.2) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta-text { position: relative; }
+
+    .cta-eyebrow {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(92,122,62,0.85);
+      margin-bottom: 8px;
+    }
+
+    .cta-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #FDFAF4;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .cta-sub {
+      font-size: 0.85rem;
+      color: rgba(196,168,130,0.8);
+    }
+
+    .cta-action { position: relative; flex-shrink: 0; }
+
+    .btn-cta-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--ht-accent);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 16px 28px;
+      transition: background 0.15s;
+      white-space: nowrap;
+      min-height: 44px;
+    }
+
+    .btn-cta-main:hover { background: #4a6630; }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      border-top: 1px solid var(--ht-border);
+      padding: 24px;
+    }
+
+    .footer-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .footer-name {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--ht-text);
+    }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: var(--ht-muted);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-portrait { display: none; }
+      .hero-title { font-size: 2.1rem; }
+      .how-steps { grid-template-columns: 1fr; gap: 24px; }
+      .honest-inner { grid-template-columns: 1fr; gap: 32px; }
+      .about-inner { flex-direction: column; }
+      .about-portrait { width: 100%; height: 140px; border-radius: 12px; }
+      .cta-inner { flex-direction: column; padding: 32px 24px; }
+      .schedule-step { padding: 0 12px; }
+      .nav-cta span { display: none; }
+    }
+
+    @media (max-width: 400px) {
+      .hero-title { font-size: 1.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="site-nav" role="navigation" aria-label="Site navigation">
+    <div class="nav-inner">
+      <a href="./market_test.html" class="brand" aria-label="Honest Tom's Market home">
+        <!-- HT brand mark — inline SVG stamp -->
+        <svg class="brand-mark" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="19" cy="19" r="17.5" stroke="#5C7A3E" stroke-width="1.5" fill="#EDE0C4"/>
+          <text x="19" y="25" text-anchor="middle" font-family="Lora, Georgia, serif" font-size="14" font-weight="700" fill="#2C1810">HT</text>
+        </svg>
+        <div>
+          <div class="brand-name">Honest Tom's Market</div>
+          <div class="brand-sub">Aberdeen, SD</div>
+        </div>
+      </a>
+      <a href="./preorder.html" class="nav-cta" aria-label="Order this week">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+          <path d="M2 7.5h11M9 3.5l4 4-4 4" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Order This Week</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- SCHEDULE BAR -->
+  <div class="schedule-bar" role="complementary" aria-label="Weekly schedule">
+    <div class="schedule-inner">
+      <div class="schedule-step">
+        <span class="step-day">Tuesday</span>
+        <span class="step-action">Menu posts</span>
+      </div>
+      <div class="step-arrow" aria-hidden="true">→</div>
+      <div class="schedule-step">
+        <span class="step-day">Wednesday</span>
+        <span class="step-action">Orders close</span>
+      </div>
+      <div class="step-arrow" aria-hidden="true">→</div>
+      <div class="schedule-step">
+        <span class="step-day">Wednesday</span>
+        <span class="step-action">Tom sources</span>
+      </div>
+      <div class="step-arrow" aria-hidden="true">→</div>
+      <div class="schedule-step">
+        <span class="step-day">Friday</span>
+        <span class="step-action">Pickup</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-eyebrow eyebrow">Fresh Food · Aberdeen, SD</div>
+        <h1 class="hero-title" id="hero-heading">
+          What's <em>actually</em><br>good this week.
+        </h1>
+        <p class="hero-body">
+          Aberdeen's first weekly fresh food pre-order. Tom sources after you order —
+          so you only get what's in season and excellent. No storefront. No guessing.
+          Order by Wednesday, pick up Friday.
+        </p>
+        <div class="hero-actions">
+          <a href="./preorder.html" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            See This Week's Menu
+          </a>
+          <a href="#how-it-works" class="btn-ghost">
+            How it works
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M7 2v10M3 8l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="hero-portrait" aria-hidden="true">
+        <img
+          src="./honest_tom_sketch.png"
+          alt="Tom"
+          onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'portrait-fallback\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 64 64\' fill=\'none\'><circle cx=\'32\' cy=\'32\' r=\'30\' stroke=\'#C4A882\' stroke-width=\'1.5\' fill=\'#F5EDD6\'/><text x=\'32\' y=\'40\' text-anchor=\'middle\' font-family=\'Lora,Georgia,serif\' font-size=\'22\' font-weight=\'700\' fill=\'#5C7A3E\'>HT</text></svg></div>'"
+        >
+      </div>
+    </div>
+  </section>
+
+  <!-- THIS WEEK'S PICK -->
+  <section class="this-week" aria-labelledby="this-week-heading">
+    <div class="this-week-inner">
+      <div class="this-week-header">
+        <h2 class="this-week-title" id="this-week-heading">This Week's Pick</h2>
+        <a href="./preorder.html" class="this-week-link">Full menu →</a>
+      </div>
+
+      <div class="pick-loading" id="pick-loading">Loading this week's featured item...</div>
+      <div class="pick-error" id="pick-error">Menu not available right now. <a href="./preorder.html" style="color:var(--ht-accent);">View on order page →</a></div>
+      <div class="pick-empty" id="pick-empty">Menu posts Tuesday morning. Check back then.</div>
+
+      <div class="pick-feature" id="pick-feature" style="display:none;" role="region" aria-label="Tom's weekly pick">
+        <div class="pick-label">Tom's Pick This Week</div>
+        <div class="pick-name" id="pick-name">—</div>
+        <div class="pick-price" id="pick-price"></div>
+        <div class="pick-note" id="pick-note"></div>
+        <div class="pick-tom">— Tom</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how-it-works" aria-labelledby="how-heading">
+    <div class="how-inner">
+      <div class="how-eyebrow eyebrow">The rhythm</div>
+      <h2 class="how-title" id="how-heading">How it works</h2>
+      <div class="how-steps" role="list">
+        <div class="how-step" role="listitem">
+          <div class="step-num">01</div>
+          <div class="step-day-label">Tuesday</div>
+          <div class="step-title">Tom posts the menu</div>
+          <p class="step-desc">Every Tuesday morning, this week's produce, meat, and bread goes live. Tom only lists what he knows is good.</p>
+        </div>
+        <div class="how-step" role="listitem">
+          <div class="step-num">02</div>
+          <div class="step-day-label">Wednesday</div>
+          <div class="step-title">You order, Tom sources</div>
+          <p class="step-desc">Place your order by Wednesday night. Tom buys exactly what's been ordered — nothing sits in a warehouse waiting.</p>
+        </div>
+        <div class="how-step" role="listitem">
+          <div class="step-num">03</div>
+          <div class="step-day-label">Friday</div>
+          <div class="step-title">Pick up your order</div>
+          <p class="step-desc">Swing by the pickup location Friday and grab your order. Fresh from the source, packed that morning.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE HONEST BIT -->
+  <section class="honest" aria-labelledby="honest-heading">
+    <div class="honest-inner">
+      <div>
+        <h2 class="honest-title" id="honest-heading">
+          Why <em>honest?</em>
+        </h2>
+        <p class="honest-body">
+          Aberdeen has one grocery store. <strong>It's Walmart.</strong> Kessler's and Ken's are fine for what they are, but fresh produce isn't their thing.
+        </p>
+        <p class="honest-body">
+          Tom is a neighbor who got tired of it. The idea is simple: a weekly menu of what's actually worth buying this week, sourced after you order so nothing goes to waste, sold at a fair price.
+        </p>
+        <p class="honest-body">
+          <strong>No subscription boxes.</strong> No 40-item catalog. No produce that was picked two weeks ago. Just what Tom knows is excellent right now.
+        </p>
+      </div>
+      <div class="honest-aside" role="complementary" aria-labelledby="aside-heading">
+        <div class="aside-title" id="aside-heading">What this is not</div>
+        <ul class="aside-list" aria-label="What Honest Tom's Market is not">
+          <li><span class="check" aria-hidden="true">✗</span> <span>A subscription box you can't cancel</span></li>
+          <li><span class="check" aria-hidden="true">✗</span> <span>300 items and a confusing website</span></li>
+          <li><span class="check" aria-hidden="true">✗</span> <span>Produce that sat in a warehouse</span></li>
+          <li><span class="check" aria-hidden="true">✗</span> <span>A stranger who doesn't know Aberdeen</span></li>
+          <li><span class="check" aria-hidden="true">✓</span> <span style="color:var(--ht-text);">Tom. With good stuff. Every Friday.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT TOM -->
+  <section class="about" aria-labelledby="about-heading">
+    <div class="about-inner">
+      <div class="about-portrait" aria-hidden="true">
+        <img
+          src="./honest_tom_sketch.png"
+          alt=""
+          onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'about-portrait-fallback\'><svg width=\'52\' height=\'52\' viewBox=\'0 0 52 52\' fill=\'none\'><circle cx=\'26\' cy=\'26\' r=\'24\' stroke=\'#C4A882\' stroke-width=\'1.5\' fill=\'#F5EDD6\'/><text x=\'26\' y=\'32\' text-anchor=\'middle\' font-family=\'Lora,Georgia,serif\' font-size=\'16\' font-weight=\'700\' fill=\'#5C7A3E\'>HT</text></svg></div>'"
+        >
+      </div>
+      <div class="about-text">
+        <div class="about-eyebrow eyebrow">The person behind it</div>
+        <h2 class="about-title" id="about-heading">Tom Husom</h2>
+        <p class="about-body">
+          Aberdeen local. <strong>Spent years watching the same tired produce rotate through the same tired shelves.</strong>
+          Honest Tom's Market is the direct result — a weekly fresh food service built around the idea that Aberdeen deserves better.
+        </p>
+        <p class="about-body" style="margin-top:10px;">
+          Tom sources from regional distributors and local farms, posts the menu every Tuesday, and has your order ready Friday morning.
+          If you have a question, text him.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta-banner" aria-labelledby="cta-heading">
+    <div class="cta-inner">
+      <div class="cta-text">
+        <div class="cta-eyebrow">Ready?</div>
+        <h2 class="cta-title" id="cta-heading">See what Tom has this week.</h2>
+        <div class="cta-sub">Order by Wednesday · Pick up Friday</div>
+      </div>
+      <div class="cta-action">
+        <a href="./preorder.html" class="btn-cta-main">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Open the Order Page
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <a href="./market_test.html" class="footer-brand" aria-label="Honest Tom's Market">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <circle cx="14" cy="14" r="13" stroke="#C4A882" stroke-width="1.2" fill="transparent"/>
+          <text x="14" y="18.5" text-anchor="middle" font-family="Lora, Georgia, serif" font-size="9.5" font-weight="700" fill="#7A6450">HT</text>
+        </svg>
+        <span class="footer-name">Honest Tom's Market</span>
+      </a>
+      <span class="footer-copy">Aberdeen, SD · &copy; 2026 · <a href="./dashboard.html" style="color:var(--ht-muted);text-decoration:none;">honesttom.ai</a></span>
+    </div>
+  </footer>
+
+  <script>
+    // Pull the featured item from the same Google Sheet as preorder.html
+    // Replace SHEET_CSV_URL with your published Google Sheet CSV URL
+    var SHEET_CSV_URL = 'YOUR_GOOGLE_SHEET_CSV_URL_HERE';
+    var PROXY = 'https://api.allorigins.win/raw?url=';
+
+    function parseCSVLine(line) {
+      var result = [], cur = '', inQ = false;
+      for (var i = 0; i < line.length; i++) {
+        var c = line[i];
+        if (c === '"') { inQ = !inQ; }
+        else if (c === ',' && !inQ) { result.push(cur); cur = ''; }
+        else { cur += c; }
+      }
+      result.push(cur);
+      return result;
+    }
+
+    function parseCSV(text) {
+      var lines = text.trim().split('\n');
+      if (lines.length < 2) return [];
+      var headers = parseCSVLine(lines[0]).map(function(h){ return h.trim().toLowerCase().replace(/"/g,''); });
+      return lines.slice(1).map(function(line) {
+        var vals = parseCSVLine(line);
+        var obj = {};
+        headers.forEach(function(h, i){ obj[h] = (vals[i] || '').trim().replace(/^"|"$/g,''); });
+        return obj;
+      }).filter(function(r){ return r.item && r.item !== ''; });
+    }
+
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function loadPick() {
+      if (SHEET_CSV_URL === 'YOUR_GOOGLE_SHEET_CSV_URL_HERE') {
+        document.getElementById('pick-loading').style.display = 'none';
+        document.getElementById('pick-empty').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('pick-loading').style.display = 'block';
+
+      fetch(PROXY + encodeURIComponent(SHEET_CSV_URL))
+        .then(function(r) { if (!r.ok) throw new Error(); return r.text(); })
+        .then(function(text) {
+          document.getElementById('pick-loading').style.display = 'none';
+          var items = parseCSV(text);
+          var featured = items.filter(function(i){
+            return i.available && i.available.toUpperCase() === 'Y'
+                && i.featured  && i.featured.toUpperCase()  === 'Y';
+          })[0];
+
+          if (!featured) {
+            document.getElementById('pick-empty').style.display = 'block';
+            return;
+          }
+
+          document.getElementById('pick-name').textContent  = featured.item;
+          document.getElementById('pick-price').textContent = featured.price || '';
+          document.getElementById('pick-note').textContent  = featured.description || '';
+          document.getElementById('pick-feature').style.display = 'block';
+        })
+        .catch(function() {
+          document.getElementById('pick-loading').style.display = 'none';
+          document.getElementById('pick-error').style.display = 'block';
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPick);
+  </script>
+
+</body>
+</html>
