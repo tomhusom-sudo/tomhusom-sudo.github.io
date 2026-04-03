@@ -339,6 +339,8 @@
 </div>
 
 <script>
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
 // ── CSV PARSER ──
 function parseCSV(text) {
   // Strip BOM if present, handle all line ending variants (\r\n, \r, \n)
@@ -506,22 +508,22 @@ function analyze(file, text) {
     var tr = document.createElement('tr');
     var missingPct = (c.missing / rows.length * 100).toFixed(0);
     var missingClass = c.missing === 0 ? 'missing-none' : c.missing < rows.length * 0.1 ? 'missing-some' : 'missing-lots';
-    tr.innerHTML = '<td style="font-weight:600;color:#f1f5f9;">' + c.name + '</td>' +
+    tr.innerHTML = '<td style="font-weight:600;color:#f1f5f9;">' + esc(c.name) + '</td>' +
       '<td><span class="type-badge type-' + c.type + '">' + c.type + '</span></td>' +
       '<td><span class="missing-pill ' + missingClass + '">' + (c.missing === 0 ? 'None' : c.missing + ' (' + missingPct + '%)') + '</span></td>' +
       '<td>' + c.unique.toLocaleString() + '</td>' +
-      '<td>' + c.min + '</td>' +
-      '<td>' + c.max + '</td>' +
-      '<td>' + c.avg + '</td>';
+      '<td>' + esc(String(c.min)) + '</td>' +
+      '<td>' + esc(String(c.max)) + '</td>' +
+      '<td>' + esc(String(c.avg)) + '</td>';
     tbody.appendChild(tr);
   });
 
   // Preview table
   var preview = document.getElementById('previewTable');
   preview.innerHTML = '';
-  var thead = '<thead><tr>' + headers.map(h => '<th>' + h + '</th>').join('') + '</tr></thead>';
+  var thead = '<thead><tr>' + headers.map(h => '<th>' + esc(h) + '</th>').join('') + '</tr></thead>';
   var tbody2 = '<tbody>' + rows.slice(0, 10).map(row =>
-    '<tr>' + headers.map(h => '<td>' + (row[h] || '') + '</td>').join('') + '</tr>'
+    '<tr>' + headers.map(h => '<td>' + esc(row[h] || '') + '</td>').join('') + '</tr>'
   ).join('') + '</tbody>';
   preview.innerHTML = thead + tbody2;
 
