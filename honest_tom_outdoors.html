@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Honest Tom Outdoors — AI Backyard Designer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overflow-x: hidden; }
+
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(160deg, rgba(10,32,8,0.92) 0%, rgba(8,22,5,0.96) 50%, rgba(5,14,3,0.98) 100%),
+        url('./lincoln.jpg') center 30% / cover no-repeat fixed;
+      color: #d4edda;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(74,222,128,0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 48px 28px 80px; }
+
+    /* ── HEADER ── */
+    .header { margin-bottom: 40px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .header-logo {
+      width: 68px; height: 68px; border-radius: 16px;
+      background: linear-gradient(135deg, #14532d, #15803d);
+      border: 1.5px solid rgba(74,222,128,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.4rem; flex-shrink: 0;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 20px rgba(74,222,128,0.12);
+    }
+    .header-text { flex: 1; }
+    .header-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #4ade80; margin-bottom: 4px; }
+    .header-title { font-size: 2.4rem; font-weight: 800; color: #f0fdf4; line-height: 1.1; }
+    .header-title em { font-style: normal; color: #4ade80; }
+    .header-sub { font-size: 0.85rem; color: #86efac; margin-top: 6px; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 600;
+      color: #4ade80; text-decoration: none; border: 1px solid rgba(74,222,128,0.25);
+      border-radius: 20px; padding: 7px 14px; transition: all 0.15s; white-space: nowrap;
+    }
+    .back-link:hover { border-color: rgba(74,222,128,0.6); background: rgba(74,222,128,0.06); }
+
+    /* ── API KEY BANNER ── */
+    .api-banner {
+      background: rgba(20,83,45,0.25); border: 1px solid rgba(74,222,128,0.2);
+      border-radius: 14px; padding: 14px 18px; margin-bottom: 28px;
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    }
+    .api-banner.hidden { display: none; }
+    .api-label { font-size: 0.78rem; font-weight: 600; color: #86efac; flex-shrink: 0; }
+    .api-input {
+      flex: 1; min-width: 220px; background: rgba(0,0,0,0.35); border: 1px solid rgba(74,222,128,0.2);
+      border-radius: 8px; padding: 8px 12px; color: #d4edda; font-size: 0.8rem;
+      font-family: 'Inter', monospace; outline: none; transition: border-color 0.15s;
+    }
+    .api-input:focus { border-color: rgba(74,222,128,0.5); }
+    .api-input::placeholder { color: #4a7060; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.8rem; font-weight: 600; font-family: inherit; transition: all 0.15s; }
+    .btn-green { background: #15803d; color: #f0fdf4; }
+    .btn-green:hover { background: #16a34a; }
+    .btn-outline { background: transparent; border: 1px solid rgba(74,222,128,0.3); color: #4ade80; }
+    .btn-outline:hover { border-color: rgba(74,222,128,0.6); background: rgba(74,222,128,0.06); }
+    .btn-sm { padding: 6px 12px; font-size: 0.74rem; }
+    .api-status { font-size: 0.72rem; color: #4ade80; flex-shrink: 0; }
+
+    /* ── MAIN GRID ── */
+    .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+    @media (max-width: 768px) { .main-grid { grid-template-columns: 1fr; } }
+
+    .panel {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(74,222,128,0.15);
+      border-radius: 20px; padding: 24px; overflow: hidden;
+    }
+    .panel-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #4ade80; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+    /* ── UPLOAD ZONE ── */
+    .upload-zone {
+      border: 2px dashed rgba(74,222,128,0.25); border-radius: 14px;
+      padding: 40px 20px; text-align: center; cursor: pointer; transition: all 0.2s;
+      background: rgba(20,83,45,0.08); position: relative; overflow: hidden;
+    }
+    .upload-zone:hover, .upload-zone.drag-over { border-color: rgba(74,222,128,0.6); background: rgba(20,83,45,0.15); }
+    .upload-icon { font-size: 2.8rem; margin-bottom: 10px; }
+    .upload-text { font-size: 0.88rem; color: #86efac; font-weight: 500; }
+    .upload-sub { font-size: 0.72rem; color: #4a7060; margin-top: 4px; }
+    #file-input { display: none; }
+
+    /* ── CANVAS AREA ── */
+    .canvas-wrap { position: relative; border-radius: 12px; overflow: hidden; display: none; background: #000; }
+    #yard-canvas { display: block; width: 100%; height: auto; }
+    .canvas-wrap canvas { display: block; }
+
+    /* ── ANALYZE BTN ── */
+    .analyze-btn {
+      width: 100%; margin-top: 14px; padding: 13px; border-radius: 12px; border: none;
+      background: linear-gradient(135deg, #15803d, #16a34a); color: #f0fdf4;
+      font-size: 0.92rem; font-weight: 700; font-family: inherit; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 0.15s; display: none;
+      box-shadow: 0 4px 16px rgba(21,128,61,0.3);
+    }
+    .analyze-btn:hover { background: linear-gradient(135deg, #16a34a, #22c55e); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(21,128,61,0.4); }
+    .analyze-btn:active { transform: translateY(0); }
+    .analyze-btn.loading { opacity: 0.7; cursor: not-allowed; }
+
+    /* ── DETECTION RESULTS ── */
+    .detections { margin-top: 14px; display: none; }
+    .detection-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #4a7060; margin-bottom: 8px; }
+    .detection-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px;
+      border-radius: 20px; font-size: 0.72rem; font-weight: 600; cursor: pointer;
+      transition: all 0.15s; border: 1px solid;
+    }
+    .tag-tree    { background: rgba(21,128,61,0.15); border-color: rgba(21,128,61,0.4); color: #86efac; }
+    .tag-shrub   { background: rgba(34,197,94,0.1);  border-color: rgba(34,197,94,0.3); color: #4ade80; }
+    .tag-plant   { background: rgba(74,222,128,0.08);border-color: rgba(74,222,128,0.25);color: #6ee7b7; }
+    .tag-grass   { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: #34d399; }
+    .tag-weed    { background: rgba(239,68,68,0.1);  border-color: rgba(239,68,68,0.3); color: #fca5a5; }
+    .tag-hardscape { background: rgba(100,116,139,0.1);border-color:rgba(100,116,139,0.3);color:#cbd5e1;}
+    .tag-planter { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: #fcd34d; }
+    .tag-other   { background: rgba(168,85,247,0.1); border-color: rgba(168,85,247,0.3); color: #d8b4fe; }
+    .tag:hover { transform: scale(1.04); }
+
+    .yard-summary { margin-top: 14px; font-size: 0.8rem; color: #86efac; line-height: 1.5; background: rgba(20,83,45,0.15); border-radius: 10px; padding: 12px 14px; border: 1px solid rgba(74,222,128,0.1); display: none; }
+    .yard-health-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .yard-health-label { font-size: 0.7rem; font-weight: 600; color: #4a7060; }
+    .health-bar { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+    .health-fill { height: 100%; background: linear-gradient(90deg, #ef4444, #eab308, #22c55e); border-radius: 3px; transition: width 1s; }
+
+    /* ── REGION SELECTOR ── */
+    .region-select {
+      width: 100%; background: rgba(0,0,0,0.35); border: 1px solid rgba(74,222,128,0.2);
+      border-radius: 10px; padding: 10px 14px; color: #d4edda; font-size: 0.84rem;
+      font-family: inherit; outline: none; cursor: pointer; margin-bottom: 16px;
+      transition: border-color 0.15s;
+    }
+    .region-select:focus { border-color: rgba(74,222,128,0.5); }
+    .region-select option { background: #0a1a08; }
+
+    /* ── PLANT TYPE TABS ── */
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+    .tab {
+      padding: 5px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600;
+      border: 1px solid rgba(74,222,128,0.2); color: #6b9e80; cursor: pointer; transition: all 0.15s;
+    }
+    .tab:hover { border-color: rgba(74,222,128,0.4); color: #86efac; }
+    .tab.active { background: rgba(74,222,128,0.12); border-color: rgba(74,222,128,0.5); color: #4ade80; }
+
+    /* ── PLANT CARDS ── */
+    .plant-list { display: flex; flex-direction: column; gap: 10px; max-height: 480px; overflow-y: auto; padding-right: 4px; }
+    .plant-list::-webkit-scrollbar { width: 4px; }
+    .plant-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); border-radius: 2px; }
+    .plant-list::-webkit-scrollbar-thumb { background: rgba(74,222,128,0.2); border-radius: 2px; }
+
+    .plant-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(74,222,128,0.1);
+      border-radius: 12px; padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px;
+      transition: all 0.15s; cursor: default;
+    }
+    .plant-card:hover { border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.04); }
+    .plant-emoji { font-size: 2rem; flex-shrink: 0; line-height: 1; }
+    .plant-info { flex: 1; min-width: 0; }
+    .plant-name { font-size: 0.88rem; font-weight: 700; color: #d4edda; }
+    .plant-latin { font-size: 0.7rem; color: #4a7060; font-style: italic; margin-top: 1px; }
+    .plant-desc { font-size: 0.75rem; color: #86efac; margin-top: 4px; line-height: 1.4; }
+    .plant-meta { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+    .plant-badge {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; padding: 2px 7px;
+      border-radius: 10px; text-transform: uppercase;
+    }
+    .badge-care-low  { background: rgba(34,197,94,0.12); color: #4ade80; }
+    .badge-care-med  { background: rgba(234,179,8,0.12);  color: #fde047; }
+    .badge-care-high { background: rgba(239,68,68,0.12);  color: #fca5a5; }
+    .badge-zone { background: rgba(74,222,128,0.08); color: #86efac; }
+    .badge-height { background: rgba(100,116,139,0.12); color: #94a3b8; }
+    .plant-add-btn {
+      flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px; border: 1px solid rgba(74,222,128,0.25);
+      background: transparent; color: #4ade80; cursor: pointer; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+    }
+    .plant-add-btn:hover { background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.5); transform: scale(1.1); }
+    .plant-add-btn.added { background: rgba(74,222,128,0.15); border-color: #4ade80; color: #86efac; }
+
+    /* ── MY YARD PLAN ── */
+    .plan-section { margin-top: 0; }
+    .plan-panel {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(74,222,128,0.15);
+      border-radius: 20px; padding: 24px;
+    }
+    .plan-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+    .plan-empty { text-align: center; padding: 32px; font-size: 0.82rem; color: #4a7060; }
+    .plan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+    .plan-item {
+      background: rgba(20,83,45,0.15); border: 1px solid rgba(74,222,128,0.2);
+      border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px;
+    }
+    .plan-item-emoji { font-size: 1.6rem; }
+    .plan-item-info { flex: 1; min-width: 0; }
+    .plan-item-name { font-size: 0.8rem; font-weight: 600; color: #d4edda; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .plan-item-type { font-size: 0.66rem; color: #4a7060; text-transform: uppercase; letter-spacing: 0.06em; }
+    .plan-item-remove { background: none; border: none; color: #4a7060; cursor: pointer; font-size: 1rem; padding: 2px; transition: color 0.15s; flex-shrink: 0; }
+    .plan-item-remove:hover { color: #fca5a5; }
+
+    /* ── SPINNER ── */
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.2); border-top-color: #4ade80; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── AI RECOMMENDATIONS ── */
+    .ai-recs { margin-top: 12px; display: none; }
+    .ai-recs-title { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #4a7060; margin-bottom: 8px; }
+    .ai-rec-item { font-size: 0.78rem; color: #86efac; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; align-items: flex-start; gap: 7px; }
+    .ai-rec-item:last-child { border-bottom: none; }
+    .ai-rec-item::before { content: '→'; color: #4ade80; font-weight: 700; flex-shrink: 0; }
+
+    .toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+      background: rgba(20,83,45,0.95); border: 1px solid rgba(74,222,128,0.4);
+      border-radius: 10px; padding: 10px 20px; font-size: 0.82rem; color: #d4edda;
+      z-index: 9999; opacity: 0; transition: opacity 0.2s; pointer-events: none;
+      backdrop-filter: blur(10px);
+    }
+    .toast.show { opacity: 1; }
+
+    footer { margin-top: 56px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 18px; font-size: 0.68rem; color: #4a7060; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <header class="header">
+    <div class="header-logo">🌿</div>
+    <div class="header-text">
+      <div class="header-eyebrow">AI-Powered Landscaping</div>
+      <h1 class="header-title">Honest Tom <em>Outdoors</em></h1>
+      <p class="header-sub">Upload a photo of your yard — AI identifies every plant, tree &amp; feature, then recommends what to add for your region.</p>
+    </div>
+    <a href="./dashboard.html" class="back-link">
+      ← Dashboard
+    </a>
+  </header>
+
+  <!-- API Key Setup -->
+  <div class="api-banner" id="api-banner">
+    <span class="api-label">🔑 Claude API Key</span>
+    <input type="password" class="api-input" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off">
+    <button class="btn btn-green btn-sm" onclick="saveApiKey()">Save Key</button>
+    <button class="btn btn-outline btn-sm" onclick="dismissApiBanner()">I'll use demo mode</button>
+    <a href="https://console.anthropic.com/" target="_blank" class="btn btn-outline btn-sm">Get API Key ↗</a>
+    <span class="api-status" id="api-status" style="display:none;">✓ Key saved</span>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="main-grid">
+
+    <!-- LEFT: Your Yard -->
+    <div class="panel">
+      <div class="panel-title">
+        📷 Your Yard
+        <span style="margin-left:auto;font-size:0.68rem;color:#4a7060;text-transform:none;letter-spacing:0;font-weight:400;">Drag &amp; drop or click to upload</span>
+      </div>
+
+      <!-- Upload Zone -->
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+        <div class="upload-icon">🏡</div>
+        <div class="upload-text">Upload Your Backyard Photo</div>
+        <div class="upload-sub">JPG, PNG, HEIC up to 20MB · Or drag &amp; drop here</div>
+      </div>
+      <input type="file" id="file-input" accept="image/*" onchange="handleFileSelect(event)">
+
+      <!-- Canvas for labeled image -->
+      <div class="canvas-wrap" id="canvas-wrap">
+        <canvas id="yard-canvas"></canvas>
+      </div>
+
+      <!-- Analyze Button -->
+      <button class="analyze-btn" id="analyze-btn" onclick="analyzeYard()">
+        <span id="analyze-btn-icon">🔍</span>
+        <span id="analyze-btn-text">Analyze My Yard with AI</span>
+      </button>
+
+      <!-- Detection Results -->
+      <div class="detections" id="detections">
+        <div class="detection-label">Detected Elements — click to highlight</div>
+        <div class="detection-tags" id="detection-tags"></div>
+      </div>
+
+      <!-- Yard Summary -->
+      <div class="yard-summary" id="yard-summary">
+        <div class="yard-health-row">
+          <span class="yard-health-label">Yard Health</span>
+          <div class="health-bar"><div class="health-fill" id="health-fill" style="width:0%"></div></div>
+          <span style="font-size:0.75rem;font-weight:700;color:#4ade80;" id="health-score"></span>
+        </div>
+        <div id="yard-summary-text"></div>
+        <div class="ai-recs" id="ai-recs">
+          <div class="ai-recs-title">AI Recommendations</div>
+          <div id="ai-recs-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Design Your Space -->
+    <div class="panel">
+      <div class="panel-title">🌱 Design Your Space</div>
+
+      <!-- Region Selector -->
+      <select class="region-select" id="region-select" onchange="renderPlants()">
+        <option value="">— Select your region / USDA zone —</option>
+        <optgroup label="Northern US (Zones 3–4)">
+          <option value="zones_3_4">MN, ND, SD, MT, WI (Zones 3–4)</option>
+        </optgroup>
+        <optgroup label="Midwest / Great Lakes (Zones 5–6)">
+          <option value="zones_5_6">IA, IL, IN, OH, MI, NY, PA, NE, CO (Zones 5–6)</option>
+        </optgroup>
+        <optgroup label="Mid-Atlantic / Upper South (Zones 7–8)">
+          <option value="zones_7_8">VA, NC, TN, KY, OK, OR, WA (Zones 7–8)</option>
+        </optgroup>
+        <optgroup label="Deep South / Southwest (Zones 9–10)">
+          <option value="zones_9_10">FL, TX, AZ, CA, LA, GA (Zones 9–10)</option>
+        </optgroup>
+      </select>
+
+      <!-- Type Tabs -->
+      <div class="tabs" id="type-tabs">
+        <div class="tab active" data-type="all" onclick="selectTab(this)">All</div>
+        <div class="tab" data-type="tree" onclick="selectTab(this)">🌳 Trees</div>
+        <div class="tab" data-type="shrub" onclick="selectTab(this)">🌿 Shrubs</div>
+        <div class="tab" data-type="perennial" onclick="selectTab(this)">🌸 Perennials</div>
+        <div class="tab" data-type="groundcover" onclick="selectTab(this)">🟢 Ground Cover</div>
+        <div class="tab" data-type="native" onclick="selectTab(this)">🏞️ Native</div>
+      </div>
+
+      <!-- Plant List -->
+      <div class="plant-list" id="plant-list">
+        <div style="text-align:center;padding:40px 20px;font-size:0.82rem;color:#4a7060;">
+          Select a region above to see recommended plants &amp; trees for your area.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- My Yard Plan -->
+  <div class="plan-section">
+    <div class="plan-panel">
+      <div class="plan-header">
+        <div class="panel-title" style="margin-bottom:0;">📋 My Yard Plan <span style="font-size:0.7rem;color:#4a7060;font-weight:400;text-transform:none;letter-spacing:0;margin-left:8px;" id="plan-count"></span></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-outline btn-sm" onclick="printPlan()">🖨️ Print Plan</button>
+          <button class="btn btn-outline btn-sm" onclick="clearPlan()">✕ Clear</button>
+        </div>
+      </div>
+      <div id="plan-content">
+        <div class="plan-empty">Add plants from the list above to build your yard plan.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <span>Honest Tom Outdoors · AI Backyard Designer</span>
+  <span>Powered by Claude Vision API · Plant data sourced from USDA PLANTS</span>
+</footer>
+
+<script>
+// ── PLANT DATABASE ─────────────────────────────────────────────────────────
+const PLANTS = {
+  zones_3_4: [
+    // Trees
+    { name:'Paper Birch',      latin:'Betula papyrifera',    emoji:'🌳', type:'tree',      care:'low',  zone:'2–7', height:'50–70 ft', desc:'Iconic white peeling bark with brilliant gold fall color. A Minnesota classic.' },
+    { name:'Bur Oak',          latin:'Quercus macrocarpa',   emoji:'🌳', type:'tree',      care:'low',  zone:'3–8', height:'60–80 ft', desc:'Rugged prairie oak. Extremely cold &amp; drought tolerant once established.' },
+    { name:'American Linden',  latin:'Tilia americana',      emoji:'🌳', type:'tree',      care:'low',  zone:'2–8', height:'60–80 ft', desc:'Fragrant summer flowers attract pollinators. Dense summer shade.' },
+    { name:'Green Ash',        latin:'Fraxinus pennsylvanica',emoji:'🌳', type:'tree',      care:'low',  zone:'3–9', height:'50–60 ft', desc:'Fast-growing native shade tree. Brilliant yellow fall color.' },
+    { name:'Quaking Aspen',    latin:'Populus tremuloides',  emoji:'🌳', type:'tree',      care:'low',  zone:'1–6', height:'20–50 ft', desc:'Leaves flutter in the slightest breeze. Spreads by root sprouts for a grove effect.' },
+    { name:'Hackberry',        latin:'Celtis occidentalis',  emoji:'🌳', type:'tree',      care:'low',  zone:'3–9', height:'40–60 ft', desc:'Tough native tree tolerating drought, wet soil, and urban conditions.' },
+    // Shrubs
+    { name:'Lilac',            latin:'Syringa vulgaris',     emoji:'🌸', type:'shrub',     care:'low',  zone:'3–7', height:'8–15 ft', desc:'Classic fragrant purple blooms in May. A northern garden staple.' },
+    { name:'Red Twig Dogwood', latin:'Cornus sericea',       emoji:'🌿', type:'shrub',     care:'low',  zone:'2–7', height:'6–8 ft',  desc:'Brilliant red stems in winter. White flowers and berries for wildlife.' },
+    { name:'Nannyberry',       latin:'Viburnum lentago',     emoji:'🌿', type:'shrub',     care:'low',  zone:'2–8', height:'15–18 ft',desc:'Native viburnum with white flowers, fall berries and excellent wildlife value.' },
+    { name:'Fragrant Sumac',   latin:'Rhus aromatica',       emoji:'🍂', type:'shrub',     care:'low',  zone:'3–9', height:'3–5 ft',  desc:'Aromatic native groundcover shrub with fiery red-orange fall color.' },
+    // Perennials
+    { name:'Purple Coneflower',latin:'Echinacea purpurea',   emoji:'💜', type:'perennial', care:'low',  zone:'3–9', height:'2–4 ft',  desc:'Tough native prairie flower loved by bees, butterflies and goldfinches.' },
+    { name:'Black-Eyed Susan', latin:'Rudbeckia hirta',      emoji:'🌻', type:'perennial', care:'low',  zone:'3–9', height:'1–3 ft',  desc:'Cheerful bright yellow blooms from July through fall. Self-seeds freely.' },
+    { name:'Wild Bergamot',    latin:'Monarda fistulosa',    emoji:'🌺', type:'perennial', care:'low',  zone:'3–9', height:'2–4 ft',  desc:'Lavender-pink native wildflower. Excellent pollinator magnet.' },
+    { name:'Prairie Dropseed', latin:'Sporobolus heterolepis',emoji:'🌾',type:'perennial', care:'low',  zone:'3–9', height:'2–3 ft',  desc:'Elegant native grass with fragrant flowers and stunning fall color.' },
+    // Ground Covers
+    { name:'Wild Ginger',      latin:'Asarum canadense',     emoji:'🍃', type:'groundcover',care:'low',  zone:'3–7', height:'6–8 in',  desc:'Dense, low spreading native groundcover for shady areas under trees.' },
+    { name:'Creeping Thyme',   latin:'Thymus serpyllum',     emoji:'🟢', type:'groundcover',care:'low',  zone:'4–9', height:'2–4 in',  desc:'Fragrant mat-forming herb. Tiny pink flowers. Tolerates foot traffic.' },
+    // Natives
+    { name:'Leadplant',        latin:'Amorpha canescens',    emoji:'🏞️', type:'native',    care:'low',  zone:'2–8', height:'2–4 ft',  desc:'Exceptional prairie native. Deep roots prevent erosion. Purple blooms attract bees.' },
+    { name:'Joe-Pye Weed',     latin:'Eutrochium purpureum', emoji:'🏞️', type:'native',    care:'low',  zone:'3–9', height:'4–7 ft',  desc:'Tall native wildflower with dusty-rose blooms. Monarch butterfly favorite.' },
+  ],
+  zones_5_6: [
+    { name:'Sugar Maple',      latin:'Acer saccharum',       emoji:'🍁', type:'tree',      care:'low',  zone:'3–8', height:'60–75 ft',desc:'The classic fall color tree. Stunning orange-red autumn display.' },
+    { name:'White Oak',        latin:'Quercus alba',         emoji:'🌳', type:'tree',      care:'low',  zone:'3–9', height:'50–80 ft',desc:'Majestic long-lived native oak. Wildlife cornerstone — over 500 species depend on oaks.' },
+    { name:'Redbud',           latin:'Cercis canadensis',    emoji:'🌸', type:'tree',      care:'low',  zone:'4–9', height:'20–30 ft',desc:'Spectacular magenta-pink spring blooms on bare branches before leaves emerge.' },
+    { name:'River Birch',      latin:'Betula nigra',         emoji:'🌳', type:'tree',      care:'low',  zone:'4–9', height:'40–70 ft',desc:'Peeling cinnamon-colored bark. Excellent for wet areas or rain gardens.' },
+    { name:'American Serviceberry',latin:'Amelanchier arborea',emoji:'🌸',type:'tree',     care:'low',  zone:'4–9', height:'15–25 ft',desc:'White spring flowers, edible berries for birds, and brilliant fall foliage.' },
+    { name:'Buttonbush',       latin:'Cephalanthus occidentalis',emoji:'🌿',type:'shrub',  care:'low',  zone:'5–9', height:'5–12 ft', desc:'Unique spherical white flowers loved by bees. Tolerates wet soil and flooding.' },
+    { name:'American Beautyberry',latin:'Callicarpa americana',emoji:'🟣',type:'shrub',   care:'low',  zone:'5–9', height:'4–6 ft',  desc:'Dramatic clusters of vivid purple berries in fall. Bold color punch.' },
+    { name:'Spicebush',        latin:'Lindera benzoin',      emoji:'🌿', type:'shrub',     care:'low',  zone:'4–9', height:'6–12 ft', desc:'Fragrant yellow spring flowers. Host plant for Spicebush Swallowtail butterfly.' },
+    { name:'Coneflower',       latin:'Echinacea purpurea',   emoji:'💜', type:'perennial', care:'low',  zone:'3–9', height:'2–4 ft',  desc:'Classic American prairie plant. Long-blooming, drought tolerant, pollinator magnet.' },
+    { name:'Little Bluestem',  latin:'Schizachyrium scoparium',emoji:'🌾',type:'perennial',care:'low',  zone:'3–9', height:'2–3 ft',  desc:'Beautiful native grass with blue-green summer color turning copper-red in fall.' },
+    { name:'Swamp Milkweed',   latin:'Asclepias incarnata',  emoji:'🦋', type:'native',    care:'low',  zone:'3–8', height:'3–5 ft',  desc:'Essential monarch butterfly host plant. Pink flowers July–August.' },
+    { name:'Wild Columbine',   latin:'Aquilegia canadensis', emoji:'🔴', type:'native',    care:'low',  zone:'3–8', height:'1–3 ft',  desc:'Graceful red and yellow nodding flowers. Hummingbird magnet in spring.' },
+    { name:'Virginia Creeper', latin:'Parthenocissus quinquefolia',emoji:'🍂',type:'groundcover',care:'low',zone:'3–9',height:'6–12 in',desc:'Fast-spreading native vine. Brilliant scarlet fall color. Excellent wildlife value.' },
+    { name:'Creeping Phlox',   latin:'Phlox subulata',       emoji:'🌸', type:'groundcover',care:'low',  zone:'3–9', height:'4–6 in',  desc:'Dense carpet of pink/white/purple spring blooms. Slope stabilizer.' },
+    { name:'Butterfly Weed',   latin:'Asclepias tuberosa',   emoji:'🦋', type:'native',    care:'low',  zone:'3–9', height:'1–3 ft',  desc:'Vivid orange clusters beloved by monarchs and all pollinators. Excellent drought tolerance.' },
+  ],
+  zones_7_8: [
+    { name:'Southern Magnolia',latin:'Magnolia grandiflora', emoji:'🌳', type:'tree',      care:'low',  zone:'7–9', height:'60–80 ft',desc:'Iconic evergreen with massive fragrant white blooms. Classic Southern tree.' },
+    { name:'Dogwood',          latin:'Cornus florida',       emoji:'🌸', type:'tree',      care:'med',  zone:'5–9', height:'15–30 ft',desc:'Spring spectacular — white or pink bracts before leaves. Brilliant red fall berries.' },
+    { name:'Sweetbay Magnolia',latin:'Magnolia virginiana',  emoji:'🌸', type:'tree',      care:'low',  zone:'5–10',height:'10–35 ft',desc:'Fragrant creamy flowers summer through fall. Semi-evergreen. Great as multi-stem.' },
+    { name:'Crepe Myrtle',     latin:'Lagerstroemia indica', emoji:'🌺', type:'tree',      care:'low',  zone:'7–9', height:'15–30 ft',desc:'Long-blooming summer flowering tree in pink, red, white or lavender. Peeling bark.' },
+    { name:'Oakleaf Hydrangea',latin:'Hydrangea quercifolia',emoji:'🌿', type:'shrub',     care:'low',  zone:'5–9', height:'4–6 ft',  desc:'White cone-shaped flower clusters. Outstanding oak-leaf foliage turns burgundy in fall.' },
+    { name:'Camellia',         latin:'Camellia japonica',    emoji:'🌹', type:'shrub',     care:'med',  zone:'7–9', height:'6–12 ft', desc:'Elegant flowers from fall through spring when little else blooms.' },
+    { name:'Virginia Sweetspire',latin:'Itea virginica',     emoji:'🌿', type:'shrub',     care:'low',  zone:'5–9', height:'3–5 ft',  desc:'Fragrant white flower racemes in summer. Fiery red-purple fall color. Spreads naturally.' },
+    { name:'Garden Phlox',     latin:'Phlox paniculata',     emoji:'🌸', type:'perennial', care:'med',  zone:'4–8', height:'2–4 ft',  desc:'Tall fragrant clusters of pink/purple/white summer blooms. Hummingbird favorite.' },
+    { name:'Daylily',          latin:'Hemerocallis spp.',    emoji:'🌼', type:'perennial', care:'low',  zone:'3–9', height:'1–3 ft',  desc:'Incredibly tough summer bloomer in every color. Spreads to fill difficult areas.' },
+    { name:'Muhly Grass',      latin:'Muhlenbergia capillaris',emoji:'🌾',type:'native',   care:'low',  zone:'6–9', height:'3–4 ft',  desc:'Spectacular pink-purple fall cloud of feathery blooms. Truly breathtaking.' },
+    { name:'Switchgrass',      latin:'Panicum virgatum',     emoji:'🌾', type:'native',    care:'low',  zone:'5–9', height:'3–6 ft',  desc:'Versatile native grass with airy seed heads. Exceptional wildlife cover and food.' },
+    { name:'Eastern Red Cedar',latin:'Juniperus virginiana', emoji:'🌲', type:'native',    care:'low',  zone:'2–9', height:'30–65 ft',desc:'Tough native evergreen. Blue-grey berries are a winter staple for over 50 bird species.' },
+    { name:'Liriope',          latin:'Liriope muscari',      emoji:'🟢', type:'groundcover',care:'low',  zone:'5–10',height:'12–18 in',desc:'Evergreen grass-like groundcover with purple flower spikes. Extremely adaptable.' },
+    { name:'Mondo Grass',      latin:'Ophiopogon japonicus', emoji:'🟢', type:'groundcover',care:'low',  zone:'6–10',height:'6–10 in', desc:'Dense, slow-spreading dark green turf alternative. Shade tolerant.' },
+  ],
+  zones_9_10: [
+    { name:'Live Oak',         latin:'Quercus virginiana',   emoji:'🌳', type:'tree',      care:'low',  zone:'8–10',height:'40–80 ft',desc:'Magnificent spreading evergreen oak. Iconic Southern shade tree. Very long-lived.' },
+    { name:'Crape Myrtle',     latin:'Lagerstroemia indica', emoji:'🌺', type:'tree',      care:'low',  zone:'7–9', height:'15–30 ft',desc:'Showy summer blooms in vivid shades. Exfoliating bark. Year-round interest.' },
+    { name:'Sago Palm',        latin:'Cycas revoluta',       emoji:'🌴', type:'tree',      care:'low',  zone:'9–11',height:'4–10 ft', desc:'Ancient cycad with stiff feathery fronds. Bold architectural form. Drought tolerant.' },
+    { name:'Desert Willow',    latin:'Chilopsis linearis',   emoji:'🌸', type:'tree',      care:'low',  zone:'7–11',height:'15–30 ft',desc:'Southwest native with long orchid-like blooms spring through fall. Hummingbird magnet.' },
+    { name:'Bougainvillea',    latin:'Bougainvillea spectabilis',emoji:'🌺',type:'shrub',  care:'low',  zone:'9–11',height:'15–40 ft',desc:'Dramatic papery bracts in magenta, orange, red, white. Nearly year-round color.' },
+    { name:'Plumbago',         latin:'Plumbago auriculata',  emoji:'💙', type:'shrub',     care:'low',  zone:'9–11',height:'3–6 ft',  desc:'Sky-blue phlox-like flowers non-stop from spring through fall. Attracts butterflies.' },
+    { name:'Firebush',         latin:'Hamelia patens',       emoji:'🔴', type:'shrub',     care:'low',  zone:'9–11',height:'4–10 ft', desc:'Tropical native shrub with red-orange tubular flowers. Hummingbirds and butterflies love it.' },
+    { name:'Turk\'s Cap',      latin:'Malvaviscus arboreus', emoji:'🔴', type:'native',    care:'low',  zone:'8–11',height:'3–8 ft',  desc:'Texas native with twisted red blooms. Thrives in heat and part shade. Top hummingbird plant.' },
+    { name:'Salvia',           latin:'Salvia greggii',       emoji:'🌺', type:'perennial', care:'low',  zone:'6–9', height:'2–3 ft',  desc:'Long-blooming in red, pink or white. Exceptional hummingbird and butterfly plant.' },
+    { name:'Lantana',          latin:'Lantana camara',       emoji:'🌼', type:'perennial', care:'low',  zone:'8–11',height:'1–6 ft',  desc:'Relentless bloomer in vivid multicolor clusters. Extremely heat and drought tolerant.' },
+    { name:'Texas Sage',       latin:'Leucophyllum frutescens',emoji:'💜',type:'native',   care:'low',  zone:'7–11',height:'5–8 ft',  desc:'Native to Texas. Silver foliage, purple blooms triggered by humidity. Zero water needed.' },
+    { name:'Gulf Muhly',       latin:'Muhlenbergia capillaris',emoji:'🌾',type:'native',   care:'low',  zone:'5–9', height:'3–4 ft',  desc:'Clouds of pink-purple gossamer in fall. Stunning en masse. No irrigation needed.' },
+    { name:'Asian Jasmine',    latin:'Trachelospermum asiaticum',emoji:'🟢',type:'groundcover',care:'low',zone:'7–11',height:'6–18 in',desc:'Dense, tough evergreen groundcover. Handles heat, drought and shade. Excellent under trees.' },
+    { name:'Dwarf Mondo Grass',latin:'Ophiopogon japonicus Nana',emoji:'🟢',type:'groundcover',care:'low',zone:'6–10',height:'3–4 in',desc:'Tiny dark green turf alternative for shady spots. Virtually no maintenance.' },
+  ]
+};
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let currentImage = null;
+let detectedObjects = [];
+let selectedType = 'all';
+let myPlan = JSON.parse(localStorage.getItem('ht_outdoors_plan') || '[]');
+let apiKeySet = !!localStorage.getItem('ht_outdoors_api_key');
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+(function init() {
+  if (apiKeySet) {
+    document.getElementById('api-banner').classList.add('hidden');
+  } else {
+    const saved = localStorage.getItem('ht_outdoors_api_key');
+    if (saved) document.getElementById('api-key-input').value = saved;
+  }
+  renderPlan();
+})();
+
+// ── API KEY ────────────────────────────────────────────────────────────────
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key.startsWith('sk-ant-')) { showToast('⚠️ That doesn\'t look like a Claude API key (should start with sk-ant-)'); return; }
+  localStorage.setItem('ht_outdoors_api_key', key);
+  apiKeySet = true;
+  document.getElementById('api-status').style.display = 'inline';
+  setTimeout(() => document.getElementById('api-banner').classList.add('hidden'), 1200);
+  showToast('✓ API key saved! You\'re ready to analyze yards.');
+}
+
+function dismissApiBanner() {
+  document.getElementById('api-banner').classList.add('hidden');
+}
+
+// ── FILE HANDLING ──────────────────────────────────────────────────────────
+function handleFileSelect(e) { loadFile(e.target.files[0]); }
+function handleDragOver(e) { e.preventDefault(); document.getElementById('upload-zone').classList.add('drag-over'); }
+function handleDragLeave(e) { document.getElementById('upload-zone').classList.remove('drag-over'); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) loadFile(f);
+}
+
+function loadFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    currentImage = e.target.result;
+    const img = new Image();
+    img.onload = function() {
+      const wrap = document.getElementById('canvas-wrap');
+      const canvas = document.getElementById('yard-canvas');
+      const maxW = wrap.parentElement.clientWidth - 48;
+      const scale = Math.min(1, maxW / img.width);
+      canvas.width = img.width;
+      canvas.height = img.height;
+      canvas.style.maxWidth = '100%';
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      document.getElementById('upload-zone').style.display = 'none';
+      wrap.style.display = 'block';
+      document.getElementById('analyze-btn').style.display = 'flex';
+      document.getElementById('detections').style.display = 'none';
+      document.getElementById('yard-summary').style.display = 'none';
+      detectedObjects = [];
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── AI ANALYSIS ────────────────────────────────────────────────────────────
+async function analyzeYard() {
+  if (!currentImage) return;
+  const apiKey = localStorage.getItem('ht_outdoors_api_key');
+  const btn = document.getElementById('analyze-btn');
+  const btnText = document.getElementById('analyze-btn-text');
+  const btnIcon = document.getElementById('analyze-btn-icon');
+
+  if (!apiKey) {
+    // Demo mode
+    runDemoAnalysis();
+    return;
+  }
+
+  btn.classList.add('loading');
+  btnText.textContent = 'Analyzing with Claude AI…';
+  btnIcon.innerHTML = '<div class="spinner"></div>';
+
+  try {
+    const b64 = currentImage.split(',')[1];
+    const mimeMatch = currentImage.match(/data:([^;]+);/);
+    const mime = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+
+    const response = await fetch('https://corsproxy.io/?https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'claude-opus-4-6',
+        max_tokens: 1500,
+        messages: [{
+          role: 'user',
+          content: [{
+            type: 'image',
+            source: { type: 'base64', media_type: mime, data: b64 }
+          }, {
+            type: 'text',
+            text: `Analyze this yard/backyard/garden photo. Identify all visible landscape elements: plants, trees, shrubs, grass areas, weeds, garden beds, benches, patios, decks, fences, planters, mulch, stones, water features, etc.
+
+Return ONLY valid JSON (no markdown, no extra text) with this exact structure:
+{
+  "objects": [
+    {
+      "label": "descriptive name",
+      "type": "tree|shrub|plant|grass|weed|hardscape|planter|other",
+      "x": 0.30,
+      "y": 0.20,
+      "w": 0.25,
+      "h": 0.40,
+      "condition": "healthy|needs_attention|overgrown|dying",
+      "notes": "one brief observation"
+    }
+  ],
+  "yard_health": 7,
+  "summary": "2-3 sentence yard assessment",
+  "recommendations": ["specific recommendation 1", "specific recommendation 2", "specific recommendation 3"]
+}`
+          }]
+        }]
+      })
+    });
+
+    const data = await response.json();
+    if (data.error) throw new Error(data.error.message);
+    const text = data.content[0].text.trim();
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('Could not parse AI response');
+    const result = JSON.parse(jsonMatch[0]);
+    displayAnalysis(result);
+
+  } catch(err) {
+    console.error(err);
+    showToast('AI analysis failed: ' + err.message + '. Running demo mode.');
+    runDemoAnalysis();
+  } finally {
+    btn.classList.remove('loading');
+    btnText.textContent = 'Re-Analyze';
+    btnIcon.textContent = '🔄';
+  }
+}
+
+function runDemoAnalysis() {
+  const demo = {
+    objects: [
+      { label: 'Deciduous Tree', type: 'tree', x: 0.05, y: 0.05, w: 0.25, h: 0.45, condition: 'healthy', notes: 'Mature shade tree, appears healthy' },
+      { label: 'Lawn Grass', type: 'grass', x: 0.15, y: 0.55, w: 0.70, h: 0.40, condition: 'needs_attention', notes: 'Some thin spots — consider overseeding' },
+      { label: 'Garden Bed', type: 'plant', x: 0.75, y: 0.20, w: 0.22, h: 0.35, condition: 'healthy', notes: 'Mixed perennial planting' },
+      { label: 'Weedy Area', type: 'weed', x: 0.35, y: 0.65, w: 0.20, h: 0.20, condition: 'needs_attention', notes: 'Ground ivy or creeping Charlie detected' },
+      { label: 'Patio / Hardscape', type: 'hardscape', x: 0.60, y: 0.60, w: 0.35, h: 0.30, condition: 'healthy', notes: 'Concrete or paver surface' }
+    ],
+    yard_health: 6,
+    summary: 'Demo mode — upload your photo and add a Claude API key for real AI analysis. This sample shows what labeled detection looks like: trees, lawn areas, garden beds, weedy spots, and hardscape surfaces are identified and color-coded.',
+    recommendations: [
+      'Address the weedy areas with targeted herbicide or hand removal before they spread further',
+      'Overseed thin lawn areas in fall for thicker turf next spring',
+      'Add a mulch border around the garden bed to reduce weeding and retain moisture'
+    ]
+  };
+  displayAnalysis(demo);
+  document.getElementById('analyze-btn').style.display = 'flex';
+  document.getElementById('analyze-btn-text').textContent = 'Re-Analyze';
+  document.getElementById('analyze-btn-icon').textContent = '🔄';
+}
+
+// ── DISPLAY ANALYSIS ───────────────────────────────────────────────────────
+const TYPE_COLORS = {
+  tree:       { stroke: '#4ade80', fill: 'rgba(74,222,128,0.12)',  label: '#d4edda' },
+  shrub:      { stroke: '#22c55e', fill: 'rgba(34,197,94,0.12)',   label: '#d4edda' },
+  plant:      { stroke: '#86efac', fill: 'rgba(134,239,172,0.1)',  label: '#d4edda' },
+  grass:      { stroke: '#16a34a', fill: 'rgba(22,163,74,0.1)',    label: '#d4edda' },
+  weed:       { stroke: '#ef4444', fill: 'rgba(239,68,68,0.12)',   label: '#fecaca' },
+  hardscape:  { stroke: '#94a3b8', fill: 'rgba(148,163,184,0.1)', label: '#e2e8f0' },
+  planter:    { stroke: '#f59e0b', fill: 'rgba(245,158,11,0.1)',   label: '#fde68a' },
+  other:      { stroke: '#a78bfa', fill: 'rgba(167,139,250,0.1)',  label: '#ddd6fe' }
+};
+
+function displayAnalysis(result) {
+  detectedObjects = result.objects || [];
+  const canvas = document.getElementById('yard-canvas');
+  const ctx = canvas.getContext('2d');
+
+  // Redraw base image
+  const img = new Image();
+  img.onload = function() {
+    ctx.drawImage(img, 0, 0);
+    // Draw overlays
+    detectedObjects.forEach((obj, i) => {
+      const c = TYPE_COLORS[obj.type] || TYPE_COLORS.other;
+      const x = obj.x * canvas.width;
+      const y = obj.y * canvas.height;
+      const w = obj.w * canvas.width;
+      const h = obj.h * canvas.height;
+      // Box
+      ctx.strokeStyle = c.stroke;
+      ctx.lineWidth = 2.5;
+      ctx.fillStyle = c.fill;
+      ctx.beginPath(); ctx.roundRect(x, y, w, h, 6); ctx.fill(); ctx.stroke();
+      // Label background
+      ctx.font = 'bold 13px Inter, sans-serif';
+      const tw = ctx.measureText(obj.label).width + 12;
+      ctx.fillStyle = 'rgba(5,15,5,0.82)';
+      ctx.beginPath(); ctx.roundRect(x + 4, y + 4, tw, 22, 4); ctx.fill();
+      ctx.fillStyle = c.label;
+      ctx.fillText(obj.label, x + 10, y + 19);
+    });
+  };
+  img.src = currentImage;
+
+  // Detection tags
+  const tagsEl = document.getElementById('detection-tags');
+  tagsEl.innerHTML = '';
+  detectedObjects.forEach((obj, i) => {
+    const tag = document.createElement('div');
+    tag.className = 'tag tag-' + (obj.type || 'other');
+    tag.textContent = obj.label;
+    tag.title = obj.notes || '';
+    tagsEl.appendChild(tag);
+  });
+  document.getElementById('detections').style.display = 'block';
+
+  // Summary
+  const summEl = document.getElementById('yard-summary');
+  summEl.style.display = 'block';
+  const health = result.yard_health || 5;
+  document.getElementById('health-fill').style.width = (health * 10) + '%';
+  document.getElementById('health-score').textContent = health + '/10';
+  document.getElementById('yard-summary-text').textContent = result.summary || '';
+
+  // AI recommendations
+  if (result.recommendations && result.recommendations.length) {
+    const recsEl = document.getElementById('ai-recs');
+    recsEl.style.display = 'block';
+    document.getElementById('ai-recs-list').innerHTML = result.recommendations
+      .map(r => `<div class="ai-rec-item">${r}</div>`).join('');
+  }
+}
+
+// ── PLANTS ─────────────────────────────────────────────────────────────────
+function selectTab(el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  selectedType = el.dataset.type;
+  renderPlants();
+}
+
+function renderPlants() {
+  const region = document.getElementById('region-select').value;
+  const list = document.getElementById('plant-list');
+  if (!region) {
+    list.innerHTML = '<div style="text-align:center;padding:40px 20px;font-size:0.82rem;color:#4a7060;">Select a region above to see recommended plants &amp; trees for your area.</div>';
+    return;
+  }
+  const plants = PLANTS[region] || [];
+  const filtered = selectedType === 'all' ? plants : plants.filter(p => p.type === selectedType);
+  if (!filtered.length) {
+    list.innerHTML = '<div style="text-align:center;padding:30px;font-size:0.82rem;color:#4a7060;">No plants in this category for the selected region.</div>';
+    return;
+  }
+  list.innerHTML = filtered.map((p, i) => {
+    const inPlan = myPlan.some(x => x.name === p.name);
+    return `<div class="plant-card">
+      <div class="plant-emoji">${p.emoji}</div>
+      <div class="plant-info">
+        <div class="plant-name">${p.name}</div>
+        <div class="plant-latin">${p.latin}</div>
+        <div class="plant-desc">${p.desc}</div>
+        <div class="plant-meta">
+          <span class="plant-badge badge-care-${p.care}">${p.care} maintenance</span>
+          <span class="plant-badge badge-zone">Zone ${p.zone}</span>
+          <span class="plant-badge badge-height">${p.height}</span>
+        </div>
+      </div>
+      <button class="plant-add-btn ${inPlan ? 'added' : ''}" onclick="togglePlan('${region}', '${p.name}')" title="${inPlan ? 'Remove from plan' : 'Add to plan'}">${inPlan ? '✓' : '+'}</button>
+    </div>`;
+  }).join('');
+}
+
+// ── MY YARD PLAN ───────────────────────────────────────────────────────────
+function togglePlan(region, plantName) {
+  const allPlants = PLANTS[region] || [];
+  const plant = allPlants.find(p => p.name === plantName);
+  if (!plant) return;
+  const idx = myPlan.findIndex(x => x.name === plantName);
+  if (idx > -1) {
+    myPlan.splice(idx, 1);
+    showToast('Removed ' + plantName + ' from your plan.');
+  } else {
+    myPlan.push({ name: plant.name, emoji: plant.emoji, type: plant.type, latin: plant.latin });
+    showToast('✓ Added ' + plantName + ' to your yard plan!');
+  }
+  localStorage.setItem('ht_outdoors_plan', JSON.stringify(myPlan));
+  renderPlan();
+  renderPlants();
+}
+
+function renderPlan() {
+  const content = document.getElementById('plan-content');
+  const count = document.getElementById('plan-count');
+  count.textContent = myPlan.length ? '(' + myPlan.length + ' item' + (myPlan.length > 1 ? 's' : '') + ')' : '';
+  if (!myPlan.length) {
+    content.innerHTML = '<div class="plan-empty">Add plants from the list above to build your yard plan.</div>';
+    return;
+  }
+  content.innerHTML = '<div class="plan-grid">' + myPlan.map((p, i) => `
+    <div class="plan-item">
+      <div class="plan-item-emoji">${p.emoji}</div>
+      <div class="plan-item-info">
+        <div class="plan-item-name">${p.name}</div>
+        <div class="plan-item-type">${p.type}</div>
+      </div>
+      <button class="plan-item-remove" onclick="removePlanItem(${i})" title="Remove">✕</button>
+    </div>`).join('') + '</div>';
+}
+
+function removePlanItem(i) {
+  myPlan.splice(i, 1);
+  localStorage.setItem('ht_outdoors_plan', JSON.stringify(myPlan));
+  renderPlan();
+  renderPlants();
+}
+
+function clearPlan() {
+  if (!myPlan.length) return;
+  if (confirm('Clear all ' + myPlan.length + ' items from your yard plan?')) {
+    myPlan = [];
+    localStorage.setItem('ht_outdoors_plan', JSON.stringify(myPlan));
+    renderPlan();
+    renderPlants();
+  }
+}
+
+function printPlan() {
+  if (!myPlan.length) { showToast('Add some plants to your plan first!'); return; }
+  const html = `<html><head><title>My Yard Plan — Honest Tom Outdoors</title>
+  <style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;color:#111;}
+  h1{font-size:24px;margin-bottom:4px;}h2{font-size:14px;color:#555;margin-bottom:24px;font-weight:normal;}
+  table{width:100%;border-collapse:collapse;}th{text-align:left;padding:8px 12px;border-bottom:2px solid #333;font-size:13px;}
+  td{padding:8px 12px;border-bottom:1px solid #ddd;font-size:13px;}
+  .emoji{font-size:18px;}footer{margin-top:40px;font-size:11px;color:#888;}</style></head>
+  <body><h1>🌿 My Yard Plan</h1><h2>Created with Honest Tom Outdoors · ${new Date().toLocaleDateString()}</h2>
+  <table><tr><th></th><th>Plant</th><th>Latin Name</th><th>Type</th></tr>
+  ${myPlan.map(p => `<tr><td class="emoji">${p.emoji}</td><td>${p.name}</td><td><em>${p.latin || ''}</em></td><td style="text-transform:capitalize">${p.type}</td></tr>`).join('')}
+  </table><footer>Honest Tom Outdoors · honesttom.ai</footer></body></html>`;
+  const w = window.open('', '_blank');
+  w.document.write(html);
+  w.document.close();
+  w.print();
+}
+
+// ── TOAST ──────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
