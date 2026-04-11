@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Made In Iron — Kelly Glaser | Aberdeen, SD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0d0d;
+      --bg2:       #161616;
+      --bg3:       #1f1f1f;
+      --rust:      #c0522a;
+      --rust2:     #e06b38;
+      --steel:     #8a9aaa;
+      --light:     #e8e0d4;
+      --dim:       #9e9a94;
+      --border:    rgba(192, 82, 42, 0.35);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--light);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 20px 80px;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(192,82,42,0.18) 0%, transparent 60%),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(255,255,255,0.012) 2px,
+          rgba(255,255,255,0.012) 4px
+        ),
+        var(--bg);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 120px;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      margin-bottom: 28px;
+    }
+
+    .logo-img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 18px rgba(192,82,42,0.7));
+    }
+
+    .brand {
+      text-align: left;
+    }
+
+    .brand-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: 0.03em;
+      color: var(--light);
+      text-transform: uppercase;
+    }
+
+    .brand-name span {
+      color: var(--rust2);
+    }
+
+    .brand-sub {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(0.9rem, 2vw, 1.15rem);
+      font-weight: 400;
+      color: var(--steel);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--dim);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+      font-weight: 300;
+    }
+
+    .hero-tagline em {
+      color: var(--rust2);
+      font-style: normal;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 26px;
+      border-radius: 4px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--rust);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--rust2); transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--light);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--rust2); color: var(--rust2); transform: translateY(-2px); }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--dim);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      z-index: 1;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── SECTION WRAPPER ── */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .section-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--rust2);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      color: var(--light);
+      line-height: 1.1;
+      margin-bottom: 40px;
+    }
+
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: var(--rust);
+      margin-bottom: 40px;
+    }
+
+    /* ── GALLERY ── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 10px;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 3px;
+      aspect-ratio: 1 / 1;
+      cursor: pointer;
+      background: var(--bg3);
+    }
+
+    .gallery-item.tall {
+      grid-row: span 2;
+      aspect-ratio: unset;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease, filter 0.4s ease;
+      filter: saturate(0.85);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.06);
+      filter: saturate(1.1);
+    }
+
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(192,82,42,0.25) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .gallery-item:hover::after { opacity: 1; }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.93);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px; right: 28px;
+      font-size: 2rem;
+      color: var(--dim);
+      cursor: pointer;
+      background: none;
+      border: none;
+      line-height: 1;
+    }
+    .lightbox-close:hover { color: var(--rust2); }
+
+    .lb-prev, .lb-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      border: 1px solid var(--border);
+      color: var(--light);
+      font-size: 1.6rem;
+      padding: 10px 16px;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: background 0.2s;
+    }
+    .lb-prev:hover, .lb-next:hover { background: var(--rust); }
+    .lb-prev { left: 20px; }
+    .lb-next { right: 20px; }
+
+    /* ── BIO ── */
+    .bio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .bio-text p {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--dim);
+      margin-bottom: 18px;
+      font-weight: 300;
+    }
+
+    .bio-text p strong {
+      color: var(--light);
+      font-weight: 500;
+    }
+
+    .quote-block {
+      border-left: 3px solid var(--rust);
+      padding-left: 22px;
+      margin: 28px 0;
+    }
+
+    .quote-block blockquote {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--light);
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .stats-col {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+
+    .stat-number {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--rust2);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--dim);
+      margin-top: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── VIDEO / MEDIA ── */
+    .media-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .media-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      text-decoration: none;
+      display: block;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .media-card:hover {
+      border-color: var(--rust2);
+      transform: translateY(-3px);
+    }
+
+    .media-thumb {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: var(--bg3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .media-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.7;
+    }
+
+    .play-icon {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: rgba(192,82,42,0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: #fff;
+    }
+
+    .media-info {
+      padding: 20px;
+    }
+
+    .media-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rust2);
+      margin-bottom: 6px;
+    }
+
+    .media-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--light);
+      margin-bottom: 6px;
+    }
+
+    .media-desc {
+      font-size: 0.85rem;
+      color: var(--dim);
+      line-height: 1.5;
+    }
+
+    .ext-icon {
+      font-size: 0.75rem;
+      color: var(--steel);
+      margin-left: 4px;
+    }
+
+    /* ── CONTACT / FOOTER ── */
+    .contact-section {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .contact-headline {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--light);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .contact-headline span { color: var(--rust2); }
+
+    .contact-text {
+      font-size: 0.95rem;
+      color: var(--dim);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--light);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .contact-link:hover {
+      border-color: var(--rust2);
+      background: rgba(192,82,42,0.08);
+    }
+
+    .contact-link-icon {
+      font-size: 1.4rem;
+      width: 32px;
+      text-align: center;
+    }
+
+    .contact-link-text strong {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .contact-link-text span {
+      font-size: 0.8rem;
+      color: var(--dim);
+    }
+
+    /* ── FOOTER BAR ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.78rem;
+      color: var(--dim);
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    footer a { color: var(--rust2); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(13,13,13,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(192,82,42,0.2);
+    }
+
+    .nav-brand {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--light);
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-brand img {
+      height: 30px;
+      width: 30px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 6px rgba(192,82,42,0.6));
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--rust2); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .bio-grid, .media-row, .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .logo-wrap { flex-direction: column; gap: 14px; }
+      .brand { text-align: center; }
+      .nav-links { display: none; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-item.tall { grid-row: span 1; aspect-ratio: 1/1; }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <img src="Made_Art/Kelly_Pencil.png" alt="Made In Iron" />
+    MADE IN IRON
+  </a>
+  <ul class="nav-links">
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#story">Story</a></li>
+    <li><a href="#media">Media</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="logo-wrap">
+    <img class="logo-img" src="Made_Art/Kelly_Pencil.png" alt="Made In Iron Logo" />
+    <div class="brand">
+      <div class="brand-name">Made <span>In</span> Iron</div>
+      <div class="brand-sub">Aberdeen, South Dakota · Est. 2022</div>
+    </div>
+  </div>
+
+  <p class="hero-tagline">
+    Scrap metal sculptures &amp; fabrication by <em>Kelly Glaser</em> —<br />
+    turning discarded metal into one-of-a-kind works of art.
+  </p>
+
+  <div class="cta-row">
+    <a href="#gallery" class="btn btn-primary">&#x1F5BC; View Gallery</a>
+    <a href="#contact" class="btn btn-outline">&#128172; Get in Touch</a>
+  </div>
+
+  <div class="scroll-hint">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v12M4 10l5 5 5-5" stroke="#9e9a94" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Scroll
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="section" id="gallery">
+  <div class="section-label">The Work</div>
+  <div class="section-title">Gallery</div>
+  <div class="divider"></div>
+
+  <div class="gallery-grid" id="galleryGrid">
+    <div class="gallery-item tall" data-index="0">
+      <img src="Made_Art/475477037_122222493446020530_7715235154782852188_n.jpg" alt="Made In Iron sculpture" loading="lazy" />
+    </div>
+    <div class="gallery-item" data-index="1">
+      <img src="Made_Art/490293629_122235124166020530_8114538525893584372_n.jpg" alt="Made In Iron sculpture" loading="lazy" />
+    </div>
+    <div class="gallery-item" data-index="2">
+      <img src="Made_Art/542756545_122256942086020530_3259705284662696787_n.jpg" alt="Made In Iron sculpture" loading="lazy" />
+    </div>
+    <div class="gallery-item" data-index="3">
+      <img src="Made_Art/544819011_122257213832020530_2637706213540729230_n.jpg" alt="Made In Iron sculpture" loading="lazy" />
+    </div>
+    <div class="gallery-item" data-index="4">
+      <img src="Made_Art/557499766_122260163468020530_963877042994041387_n.jpg" alt="Made In Iron sculpture" loading="lazy" />
+    </div>
+    <div class="gallery-item" data-index="5">
+      <img src="Made_Art/605269202_122271208934020530_5365299275839888592_n.jpg" alt="Made In Iron sculpture" loading="lazy" />
+    </div>
+    <div class="gallery-item" data-index="6">
+      <img src="Made_Art/629847036_122276416280020530_992113868595616126_n.jpg" alt="Made In Iron sculpture" loading="lazy" />
+    </div>
+    <div class="gallery-item" data-index="7">
+      <img src="Made_Art/640068437_122278043888020530_3516217102883821590_n.jpg" alt="Made In Iron sculpture" loading="lazy" />
+    </div>
+    <div class="gallery-item" data-index="8">
+      <img src="Made_Art/658398000_122282705828020530_5724339704106420950_n.jpg" alt="Made In Iron sculpture" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lbClose">&times;</button>
+  <button class="lb-prev" id="lbPrev">&#8249;</button>
+  <img id="lbImg" src="" alt="" />
+  <button class="lb-next" id="lbNext">&#8250;</button>
+</div>
+
+<!-- STORY -->
+<section class="section" id="story" style="padding-top: 0;">
+  <div class="section-label">About the Artist</div>
+  <div class="section-title">Kelly Glaser</div>
+  <div class="divider"></div>
+
+  <div class="bio-grid">
+    <div class="bio-text">
+      <p>
+        Kelly Glaser has dabbled in many different artforms, but his favorite one is also the most unique. For the past two years, Glaser has been creating sculptures from <strong>scrap metal and other discarded materials</strong>. Due to the nature of his medium, every piece ends up being one of a kind.
+      </p>
+
+      <div class="quote-block">
+        <blockquote>"I look at my junk pieces and figure it out from there. It's more fun to decide on the way. I always want to try something different."</blockquote>
+      </div>
+
+      <p>
+        Glaser, who is a driver for Spee-Dee Delivery, finds a lot of his inspiration along his routes. He's always on the lookout for new materials — asking to go through scrap bins, with people sometimes donating materials in exchange for a finished piece.
+      </p>
+
+      <p>
+        His sculptures range in size from small lawn decorations to larger statues. The biggest piece he has made is a <strong>6-foot tall robot</strong>. He'll usually alternate between larger and smaller pieces to keep variety. A small piece takes around three hours to make; some projects have taken over fifteen hours to complete.
+      </p>
+
+      <div class="quote-block">
+        <blockquote>"Finding stuff that fits well into the sculpture is the best part. I like to take something that's been used up and has served its purpose and give it some new life."</blockquote>
+      </div>
+
+      <p>
+        Before he started making sculptures, Glaser studied <strong>commercial art at Northern State University</strong> and was a tattoo artist for about five years. He took welding classes in high school, spotted a cheap welder on Facebook Marketplace, and the rest is history — starting with a tiny snake and building up from there.
+      </p>
+
+      <div class="quote-block">
+        <blockquote>"I saw a cheap welder on the Facebook marketplace. The first thing I made was a tiny snake, and I built up from there. Although I'm not really a welder. I just make stuff stick together."</blockquote>
+      </div>
+
+      <p>
+        Since he has started welding, Glaser's yard has gradually become a museum for his work. He sells his pieces at <strong>Arts in the Park</strong> and other craft fairs throughout the region.
+      </p>
+    </div>
+
+    <div class="stats-col">
+      <div class="stat-card">
+        <div class="stat-number">6 ft</div>
+        <div class="stat-label">Tallest sculpture — a full-size robot</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">2+</div>
+        <div class="stat-label">Years creating scrap metal art</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">One-of-a-kind — no two pieces alike</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">ABD</div>
+        <div class="stat-label">Based in Aberdeen, South Dakota</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEDIA -->
+<section class="section" id="media" style="padding-top: 0;">
+  <div class="section-label">Press &amp; Video</div>
+  <div class="section-title">In the Media</div>
+  <div class="divider"></div>
+
+  <div class="media-row">
+    <!-- Facebook Video -->
+    <a class="media-card" href="https://www.facebook.com/share/v/1Cb5jE31vD/" target="_blank" rel="noopener noreferrer">
+      <div class="media-thumb">
+        <img src="Made_Art/629847036_122276416280020530_992113868595616126_n.jpg" alt="Watch the video" />
+        <div class="play-icon">&#9654;</div>
+      </div>
+      <div class="media-info">
+        <div class="media-label">Facebook Video</div>
+        <div class="media-title">Watch Kelly at Work <span class="ext-icon">&#x2197;</span></div>
+        <div class="media-desc">See the process behind Made In Iron — from raw scrap to finished sculpture.</div>
+      </div>
+    </a>
+
+    <!-- Magazine Article -->
+    <a class="media-card" href="https://aberdeenmag.com/2024/08/artist-spotlight-kelly-glaser/" target="_blank" rel="noopener noreferrer">
+      <div class="media-thumb" style="background: #1a0f08; justify-content: center;">
+        <img src="Made_Art/542756545_122256942086020530_3259705284662696787_n.jpg" alt="Aberdeen Magazine" />
+        <div style="position:absolute; top: 14px; left: 14px; background: var(--rust); color: #fff; font-family: 'Oswald', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; padding: 4px 10px; border-radius: 3px; text-transform: uppercase;">Featured</div>
+      </div>
+      <div class="media-info">
+        <div class="media-label">Aberdeen Magazine · August 2024</div>
+        <div class="media-title">Artist Spotlight: Kelly Glaser <span class="ext-icon">&#x2197;</span></div>
+        <div class="media-desc">Kelly was featured as an artist spotlight in Aberdeen Magazine — quite an honor for a local publication.</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div>
+      <div class="section-label">Get in Touch</div>
+      <div class="contact-headline">Commission a piece.<br /><span>Own something unique.</span></div>
+      <p class="contact-text">
+        Kelly takes on custom commissions and sells existing pieces at local craft fairs. Whether you want a lawn decoration, a statement sculpture, or something totally out there — reach out on Facebook.
+      </p>
+      <a href="https://www.facebook.com/people/Made-n-Iron/100090200697745/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+        &#128172; Find Kelly on Facebook
+      </a>
+    </div>
+
+    <div class="contact-links">
+      <a href="https://www.facebook.com/people/Made-n-Iron/100090200697745/" target="_blank" rel="noopener noreferrer" class="contact-link">
+        <div class="contact-link-icon">&#128172;</div>
+        <div class="contact-link-text">
+          <strong>Made n Iron — Facebook</strong>
+          <span>View the full gallery &amp; message Kelly</span>
+        </div>
+      </a>
+      <a href="https://aberdeenmag.com/2024/08/artist-spotlight-kelly-glaser/" target="_blank" rel="noopener noreferrer" class="contact-link">
+        <div class="contact-link-icon">&#128240;</div>
+        <div class="contact-link-text">
+          <strong>Aberdeen Magazine Feature</strong>
+          <span>Artist Spotlight — August 2024</span>
+        </div>
+      </a>
+      <div class="contact-link" style="cursor: default;">
+        <div class="contact-link-icon">&#128205;</div>
+        <div class="contact-link-text">
+          <strong>Aberdeen, South Dakota</strong>
+          <span>Arts in the Park &amp; regional craft fairs</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  &copy; 2024–2026 Made In Iron · Kelly Glaser · Aberdeen, SD
+  &nbsp;|&nbsp;
+  <a href="/">honesttom.ai</a>
+</footer>
+
+<!-- LIGHTBOX SCRIPT -->
+<script>
+  const images = [
+    'Made_Art/475477037_122222493446020530_7715235154782852188_n.jpg',
+    'Made_Art/490293629_122235124166020530_8114538525893584372_n.jpg',
+    'Made_Art/542756545_122256942086020530_3259705284662696787_n.jpg',
+    'Made_Art/544819011_122257213832020530_2637706213540729230_n.jpg',
+    'Made_Art/557499766_122260163468020530_963877042994041387_n.jpg',
+    'Made_Art/605269202_122271208934020530_5365299275839888592_n.jpg',
+    'Made_Art/629847036_122276416280020530_992113868595616126_n.jpg',
+    'Made_Art/640068437_122278043888020530_3516217102883821590_n.jpg',
+    'Made_Art/658398000_122282705828020530_5724339704106420950_n.jpg',
+  ];
+
+  let current = 0;
+  const lb     = document.getElementById('lightbox');
+  const lbImg  = document.getElementById('lbImg');
+
+  function openLightbox(i) {
+    current = i;
+    lbImg.src = images[i];
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function navigate(dir) {
+    current = (current + dir + images.length) % images.length;
+    lbImg.src = images[current];
+  }
+
+  document.querySelectorAll('.gallery-item').forEach(el => {
+    el.addEventListener('click', () => openLightbox(+el.dataset.index));
+  });
+
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  document.getElementById('lbPrev').addEventListener('click', () => navigate(-1));
+  document.getElementById('lbNext').addEventListener('click', () => navigate(1));
+
+  lb.addEventListener('click', e => {
+    if (e.target === lb) closeLightbox();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navigate(-1);
+    if (e.key === 'ArrowRight') navigate(1);
+  });
+</script>
+
+</body>
+</html>
