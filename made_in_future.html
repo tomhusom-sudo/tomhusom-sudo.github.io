@@ -330,6 +330,9 @@
       overflow: hidden;
       cursor: pointer;
       position: relative;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      box-shadow: 0 0 20px rgba(0,212,255,0.06), inset 0 2px 0 var(--cyan);
     }
 
     .photo-strip-item img {
@@ -441,9 +444,9 @@
     .story-photo-main {
       position: relative;
       overflow: hidden;
-      border-radius: 3px;
+      border-radius: 4px;
       border: 1px solid var(--border);
-      box-shadow: 0 0 30px rgba(0,212,255,0.12), 0 0 0 1px rgba(0,212,255,0.06);
+      box-shadow: 0 0 20px rgba(0,212,255,0.08), inset 0 2px 0 var(--cyan);
     }
 
     .story-photo-main img {
@@ -512,10 +515,11 @@
 
     .photo-cell {
       overflow: hidden;
-      border-radius: 3px;
+      border-radius: 4px;
       cursor: pointer;
       position: relative;
-      border: 1px solid rgba(0,212,255,0.12);
+      border: 1px solid var(--border);
+      box-shadow: 0 0 20px rgba(0,212,255,0.06), inset 0 2px 0 var(--cyan);
     }
 
     .photo-cell img {
@@ -611,6 +615,8 @@
       cursor: pointer;
       position: relative;
       background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: 0 0 20px rgba(0,212,255,0.06), inset 0 2px 0 var(--cyan);
     }
 
     .gm-item.span2 { grid-column: span 2; }
@@ -1051,10 +1057,6 @@
         <img src="Made_Art/future_kelly.png" alt="Kelly Glaser" style="filter:saturate(0.75) brightness(0.92);" />
       </div>
       <div class="photo-caption">Kelly Glaser · Maiden Iron · Aberdeen, SD</div>
-      <div class="pencil-card">
-        <img src="Made_Art/Kelly_Pencil.png" alt="Kelly Glaser artist sketch" />
-        <div class="pencil-card-label">Kelly Glaser · Maiden Iron</div>
-      </div>
     </div>
   </div>
 
