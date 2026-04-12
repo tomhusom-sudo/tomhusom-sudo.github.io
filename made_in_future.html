@@ -95,6 +95,26 @@
       border-radius: 2px;
     }
 
+    .back-pill {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--dim);
+      background: rgba(0,212,255,0.06);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 20px;
+      padding: 5px 14px;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .back-pill:hover {
+      color: var(--cyan);
+      border-color: var(--cyan);
+      background: rgba(0,212,255,0.12);
+    }
+
     .nav-links {
       display: flex;
       gap: 32px;
@@ -120,7 +140,8 @@
     /* ── HERO ── */
     .hero {
       position: relative;
-      height: 88vh;
+      margin-top: 70px;
+      height: calc(88vh - 70px);
       overflow: hidden;
     }
 
@@ -609,14 +630,11 @@
     .gallery-wall {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(5, 280px);
       gap: 8px;
     }
 
-    /* Row 5 (full-width feature) is shorter */
-    .gallery-wall { grid-template-rows: 280px 280px 280px 280px 220px; }
-
     .gw-item {
+      aspect-ratio: 1;
       overflow: hidden;
       cursor: pointer;
       position: relative;
@@ -926,42 +944,32 @@
       .story-lead { grid-template-columns: 1fr; }
       .story-photo { position: static; }
       .story-photo-main img { aspect-ratio: 4/3; }
-      .gallery-wall { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; grid-auto-rows: 220px; }
-      .gw-item[style*="grid-column:3"] { grid-column: auto !important; grid-row: auto !important; }
-      .gw-item[style*="grid-column:1/4"] { grid-column: 1 / 3 !important; }
-      .gw-item[style*="grid-column:1/3"] { grid-column: 1 / 3 !important; }
-      .gw-item[style*="grid-column:1/2"] { grid-column: 1 !important; }
-      .gw-item[style*="grid-row:1/3"] { grid-row: auto !important; }
+      .gallery-wall { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 768px) {
-      .hero { height: 65vw; min-height: 280px; }
+      .hero { margin-top: 60px; height: calc(65vw - 60px); min-height: 220px; }
       .hero-logo-bg {
         background:
           linear-gradient(to bottom, rgba(2,9,18,0.0) 0%, rgba(2,9,18,0.0) 65%, rgba(2,9,18,0.98) 100%),
           url('Made_Art/new_logo.png') center 50%/90% no-repeat;
         filter: hue-rotate(160deg) saturate(1.0) brightness(1.4);
       }
-      .photo-strip { height: 300px; }
       .section { padding: 60px 20px; }
       .media-row, .contact-inner { grid-template-columns: 1fr; gap: 32px; }
       .stats-row { grid-template-columns: 1fr 1fr; }
-      .inline-photos { grid-template-columns: 1fr 1fr; }
       .nav-links { display: none; }
     }
 
     @media (max-width: 500px) {
-      .hero { height: 80vw; }
+      .hero { margin-top: 60px; height: calc(80vw - 60px); }
       .hero-logo-bg {
         background:
           linear-gradient(to bottom, rgba(2,9,18,0.0) 0%, rgba(2,9,18,0.0) 65%, rgba(2,9,18,0.98) 100%),
           url('Made_Art/new_logo.png') center 50%/100% no-repeat;
         filter: hue-rotate(160deg) saturate(1.0) brightness(1.4);
       }
-      .photo-strip { grid-template-columns: 1fr 1fr; height: 220px; }
-      .photo-strip-item:last-child { display: none; }
-      .gallery-wall { grid-template-columns: 1fr 1fr; grid-template-rows: none; grid-auto-rows: 180px; }
-      .gw-item { grid-column: auto !important; grid-row: auto !important; }
+      .gallery-wall { grid-template-columns: repeat(2, 1fr); }
       .stats-row { grid-template-columns: 1fr; }
       .inline-photos { grid-template-columns: 1fr; }
       .section { padding: 50px 16px; }
@@ -987,6 +995,7 @@
     <li><a href="#intel">Media</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <a href="dashboard.html" class="back-pill">&#8592; Dashboard</a>
 </nav>
 
 <!-- HERO — logo only -->
@@ -1095,45 +1104,16 @@
   <div class="gallery-wall-wrap">
     <div class="gallery-wall">
 
-      <!-- Row 1: two square + one tall portrait -->
-      <div class="gw-item" style="grid-column:1;grid-row:1;" data-lb="1">
-        <img src="Made_Art/486285668_122231792660020530_2135342563040821505_n.jpg" alt="Maiden Iron" />
-      </div>
-      <div class="gw-item" style="grid-column:2;grid-row:1;" data-lb="2">
-        <img src="Made_Art/486554265_122231792564020530_7920042721145981636_n.jpg" alt="Maiden Iron" />
-      </div>
-      <div class="gw-item" style="grid-column:3;grid-row:1/3;" data-lb="6">
-        <img src="Made_Art/605269202_122271208934020530_5365299275839888592_n.jpg" alt="Maiden Iron" />
-      </div>
-
-      <!-- Row 2: wide feature + (tall continues) -->
-      <div class="gw-item" style="grid-column:1/3;grid-row:2;" data-lb="0">
-        <img src="Made_Art/475477037_122222493446020530_7715235154782852188_n.jpg" alt="Maiden Iron" />
-      </div>
-
-      <!-- Row 3: three equal -->
-      <div class="gw-item" style="grid-column:1;grid-row:3;" data-lb="4">
-        <img src="Made_Art/490293629_122235124166020530_8114538525893584372_n.jpg" alt="Maiden Iron" />
-      </div>
-      <div class="gw-item" style="grid-column:2;grid-row:3;" data-lb="7">
-        <img src="Made_Art/629847036_122276416280020530_992113868595616126_n.jpg" alt="Maiden Iron" />
-      </div>
-      <div class="gw-item" style="grid-column:3;grid-row:3;" data-lb="8">
-        <img src="Made_Art/640068437_122278043888020530_3516217102883821590_n.jpg" alt="Maiden Iron" />
-      </div>
-
-      <!-- Row 4: wide + one -->
-      <div class="gw-item" style="grid-column:1/3;grid-row:4;" data-lb="5">
-        <img src="Made_Art/557499766_122260163468020530_963877042994041387_n.jpg" alt="Maiden Iron" />
-      </div>
-      <div class="gw-item" style="grid-column:3;grid-row:4;" data-lb="9">
-        <img src="Made_Art/658398000_122282705828020530_5724339704106420950_n.jpg" alt="Maiden Iron" />
-      </div>
-
-      <!-- Row 5: full width feature -->
-      <div class="gw-item" style="grid-column:1/4;grid-row:5;" data-lb="10">
-        <img src="Made_Art/542756545_122256942086020530_3259705284662696787_n.jpg" alt="Maiden Iron" />
-      </div>
+      <div class="gw-item" data-lb="0"><img src="Made_Art/475477037_122222493446020530_7715235154782852188_n.jpg" alt="Maiden Iron" /></div>
+      <div class="gw-item" data-lb="1"><img src="Made_Art/486285668_122231792660020530_2135342563040821505_n.jpg" alt="Maiden Iron" /></div>
+      <div class="gw-item" data-lb="2"><img src="Made_Art/486554265_122231792564020530_7920042721145981636_n.jpg" alt="Maiden Iron" /></div>
+      <div class="gw-item" data-lb="3"><img src="Made_Art/605269202_122271208934020530_5365299275839888592_n.jpg" alt="Maiden Iron" /></div>
+      <div class="gw-item" data-lb="4"><img src="Made_Art/490293629_122235124166020530_8114538525893584372_n.jpg" alt="Maiden Iron" /></div>
+      <div class="gw-item" data-lb="5"><img src="Made_Art/557499766_122260163468020530_963877042994041387_n.jpg" alt="Maiden Iron" /></div>
+      <div class="gw-item" data-lb="6"><img src="Made_Art/629847036_122276416280020530_992113868595616126_n.jpg" alt="Maiden Iron" /></div>
+      <div class="gw-item" data-lb="7"><img src="Made_Art/640068437_122278043888020530_3516217102883821590_n.jpg" alt="Maiden Iron" /></div>
+      <div class="gw-item" data-lb="8"><img src="Made_Art/658398000_122282705828020530_5724339704106420950_n.jpg" alt="Maiden Iron" /></div>
+      <div class="gw-item" data-lb="9"><img src="Made_Art/542756545_122256942086020530_3259705284662696787_n.jpg" alt="Maiden Iron" /></div>
 
     </div>
   </div>
@@ -1237,10 +1217,9 @@
     'Made_Art/475477037_122222493446020530_7715235154782852188_n.jpg',
     'Made_Art/486285668_122231792660020530_2135342563040821505_n.jpg',
     'Made_Art/486554265_122231792564020530_7920042721145981636_n.jpg',
-    'Made_Art/475740637_122222312300020530_918318047903929857_n.jpg',
+    'Made_Art/605269202_122271208934020530_5365299275839888592_n.jpg',
     'Made_Art/490293629_122235124166020530_8114538525893584372_n.jpg',
     'Made_Art/557499766_122260163468020530_963877042994041387_n.jpg',
-    'Made_Art/605269202_122271208934020530_5365299275839888592_n.jpg',
     'Made_Art/629847036_122276416280020530_992113868595616126_n.jpg',
     'Made_Art/640068437_122278043888020530_3516217102883821590_n.jpg',
     'Made_Art/658398000_122282705828020530_5724339704106420950_n.jpg',
