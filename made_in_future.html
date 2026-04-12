@@ -120,13 +120,7 @@
     /* ── HERO ── */
     .hero {
       position: relative;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      text-align: center;
-      padding: 100px 24px 72px;
+      height: 88vh;
       overflow: hidden;
     }
 
@@ -147,27 +141,27 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(to bottom, rgba(2,9,18,0.0) 0%, rgba(2,9,18,0.0) 45%, rgba(2,9,18,0.85) 68%, rgba(2,9,18,0.97) 100%),
-        url('Made_Art/new_logo.png') center 38%/82% no-repeat;
+        linear-gradient(to bottom, rgba(2,9,18,0.0) 0%, rgba(2,9,18,0.0) 70%, rgba(2,9,18,0.98) 100%),
+        url('Made_Art/new_logo.png') center 50%/82% no-repeat;
       filter: hue-rotate(160deg) saturate(1.0) brightness(1.4);
       pointer-events: none;
     }
 
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 160px;
-      background: linear-gradient(to bottom, transparent, var(--void));
-      pointer-events: none;
+    .hero-intro {
+      background: var(--void);
+      text-align: center;
+      padding: 56px 24px 64px;
+      border-top: 1px solid rgba(0,212,255,0.18);
+      position: relative;
     }
 
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      padding-top: 32px;
-      border-top: 1px solid rgba(0,212,255,0.15);
+    .hero-intro::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
+      box-shadow: 0 0 12px rgba(0,212,255,0.4);
     }
 
     .hero-eyebrow {
@@ -288,6 +282,7 @@
     .btn-outline:hover { border-color: var(--cyan); background: rgba(0,212,255,0.08); transform: translateY(-2px); }
 
     .scroll-hint {
+      display: none;
       position: absolute;
       bottom: 36px;
       left: 50%;
@@ -940,11 +935,12 @@
     }
 
     @media (max-width: 768px) {
+      .hero { height: 65vw; min-height: 280px; }
       .hero-logo-bg {
         background:
-          radial-gradient(ellipse at 50% 50%, rgba(2,9,18,0.10) 0%, rgba(2,9,18,0.55) 55%, rgba(2,9,18,0.97) 100%),
-          url('Made_Art/new_logo.png') center/95% no-repeat;
-        filter: hue-rotate(160deg) saturate(0.7) brightness(1.1);
+          linear-gradient(to bottom, rgba(2,9,18,0.0) 0%, rgba(2,9,18,0.0) 65%, rgba(2,9,18,0.98) 100%),
+          url('Made_Art/new_logo.png') center 50%/90% no-repeat;
+        filter: hue-rotate(160deg) saturate(1.0) brightness(1.4);
       }
       .photo-strip { height: 300px; }
       .section { padding: 60px 20px; }
@@ -955,11 +951,12 @@
     }
 
     @media (max-width: 500px) {
+      .hero { height: 80vw; }
       .hero-logo-bg {
         background:
-          radial-gradient(ellipse at 50% 50%, rgba(2,9,18,0.10) 0%, rgba(2,9,18,0.55) 55%, rgba(2,9,18,0.97) 100%),
-          url('Made_Art/new_logo.png') center/110% no-repeat;
-        filter: hue-rotate(160deg) saturate(0.7) brightness(1.1);
+          linear-gradient(to bottom, rgba(2,9,18,0.0) 0%, rgba(2,9,18,0.0) 65%, rgba(2,9,18,0.98) 100%),
+          url('Made_Art/new_logo.png') center 50%/100% no-repeat;
+        filter: hue-rotate(160deg) saturate(1.0) brightness(1.4);
       }
       .photo-strip { grid-template-columns: 1fr 1fr; height: 220px; }
       .photo-strip-item:last-child { display: none; }
@@ -992,35 +989,31 @@
   </ul>
 </nav>
 
-<!-- HERO -->
+<!-- HERO — logo only -->
 <section class="hero">
   <div class="hero-logo-bg"></div>
-
-  <div class="hero-content">
-    <div class="hero-eyebrow">Aberdeen, South Dakota &nbsp;·&nbsp; Est. 2022</div>
-
-    <h1 class="hero-title">
-      <span class="line1">MAIDEN</span>
-      <span class="line2">IRON</span>
-    </h1>
-
-    <p class="hero-sub">Scrap Metal Sculptures &amp; Fabrication</p>
-
-    <p class="hero-tagline">
-      Turning discarded metal into one-of-a-kind works of art.<br />Every piece by <em>Kelly Glaser</em> — Aberdeen, South Dakota.
-    </p>
-
-    <div class="cta-row">
-      <a href="#constructs" class="btn btn-primary">View Gallery</a>
-      <a href="#contact" class="btn btn-outline">Commission a Piece</a>
-    </div>
-  </div>
-
-  <div class="scroll-hint">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M3 9l5 5 5-5" stroke="#4a7a9b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Scroll
-  </div>
 </section>
+
+<!-- INTRO — text below logo -->
+<div class="hero-intro">
+  <div class="hero-eyebrow">Aberdeen, South Dakota &nbsp;·&nbsp; Est. 2022</div>
+
+  <h1 class="hero-title">
+    <span class="line1">MAIDEN</span>
+    <span class="line2">IRON</span>
+  </h1>
+
+  <p class="hero-sub">Scrap Metal Sculptures &amp; Fabrication</p>
+
+  <p class="hero-tagline">
+    Turning discarded metal into one-of-a-kind works of art.<br />Every piece by <em>Kelly Glaser</em> — Aberdeen, South Dakota.
+  </p>
+
+  <div class="cta-row">
+    <a href="#constructs" class="btn btn-primary">View Gallery</a>
+    <a href="#contact" class="btn btn-outline">Commission a Piece</a>
+  </div>
+</div>
 
 <!-- PROFILE / STORY -->
 <section class="section" id="profile">
