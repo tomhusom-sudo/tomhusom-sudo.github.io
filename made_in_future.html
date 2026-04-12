@@ -959,6 +959,10 @@
 <!-- NAV -->
 <nav>
   <a class="nav-brand" href="#">
+    <img src="Made_Art/future_kelly.png" alt="Kelly Glaser"
+      style="width:58px;height:58px;object-fit:cover;object-position:top;border-radius:3px;border:2px solid var(--cyan);margin-right:14px;flex-shrink:0;cursor:zoom-in;box-shadow:0 0 16px rgba(0,212,255,0.25);"
+      onclick="event.preventDefault();document.getElementById('kelly-lightbox').classList.add('open')"
+      onerror="this.style.display='none'">
     <div class="nav-brand-bar"></div>
     MAIDEN IRON
   </a>
@@ -1043,10 +1047,10 @@
     </div>
 
     <div class="story-photo">
-      <div class="story-photo-main" data-lb="3">
-        <img src="Made_Art/475740637_122222312300020530_918318047903929857_n.jpg" alt="Kelly Glaser sculpture" />
+      <div class="story-photo-main" style="cursor:zoom-in;" onclick="document.getElementById('kelly-lightbox').classList.add('open')">
+        <img src="Made_Art/future_kelly.png" alt="Kelly Glaser" style="filter:saturate(0.75) brightness(0.92);" />
       </div>
-      <div class="photo-caption">Original Sculpture · Aberdeen, SD</div>
+      <div class="photo-caption">Kelly Glaser · Maiden Iron · Aberdeen, SD</div>
       <div class="pencil-card">
         <img src="Made_Art/Kelly_Pencil.png" alt="Kelly Glaser artist sketch" />
         <div class="pencil-card-label">Kelly Glaser · Maiden Iron</div>
@@ -1275,6 +1279,16 @@
     if (e.key === 'ArrowRight') navigate(1);
   });
 </script>
+
+<!-- Kelly portrait lightbox -->
+<div id="kelly-lightbox" onclick="this.classList.remove('open')"
+  style="display:none;position:fixed;inset:0;z-index:1100;background:rgba(2,9,18,0.94);align-items:center;justify-content:center;cursor:zoom-out;">
+  <img src="Made_Art/future_kelly.png" alt="Kelly Glaser"
+    style="max-width:88vw;max-height:88vh;border-radius:4px;border:2px solid var(--cyan);box-shadow:0 0 60px rgba(0,212,255,0.35);" />
+</div>
+<style>
+  #kelly-lightbox.open { display: flex !important; }
+</style>
 
 </body>
 </html>
