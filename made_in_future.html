@@ -157,14 +157,27 @@
       pointer-events: none;
     }
 
-    /* logo bg */
+    /* logo video */
     .hero-logo-bg {
       position: absolute;
       inset: 0;
-      background:
-        linear-gradient(to bottom, rgba(2,9,18,0.0) 0%, rgba(2,9,18,0.0) 70%, rgba(2,9,18,0.98) 100%),
-        url('Made_Art/new_logo.png') center 50%/82% no-repeat;
-      filter: hue-rotate(160deg) saturate(1.0) brightness(1.4);
+      pointer-events: none;
+    }
+
+    .hero-logo-bg video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: hue-rotate(160deg) saturate(1.1) brightness(1.4);
+    }
+
+    .hero-logo-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(2,9,18,0.0) 0%, rgba(2,9,18,0.0) 70%, rgba(2,9,18,0.98) 100%);
       pointer-events: none;
     }
 
@@ -949,12 +962,6 @@
 
     @media (max-width: 768px) {
       .hero { margin-top: 60px; height: calc(65vw - 60px); min-height: 220px; }
-      .hero-logo-bg {
-        background:
-          linear-gradient(to bottom, rgba(2,9,18,0.0) 0%, rgba(2,9,18,0.0) 65%, rgba(2,9,18,0.98) 100%),
-          url('Made_Art/new_logo.png') center 50%/90% no-repeat;
-        filter: hue-rotate(160deg) saturate(1.0) brightness(1.4);
-      }
       .section { padding: 60px 20px; }
       .media-row, .contact-inner { grid-template-columns: 1fr; gap: 32px; }
       .stats-row { grid-template-columns: 1fr 1fr; }
@@ -963,15 +970,8 @@
 
     @media (max-width: 500px) {
       .hero { margin-top: 60px; height: calc(80vw - 60px); }
-      .hero-logo-bg {
-        background:
-          linear-gradient(to bottom, rgba(2,9,18,0.0) 0%, rgba(2,9,18,0.0) 65%, rgba(2,9,18,0.98) 100%),
-          url('Made_Art/new_logo.png') center 50%/100% no-repeat;
-        filter: hue-rotate(160deg) saturate(1.0) brightness(1.4);
-      }
       .gallery-wall { grid-template-columns: repeat(2, 1fr); }
       .stats-row { grid-template-columns: 1fr; }
-      .inline-photos { grid-template-columns: 1fr; }
       .section { padding: 50px 16px; }
       .hero-title { letter-spacing: 0.02em; }
     }
@@ -1000,7 +1000,11 @@
 
 <!-- HERO — logo only -->
 <section class="hero">
-  <div class="hero-logo-bg"></div>
+  <div class="hero-logo-bg">
+    <video autoplay muted loop playsinline preload="auto">
+      <source src="Made_Art/Video_of_Logo_Animation_and_Sparks.mp4" type="video/mp4" />
+    </video>
+  </div>
 </section>
 
 <!-- INTRO — text below logo -->
