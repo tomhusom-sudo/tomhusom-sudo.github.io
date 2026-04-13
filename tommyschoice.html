@@ -103,6 +103,105 @@
     .error-row { color: #f87171; font-size: 0.76rem; padding: 12px 0; }
     .page-footer { max-width: 860px; margin: 32px auto 0; font-size: 0.67rem; color: #334155; text-align: center; }
 
+    /* ── WINK WINK TIPS ── */
+    .tips-section { max-width: 860px; margin: 32px auto 0; }
+    .tc-panel {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      overflow: hidden;
+    }
+    .tc-panel-header {
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .tc-panel-label {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: #4ade80; margin-bottom: 3px;
+    }
+    .tc-panel-title {
+      font-size: 1.15rem; font-weight: 700; color: #f0fae8; letter-spacing: -0.02em;
+    }
+    .tc-add-form {
+      padding: 18px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .tc-form-row { display: flex; gap: 8px; }
+    .tc-form-row input, .tc-add-form input, .tc-add-form textarea {
+      flex: 1; background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+      padding: 10px 14px; font-size: 0.875rem; color: #e2eed8;
+      font-family: inherit; outline: none; transition: border-color 0.18s;
+    }
+    .tc-form-row input:focus, .tc-add-form input:focus, .tc-add-form textarea:focus {
+      border-color: rgba(74,222,128,0.45);
+    }
+    .tc-add-form input::placeholder, .tc-add-form textarea::placeholder { color: #6a8a52; }
+    .tc-add-form textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+    .tc-btn-add {
+      align-self: flex-end; background: rgba(34,197,94,0.15);
+      border: 1px solid rgba(74,222,128,0.3); border-radius: 10px;
+      padding: 9px 18px; font-size: 0.8rem; font-weight: 700; color: #4ade80;
+      cursor: pointer; font-family: inherit; letter-spacing: 0.04em;
+      transition: background 0.18s, border-color 0.18s; white-space: nowrap;
+    }
+    .tc-btn-add:hover { background: rgba(34,197,94,0.25); border-color: rgba(74,222,128,0.55); }
+    .tc-item-list { list-style: none; padding: 12px 0; min-height: 60px; }
+    .tc-item-list li {
+      padding: 12px 24px; border-bottom: 1px solid rgba(255,255,255,0.04);
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .tc-item-list li:last-child { border-bottom: none; }
+    .tc-item-body { flex: 1; min-width: 0; }
+    .tc-item-primary { font-size: 0.92rem; font-weight: 600; color: #d4e8c0; word-break: break-word; }
+    .tc-item-secondary { margin-top: 4px; font-size: 0.8rem; color: #a8bc98; line-height: 1.45; word-break: break-word; }
+    .tc-item-date { margin-top: 5px; font-size: 0.68rem; color: #7a9068; letter-spacing: 0.04em; }
+    .tc-ticker-badge {
+      flex-shrink: 0; margin-top: 2px;
+      background: rgba(34,197,94,0.12); border: 1px solid rgba(74,222,128,0.2);
+      border-radius: 7px; padding: 3px 9px; font-size: 0.72rem; font-weight: 700;
+      color: #4ade80; letter-spacing: 0.06em; text-transform: uppercase;
+      text-decoration: none; transition: background 0.18s, border-color 0.18s;
+    }
+    .tc-ticker-badge:hover { background: rgba(34,197,94,0.25); border-color: rgba(74,222,128,0.5); }
+    .tc-btn-del {
+      flex-shrink: 0; background: none; border: none; cursor: pointer;
+      color: #7a9068; font-size: 1rem; padding: 2px 4px; border-radius: 6px;
+      transition: color 0.15s, background 0.15s; line-height: 1;
+    }
+    .tc-btn-del:hover { color: #f87171; background: rgba(248,113,113,0.1); }
+    .tc-btn-edit {
+      flex-shrink: 0; background: none; border: none; cursor: pointer;
+      color: #a8bc98; font-size: 0.8rem; padding: 2px 6px; border-radius: 6px;
+      transition: color 0.15s, background 0.15s; font-family: inherit;
+    }
+    .tc-btn-edit:hover { color: #4ade80; background: rgba(74,222,128,0.1); }
+    .tc-edit-wrap { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+    .tc-edit-wrap input, .tc-edit-wrap textarea {
+      width: 100%; background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(74,222,128,0.35); border-radius: 8px;
+      padding: 8px 12px; font-size: 0.875rem; color: #e2eed8;
+      font-family: inherit; outline: none;
+    }
+    .tc-edit-wrap textarea { resize: vertical; min-height: 60px; line-height: 1.5; }
+    .tc-edit-actions { display: flex; gap: 8px; justify-content: flex-end; }
+    .tc-btn-save {
+      background: rgba(34,197,94,0.2); border: 1px solid rgba(74,222,128,0.4);
+      border-radius: 7px; padding: 6px 14px; font-size: 0.78rem; font-weight: 700;
+      color: #4ade80; cursor: pointer; font-family: inherit;
+    }
+    .tc-btn-cancel {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 7px; padding: 6px 12px; font-size: 0.78rem;
+      color: #a8bc98; cursor: pointer; font-family: inherit;
+    }
+    .tc-empty-state {
+      padding: 28px 24px; font-size: 0.82rem; color: #7a9068;
+      text-align: center; font-style: italic;
+    }
+
     /* ── MORK CORNER ── */
     .mork-corner {
       display: flex; flex-direction: column; align-items: center; gap: 4px;
@@ -203,6 +302,52 @@
     <div class="section-label">Latest News</div>
     <div class="news-list" id="news-list">
       <div class="loading-row"><div class="spinner"></div>Loading headlines&hellip;</div>
+    </div>
+  </div>
+
+  <!-- Tom's Wink Wink Tips -->
+  <div class="tips-section">
+    <div class="section-label" style="margin-bottom:14px;">Tom's Wink Wink Tips</div>
+    <div class="tc-panel">
+      <div class="tc-panel-header">
+        <div class="tc-panel-icon">
+          <svg width="40" height="34" viewBox="0 0 52 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="tcChartFill2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#4ade80" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#4ade80" stop-opacity="0"/>
+              </linearGradient>
+              <filter id="tcGlow2"><feGaussianBlur stdDeviation="1.8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <filter id="tcGlowStrong2"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <line x1="4" y1="10" x2="48" y2="10" stroke="#4ade80" stroke-opacity="0.12" stroke-width="0.7"/>
+            <line x1="4" y1="20" x2="48" y2="20" stroke="#4ade80" stroke-opacity="0.12" stroke-width="0.7"/>
+            <line x1="4" y1="30" x2="48" y2="30" stroke="#4ade80" stroke-opacity="0.12" stroke-width="0.7"/>
+            <path d="M4 34 L10 28 L18 30 L24 22 L32 18 L38 12 L46 6 L46 38 L4 38 Z" fill="url(#tcChartFill2)"/>
+            <polyline points="4,34 10,28 18,30 24,22 32,18 38,12 46,6" stroke="#4ade80" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#tcGlow2)"/>
+            <circle cx="46" cy="6" r="3" fill="#4ade80" filter="url(#tcGlowStrong2)"/>
+            <circle cx="46" cy="6" r="1.6" fill="#f0fae8"/>
+            <line x1="4" y1="6" x2="4" y2="38" stroke="#4ade80" stroke-opacity="0.4" stroke-width="1"/>
+            <line x1="4" y1="38" x2="48" y2="38" stroke="#4ade80" stroke-opacity="0.4" stroke-width="1"/>
+          </svg>
+        </div>
+        <div>
+          <div class="tc-panel-label">Stock &amp; Asset Ideas</div>
+          <div class="tc-panel-title">Tom's Wink Wink Tips</div>
+        </div>
+      </div>
+
+      <ul class="tc-item-list" id="tc-tips-list"></ul>
+      <div class="tc-empty-state" id="tc-tips-empty" style="display:none;">No tips yet — Tom's keeping his cards close.</div>
+
+      <div class="tc-add-form" id="tc-tip-form">
+        <div class="tc-form-row">
+          <input type="text" id="tc-tip-ticker" placeholder="Ticker (e.g. NVDA)" maxlength="12" style="max-width:130px;flex:none;" oninput="this.value=this.value.toUpperCase()" onblur="tcLookupName()">
+          <input type="text" id="tc-tip-title" placeholder="Asset name (auto-fills)">
+        </div>
+        <textarea id="tc-tip-note" placeholder="Why Tom thinks you should look at this…"></textarea>
+        <button class="tc-btn-add" onclick="tcAddTip()">+ Add Tip</button>
+      </div>
     </div>
   </div>
 
@@ -400,6 +545,91 @@
         + new Date().toLocaleString('en-US', { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
     });
 })();
+</script>
+<script>
+  // ── Tom's Wink Wink Tips — shared localStorage with Timmy's Corner ──
+  var TC_TIPS_KEY = 'timmy_tips'; // same key as timmy.html so data is shared
+
+  function tcLoadTips() { try { return JSON.parse(localStorage.getItem(TC_TIPS_KEY)) || []; } catch(e) { return []; } }
+  function tcSaveTips(arr) { localStorage.setItem(TC_TIPS_KEY, JSON.stringify(arr)); }
+
+  function tcFmtDate(iso) {
+    try { return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }); }
+    catch(e) { return ''; }
+  }
+  function tcEsc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function tcRenderTips() {
+    var tips  = tcLoadTips();
+    var list  = document.getElementById('tc-tips-list');
+    var empty = document.getElementById('tc-tips-empty');
+    if (!tips.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    list.innerHTML = tips.map(function(t, i) {
+      return '<li data-tc-idx="' + i + '">'
+        + (t.ticker ? '<a class="tc-ticker-badge" href="https://finance.yahoo.com/quote/' + tcEsc(t.ticker) + '" target="_blank" rel="noopener">' + tcEsc(t.ticker) + ' ↗</a>' : '')
+        + '<div class="tc-item-body">'
+        +   '<div class="tc-item-primary">' + tcEsc(t.title || t.ticker || 'Untitled') + '</div>'
+        +   (t.note ? '<div class="tc-item-secondary">' + tcEsc(t.note) + '</div>' : '')
+        +   '<div class="tc-item-date">Added ' + tcFmtDate(t.date) + '</div>'
+        + '</div>'
+        + '<button class="tc-btn-edit" title="Edit" onclick="tcEditTip(' + i + ')">✎</button>'
+        + '<button class="tc-btn-del" title="Remove" onclick="tcDeleteTip(' + i + ')">✕</button>'
+        + '</li>';
+    }).join('');
+  }
+
+  function tcAddTip() {
+    var ticker = document.getElementById('tc-tip-ticker').value.trim().toUpperCase();
+    var title  = document.getElementById('tc-tip-title').value.trim();
+    var note   = document.getElementById('tc-tip-note').value.trim();
+    if (!ticker && !title) { document.getElementById('tc-tip-ticker').focus(); return; }
+    var tips = tcLoadTips();
+    tips.unshift({ ticker: ticker, title: title, note: note, date: new Date().toISOString() });
+    tcSaveTips(tips);
+    document.getElementById('tc-tip-ticker').value = '';
+    document.getElementById('tc-tip-title').value  = '';
+    document.getElementById('tc-tip-note').value   = '';
+    tcRenderTips();
+  }
+
+  function tcDeleteTip(i) {
+    var tips = tcLoadTips(); tips.splice(i, 1); tcSaveTips(tips); tcRenderTips();
+  }
+
+  function tcEditTip(i) {
+    var tips = tcLoadTips(); var t = tips[i]; if (!t) return;
+    var li = document.querySelector('[data-tc-idx="' + i + '"]'); if (!li) return;
+    li.innerHTML = (t.ticker ? '<a class="tc-ticker-badge" href="https://finance.yahoo.com/quote/' + tcEsc(t.ticker) + '" target="_blank" rel="noopener">' + tcEsc(t.ticker) + ' ↗</a>' : '')
+      + '<div class="tc-edit-wrap">'
+      + '<input id="tc-et-title-' + i + '" value="' + tcEsc(t.title||'') + '" placeholder="Asset name">'
+      + '<textarea id="tc-et-note-' + i + '" placeholder="Why Tom thinks you should look at this…">' + tcEsc(t.note||'') + '</textarea>'
+      + '<div class="tc-edit-actions">'
+      + '<button class="tc-btn-cancel" onclick="tcRenderTips()">Cancel</button>'
+      + '<button class="tc-btn-save" onclick="tcSaveTip(' + i + ')">Save</button>'
+      + '</div></div>';
+  }
+
+  function tcSaveTip(i) {
+    var tips = tcLoadTips(); if (!tips[i]) return;
+    tips[i].title = document.getElementById('tc-et-title-' + i).value.trim();
+    tips[i].note  = document.getElementById('tc-et-note-'  + i).value.trim();
+    tcSaveTips(tips); tcRenderTips();
+  }
+
+  function tcLookupName() {
+    var ticker = document.getElementById('tc-tip-ticker').value.trim().toUpperCase();
+    var titleEl = document.getElementById('tc-tip-title');
+    if (!ticker || titleEl.value.trim()) return;
+    fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://query2.finance.yahoo.com/v8/finance/chart/' + ticker + '?interval=1d&range=1d'))
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        var name = d && d.chart && d.chart.result && d.chart.result[0] && d.chart.result[0].meta && d.chart.result[0].meta.shortName;
+        if (name) titleEl.value = name;
+      }).catch(function(){});
+  }
+
+  tcRenderTips();
 </script>
 </body>
 </html>
