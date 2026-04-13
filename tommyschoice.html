@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="manifest" href="/manifest.json">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="HonestTom">
-  <link rel="apple-touch-icon" href="/lincoln.jpg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -129,14 +124,8 @@
       box-shadow: 0 4px 16px rgba(0,0,0,0.55), 0 0 12px rgba(255,160,0,0.2);
     }
   </style>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KFJ9RZ2QS"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-9KFJ9RZ2QS');
-</script>
+<!-- Plausible Analytics -->
+<script defer data-domain="tomhusom-sudo.github.io" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
 
@@ -274,7 +263,7 @@
     }
     tryNext();
   })();
-  var QUERIES = ['ICLN clean energy ETF', 'iShares clean energy solar wind'];
+  var QUERIES = ['ICLN ETF', 'clean energy stocks', 'solar wind renewable energy', 'clean energy investing 2025'];
 
   // TradingView comparison chart via iframe
   var cfg = JSON.stringify({
@@ -388,6 +377,5 @@
     });
 })();
 </script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
 </body>
 </html>
