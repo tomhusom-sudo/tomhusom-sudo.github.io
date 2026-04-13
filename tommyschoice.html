@@ -409,25 +409,14 @@
     tryNext();
   })();
   // Top ICLN ETF holdings — Yahoo Finance RSS + Google News per ticker
-  var ICLN_TICKERS = [
-    { sym: 'ENPH',  name: 'Enphase Energy' },
-    { sym: 'FSLR',  name: 'First Solar' },
-    { sym: 'NEE',   name: 'NextEra Energy' },
-    { sym: 'BEP',   name: 'Brookfield Renewable' },
-    { sym: 'PLUG',  name: 'Plug Power' },
-    { sym: 'RUN',   name: 'Sunrun' },
-    { sym: 'SEDG',  name: 'SolarEdge' },
-    { sym: 'CWEN',  name: 'Clearway Energy' },
-    { sym: 'AES',   name: 'AES Corporation' },
-    { sym: 'BE',    name: 'Bloom Energy' },
-    { sym: 'ORA',   name: 'Ormat Technologies' },
-    { sym: 'ARRY',  name: 'Array Technologies' },
-    { sym: 'HASI',  name: 'HA Sustainable Infrastructure' },
-    { sym: 'NOVA',  name: 'Sunnova Energy' },
-    { sym: 'SPWR',  name: 'SunPower' }
+  // Google News queries covering ICLN + top holdings
+  var QUERIES = [
+    'ICLN ETF clean energy',
+    'Enphase Energy SolarEdge First Solar',
+    'NextEra Energy Brookfield Renewable Sunrun',
+    'Plug Power Bloom Energy hydrogen fuel cell',
+    'solar wind renewable energy stocks 2025'
   ];
-
-  var QUERIES = ['ICLN ETF clean energy', 'solar energy stocks', 'wind energy stocks', 'renewable energy investing'];
 
   // TradingView comparison chart via iframe
   var cfg = JSON.stringify({
@@ -448,55 +437,8 @@
   document.getElementById('tv-iframe').src =
     'https://s.tradingview.com/embed-widget/advanced-chart/?locale=en#' + encodeURIComponent(cfg);
 
-  // News — tries multiple CORS proxies in order until one works
-  var PROXIES = [
-    'https://api.allorigins.win/raw?url=',
-    'https://corsproxy.io/?',
-    'https://api.codetabs.com/v1/proxy?quest='
-  ];
-
-  function parseRss(txt, label) {
-    try {
-      var doc = new DOMParser().parseFromString(txt, 'text/xml');
-      return Array.from(doc.querySelectorAll('item')).map(function (el) {
-        var title = (el.querySelector('title') || {}).textContent || '';
-        var link = '';
-        var le = el.querySelector('link');
-        if (le) link = le.textContent || le.getAttribute('href') || '';
-        if (!link) {
-          var ch = el.childNodes;
-          for (var i = 0; i < ch.length; i++) {
-            if (ch[i].nodeName === 'link') { link = ch[i].textContent || ''; break; }
-          }
-        }
-        var pub  = (el.querySelector('pubDate') || {}).textContent || '';
-        var desc = (el.querySelector('description') || {}).textContent || '';
-        title = title.trim(); link = link.trim();
-        var src = label;
-        var m = title.match(/\s[-\u2013\u2014]\s([^\u2013\u2014]{2,45})$/);
-        if (m) { src = m[1].trim(); title = title.slice(0, title.lastIndexOf(m[0])).trim(); }
-        if (!link || link.indexOf('http') !== 0) return null;
-        return { title: title, link: link, date: pub ? new Date(pub) : null, desc: desc.replace(/<[^>]+>/g, '').trim().substring(0, 220), source: src };
-      }).filter(Boolean);
-    } catch(e) { return []; }
-  }
-
-  function fetchRss(url, label) {
-    function tryProxy(idx) {
-      if (idx >= PROXIES.length) return Promise.resolve([]);
-      var ctrl = new AbortController();
-      var tid = setTimeout(function () { ctrl.abort(); }, 7000);
-      return fetch(PROXIES[idx] + encodeURIComponent(url), { signal: ctrl.signal })
-        .then(function (r) { clearTimeout(tid); return r.text(); })
-        .then(function (txt) {
-          var items = parseRss(txt, label);
-          if (items.length > 0) return items;
-          return tryProxy(idx + 1); // try next proxy if this one returned nothing
-        })
-        .catch(function () { clearTimeout(tid); return tryProxy(idx + 1); });
-    }
-    return tryProxy(0);
-  }
+  // News — rss2json.com reliably proxies Google News RSS to JSON
+  var RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
 
   function relTime(d) {
     if (!d || isNaN(d)) return '';
@@ -506,43 +448,57 @@
     var h = Math.floor(m / 60);
     return h < 24 ? h + 'h ago' : Math.floor(h / 24) + 'd ago';
   }
-  function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  var sources = QUERIES.map(function (q) {
-    return { url: 'https://news.google.com/rss/search?q=' + encodeURIComponent(q) + '&hl=en-US&gl=US&ceid=US:en', label: 'Google News' };
-  });
-  // Yahoo Finance RSS for ICLN itself
-  sources.push({ url: 'https://finance.yahoo.com/rss/headline?s=' + YF_TICK, label: 'Yahoo Finance' });
-  // Yahoo Finance RSS for each top ICLN holding
-  ICLN_TICKERS.forEach(function (t) {
-    sources.push({ url: 'https://finance.yahoo.com/rss/headline?s=' + t.sym, label: t.name + ' (' + t.sym + ')' });
-  });
+  function fetchNews(query) {
+    var rssUrl = 'https://news.google.com/rss/search?q=' + encodeURIComponent(query) + '&hl=en-US&gl=US&ceid=US:en';
+    var ctrl = new AbortController();
+    var tid = setTimeout(function() { ctrl.abort(); }, 10000);
+    return fetch(RSS2JSON + encodeURIComponent(rssUrl), { signal: ctrl.signal })
+      .then(function(r) { clearTimeout(tid); return r.json(); })
+      .then(function(data) {
+        if (!data || data.status !== 'ok' || !data.items) return [];
+        return data.items.map(function(item) {
+          var title = (item.title || '').trim();
+          var src = 'Google News';
+          var m = title.match(/\s[-\u2013\u2014]\s([^\u2013\u2014]{2,45})$/);
+          if (m) { src = m[1].trim(); title = title.slice(0, title.lastIndexOf(m[0])).trim(); }
+          return {
+            title: title,
+            link: item.link || '',
+            date: item.pubDate ? new Date(item.pubDate) : null,
+            desc: (item.description || '').replace(/<[^>]+>/g,'').trim().substring(0, 220),
+            source: src
+          };
+        }).filter(function(i) { return i.link && i.title; });
+      })
+      .catch(function() { clearTimeout(tid); return []; });
+  }
 
-  Promise.all(sources.map(function (s) { return fetchRss(s.url, s.label); }))
-    .then(function (arrays) {
+  Promise.all(QUERIES.map(fetchNews))
+    .then(function(arrays) {
       var seen = {}, all = [];
-      arrays.forEach(function (arr) {
-        (arr || []).forEach(function (item) {
-          var k = item.title.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 60);
+      arrays.forEach(function(arr) {
+        (arr || []).forEach(function(item) {
+          var k = item.title.toLowerCase().replace(/[^a-z0-9]/g,'').substring(0,60);
           if (!seen[k]) { seen[k] = true; all.push(item); }
         });
       });
-      all.sort(function (a, b) { return (!a.date ? 1 : !b.date ? -1 : b.date - a.date); });
+      all.sort(function(a, b) { return (!a.date ? 1 : !b.date ? -1 : b.date - a.date); });
       var listEl = document.getElementById('news-list');
       if (!all.length) { listEl.innerHTML = '<div class="error-row">No headlines found — try refreshing.</div>'; return; }
-      listEl.innerHTML = all.slice(0, 15).map(function (item, i) {
+      listEl.innerHTML = all.slice(0, 20).map(function(item, i) {
         var t = relTime(item.date);
-        var sc = item.source.toLowerCase().indexOf('yahoo') !== -1 ? 'src-yahoo' : 'src-default';
         return '<a class="news-card' + (i === 0 ? ' top-story' : '') + '" href="' + esc(item.link) + '" target="_blank" rel="noopener">'
           + '<div class="news-title">' + esc(item.title) + '</div>'
           + (item.desc ? '<div class="news-summary">' + esc(item.desc) + '</div>' : '')
-          + '<div class="news-meta"><span class="src-badge ' + sc + '">' + esc(item.source) + '</span>'
+          + '<div class="news-meta"><span class="src-badge src-default">' + esc(item.source) + '</span>'
           + (t ? '<span class="news-dot">&middot;</span><span class="news-time">' + t + '</span>' : '')
           + '</div></a>';
       }).join('');
       document.getElementById('page-footer').textContent =
-        "Tommy's Choice \u00b7 Sources: Google News \u00b7 Yahoo Finance \u00b7 Refreshed "
-        + new Date().toLocaleString('en-US', { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        "Tommy's Choice \u00b7 Source: Google News via rss2json \u00b7 Refreshed "
+        + new Date().toLocaleString('en-US', { month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
     });
 })();
 </script>
