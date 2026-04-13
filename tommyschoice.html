@@ -263,7 +263,26 @@
     }
     tryNext();
   })();
-  var QUERIES = ['ICLN ETF', 'clean energy stocks', 'solar wind renewable energy', 'clean energy investing 2025'];
+  // Top ICLN ETF holdings — Yahoo Finance RSS + Google News per ticker
+  var ICLN_TICKERS = [
+    { sym: 'ENPH',  name: 'Enphase Energy' },
+    { sym: 'FSLR',  name: 'First Solar' },
+    { sym: 'NEE',   name: 'NextEra Energy' },
+    { sym: 'BEP',   name: 'Brookfield Renewable' },
+    { sym: 'PLUG',  name: 'Plug Power' },
+    { sym: 'RUN',   name: 'Sunrun' },
+    { sym: 'SEDG',  name: 'SolarEdge' },
+    { sym: 'CWEN',  name: 'Clearway Energy' },
+    { sym: 'AES',   name: 'AES Corporation' },
+    { sym: 'BE',    name: 'Bloom Energy' },
+    { sym: 'ORA',   name: 'Ormat Technologies' },
+    { sym: 'ARRY',  name: 'Array Technologies' },
+    { sym: 'HASI',  name: 'HA Sustainable Infrastructure' },
+    { sym: 'NOVA',  name: 'Sunnova Energy' },
+    { sym: 'SPWR',  name: 'SunPower' }
+  ];
+
+  var QUERIES = ['ICLN ETF clean energy', 'solar energy stocks', 'wind energy stocks', 'renewable energy investing'];
 
   // TradingView comparison chart via iframe
   var cfg = JSON.stringify({
@@ -347,7 +366,12 @@
   var sources = QUERIES.map(function (q) {
     return { url: 'https://news.google.com/rss/search?q=' + encodeURIComponent(q) + '&hl=en-US&gl=US&ceid=US:en', label: 'Google News' };
   });
+  // Yahoo Finance RSS for ICLN itself
   sources.push({ url: 'https://finance.yahoo.com/rss/headline?s=' + YF_TICK, label: 'Yahoo Finance' });
+  // Yahoo Finance RSS for each top ICLN holding
+  ICLN_TICKERS.forEach(function (t) {
+    sources.push({ url: 'https://finance.yahoo.com/rss/headline?s=' + t.sym, label: t.name + ' (' + t.sym + ')' });
+  });
 
   Promise.all(sources.map(function (s) { return fetchRss(s.url, s.label); }))
     .then(function (arrays) {
@@ -360,7 +384,7 @@
       });
       all.sort(function (a, b) { return (!a.date ? 1 : !b.date ? -1 : b.date - a.date); });
       var listEl = document.getElementById('news-list');
-      if (!all.length) { listEl.innerHTML = '<div class="error-row">No headlines found for ICLN.</div>'; return; }
+      if (!all.length) { listEl.innerHTML = '<div class="error-row">No headlines found — try refreshing.</div>'; return; }
       listEl.innerHTML = all.slice(0, 15).map(function (item, i) {
         var t = relTime(item.date);
         var sc = item.source.toLowerCase().indexOf('yahoo') !== -1 ? 'src-yahoo' : 'src-default';
