@@ -165,55 +165,6 @@
     .song-actions { display: flex; gap: 8px; margin-top: 10px; }
     .song-actions button { flex: 1; padding: 6px 10px; font-size: 0.8rem; }
 
-    .tuner-section {
-      grid-column: 1 / -1;
-      background: rgba(20, 10, 0, 0.75);
-      border: 1px solid rgba(212, 165, 116, 0.3);
-      border-radius: 8px;
-      padding: 30px;
-      backdrop-filter: blur(8px);
-    }
-
-    .tuner-section h2 {
-      font-size: 1.8rem;
-      margin-bottom: 24px;
-      color: #d4a574;
-      border-bottom: 2px solid rgba(212, 165, 116, 0.4);
-      padding-bottom: 12px;
-    }
-
-    .tuner-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-
-    .tuning-strings { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-
-    .string-tuner {
-      background: rgba(80, 60, 40, 0.6);
-      border: 1px solid rgba(212, 165, 116, 0.2);
-      border-radius: 6px;
-      padding: 16px;
-      text-align: center;
-    }
-
-    .string-note { font-size: 1.4rem; font-weight: bold; color: #d4a574; margin-bottom: 10px; }
-    .string-freq { font-size: 0.85rem; color: #999; margin-bottom: 12px; }
-
-    .freq-slider { width: 100%; cursor: pointer; }
-
-    .pitch-display {
-      background: rgba(80, 60, 40, 0.6);
-      border: 1px solid rgba(212, 165, 116, 0.2);
-      border-radius: 6px;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .pitch-freq { font-size: 2.4rem; color: #d4a574; font-weight: bold; margin-bottom: 10px; }
-    .pitch-note { font-size: 1.3rem; color: #b8956a; margin-bottom: 16px; }
-
-    .play-btn { width: 100%; padding: 14px; font-size: 1.1rem; margin-bottom: 16px; }
-
-    .preset-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .preset-buttons button { padding: 10px; font-size: 0.9rem; }
 
     .export-section {
       grid-column: 1 / -1;
@@ -278,23 +229,6 @@
     </div>
   </div>
 
-  <div class="tuner-section">
-    <h2>🎵 Guitar Tuner</h2>
-    <div class="tuner-container">
-      <div class="tuning-strings" id="tuningStrings"></div>
-      <div class="pitch-display">
-        <div class="pitch-note" id="pitchNote">Play a note...</div>
-        <div class="pitch-freq" id="pitchFreq">-- Hz</div>
-        <button class="btn btn-primary play-btn" id="playBtn">▶ Play Test Tone</button>
-        <div class="preset-buttons">
-          <button class="btn btn-secondary" data-freq="110">Low E</button>
-          <button class="btn btn-secondary" data-freq="164.81">A</button>
-          <button class="btn btn-secondary" data-freq="246.94">B</button>
-          <button class="btn btn-secondary" data-freq="329.63">E</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="export-section">
     <h2>📥 Export Songs</h2>
@@ -306,16 +240,6 @@
 </div>
 
 <script>
-const STRING_NOTES = [
-  { note: 'E', freq: 82.41, index: 0 },
-  { note: 'A', freq: 110.00, index: 1 },
-  { note: 'D', freq: 146.83, index: 2 },
-  { note: 'G', freq: 196.00, index: 3 },
-  { note: 'B', freq: 246.94, index: 4 },
-  { note: 'E', freq: 329.63, index: 5 }
-];
-
-let audioCtx, osc, gainNode;
 let songs = [];
 let editingId = null;
 
@@ -430,80 +354,6 @@ function downloadFile(content, filename, type) {
   URL.revokeObjectURL(url);
 }
 
-function initTuner() {
-  const container = document.getElementById('tuningStrings');
-  container.innerHTML = '';
-
-  STRING_NOTES.forEach(str => {
-    const div = document.createElement('div');
-    div.className = 'string-tuner';
-    div.innerHTML = `
-      <div class="string-note">${str.note}</div>
-      <div class="string-freq">${str.freq.toFixed(2)} Hz</div>
-      <input type="range" class="freq-slider" min="${str.freq * 0.8}" max="${str.freq * 1.2}" step="0.1" value="${str.freq}" />
-      <button class="btn btn-secondary" style="width:100%;margin-top:8px;padding:6px;font-size:0.8rem;" onclick="playTone(${str.freq})">Play</button>
-    `;
-
-    const slider = div.querySelector('.freq-slider');
-    slider.addEventListener('input', (e) => {
-      const freq = parseFloat(e.target.value);
-      div.querySelector('.string-freq').textContent = freq.toFixed(2) + ' Hz';
-      playTone(freq);
-    });
-
-    container.appendChild(div);
-  });
-
-  document.getElementById('playBtn').addEventListener('click', () => {
-    playTone(261.63);
-  });
-
-  document.querySelectorAll('[data-freq]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const freq = parseFloat(btn.dataset.freq);
-      playTone(freq);
-      document.getElementById('pitchFreq').textContent = freq.toFixed(2) + ' Hz';
-    });
-  });
-}
-
-function playTone(freq, duration = 0.5) {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-
-  if (osc) {
-    osc.stop();
-    gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
-  }
-
-  osc = audioCtx.createOscillator();
-  gainNode = audioCtx.createGain();
-
-  osc.frequency.value = freq;
-  osc.type = 'sine';
-  gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-
-  osc.connect(gainNode);
-  gainNode.connect(audioCtx.destination);
-
-  osc.start(audioCtx.currentTime);
-  osc.stop(audioCtx.currentTime + duration);
-
-  document.getElementById('pitchFreq').textContent = freq.toFixed(2) + ' Hz';
-  document.getElementById('pitchNote').textContent = getNoteFromFreq(freq);
-}
-
-function getNoteFromFreq(freq) {
-  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-  const a = 440;
-  const c0 = a / Math.pow(2, 9/12);
-  const h = 12 * Math.log2(freq / c0);
-  const octave = Math.floor(h / 12);
-  const n = Math.round(h % 12);
-  return notes[n] + octave;
-}
 
 function populateInitial() {
   const initialSongs = [
@@ -555,7 +405,6 @@ function populateInitial() {
 
 loadSongs();
 populateInitial();
-initTuner();
 </script>
 
 </body>
