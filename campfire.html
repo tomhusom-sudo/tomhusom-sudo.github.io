@@ -139,27 +139,26 @@
     .song-card-artist { font-size: 0.9rem; color: #b8956a; margin-bottom: 8px; }
     .song-card-note { font-size: 0.85rem; color: #999; margin-bottom: 10px; font-style: italic; }
 
-    .song-card a { color: #d4a574; text-decoration: none; font-size: 0.85rem; }
-    .song-card a:hover { text-decoration: underline; }
-
-    .spotify-icon {
-      display: inline-block;
-      width: 32px;
-      height: 32px;
-      background: #1DB954;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 32px;
-      color: white;
-      font-size: 18px;
-      cursor: pointer;
-      transition: all 0.2s;
+    .spotify-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #1db954;
       text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(29, 185, 84, 0.3);
+      transition: color 0.2s;
     }
 
-    .spotify-icon:hover {
-      background: #1ed760;
-      transform: scale(1.1);
+    .spotify-link:hover {
+      color: #1ed760;
+    }
+
+    .spotify-link svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
     }
 
     .song-actions { display: flex; gap: 8px; margin-top: 10px; }
@@ -265,15 +264,16 @@ function renderSongs() {
   songs.forEach((song, idx) => {
     const card = document.createElement('div');
     card.className = 'song-card';
+    const spotifyLink = song.spotify ? `<a href="${song.spotify}" target="_blank" rel="noopener" class="spotify-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 0 1-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 1 1-.277-1.215c3.809-.87 7.076-.496 9.712 1.115.294.181.387.565.207.857zm1.223-2.722a.78.78 0 0 1-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.779.779 0 0 1-.973-.519.781.781 0 0 1 .52-.974c3.632-1.102 8.147-.568 11.233 1.329a.78.78 0 0 1 .257 1.073zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71a.937.937 0 1 1-.543-1.794c3.532-1.07 9.404-.863 13.115 1.333a.937.937 0 0 1-.955 1.618z"/></svg> Open in Spotify</a>` : '';
     card.innerHTML = `
-      <div style="display:flex;align-items:start;gap:12px;margin-bottom:8px;">
+      <div style="display:flex;align-items:start;gap:12px;margin-bottom:8px;justify-content:space-between;">
         <div style="flex:1;">
           <div class="song-card-title">${song.title}</div>
           <div class="song-card-artist">${song.artist}</div>
         </div>
-        ${song.spotify ? `<a href="${song.spotify}" target="_blank" class="spotify-icon" title="Listen on Spotify">🎵</a>` : ''}
       </div>
       ${song.notes ? `<div class="song-card-note">${song.notes}</div>` : ''}
+      ${spotifyLink ? `<div style="margin-bottom:10px;">${spotifyLink}</div>` : ''}
       <div class="song-actions">
         <button class="btn btn-secondary" style="flex:1;padding:6px 10px;font-size:0.8rem;" onclick="editSong(${idx})">Edit</button>
         <button class="btn btn-danger" style="flex:1;padding:6px 10px;font-size:0.8rem;" onclick="deleteSong(${idx})">Delete</button>
@@ -356,44 +356,48 @@ function downloadFile(content, filename, type) {
 
 
 function populateInitial() {
+  function spotifyUrl(artist, title) {
+    return `https://open.spotify.com/search/${encodeURIComponent(artist + ' ' + title)}`;
+  }
+
   const initialSongs = [
-    { title: 'Rocky Raccoon', artist: 'The Beatles', spotify: '', notes: '' },
-    { title: "Can't Buy Me Love", artist: 'The Beatles', spotify: '', notes: '' },
-    { title: 'Norwegian Wood', artist: 'The Beatles', spotify: '', notes: 'Acoustic version' },
-    { title: 'Imagine', artist: 'John Lennon', spotify: '', notes: '' },
-    { title: 'Bad Moon Rising', artist: 'Creedence Clearwater Revival', spotify: '', notes: '' },
-    { title: 'Sundown', artist: 'Gordon Lightfoot', spotify: '', notes: '' },
-    { title: 'Billie Jean', artist: 'Michael Jackson', spotify: '', notes: '' },
-    { title: 'Squeeze Box', artist: 'The Who', spotify: '', notes: '' },
-    { title: 'A Hard Day\'s Night', artist: 'The Beatles', spotify: '', notes: '' },
+    { title: 'Rocky Raccoon', artist: 'The Beatles', spotify: spotifyUrl('The Beatles', 'Rocky Raccoon'), notes: '' },
+    { title: "Can't Buy Me Love", artist: 'The Beatles', spotify: spotifyUrl('The Beatles', "Can't Buy Me Love"), notes: '' },
+    { title: 'Norwegian Wood', artist: 'The Beatles', spotify: spotifyUrl('The Beatles', 'Norwegian Wood'), notes: 'Acoustic version' },
+    { title: 'Imagine', artist: 'John Lennon', spotify: spotifyUrl('John Lennon', 'Imagine'), notes: '' },
+    { title: 'Bad Moon Rising', artist: 'Creedence Clearwater Revival', spotify: spotifyUrl('CCR', 'Bad Moon Rising'), notes: '' },
+    { title: 'Sundown', artist: 'Gordon Lightfoot', spotify: spotifyUrl('Gordon Lightfoot', 'Sundown'), notes: '' },
+    { title: 'Billie Jean', artist: 'Michael Jackson', spotify: spotifyUrl('Michael Jackson', 'Billie Jean'), notes: '' },
+    { title: 'Squeeze Box', artist: 'The Who', spotify: spotifyUrl('The Who', 'Squeeze Box'), notes: '' },
+    { title: 'A Hard Day\'s Night', artist: 'The Beatles', spotify: spotifyUrl('The Beatles', 'A Hard Days Night'), notes: '' },
     { title: 'Aberdeen', artist: 'Tom Husom', spotify: '', notes: "Tom's Original" },
     { title: 'Back on the Drink', artist: 'Tom Husom', spotify: '', notes: "Tom's Original" },
     { title: 'Lost and the Found', artist: 'Tom Husom', spotify: '', notes: "Tom's Original" },
-    { title: 'Troubadour', artist: 'George Strait', spotify: '', notes: '' },
-    { title: "Don't Be Cruel", artist: 'Elvis Presley', spotify: '', notes: '' },
-    { title: 'La Bamba', artist: 'Ritchie Valens', spotify: '', notes: '' },
-    { title: 'Have You Ever Seen the Rain', artist: 'Creedence Clearwater Revival', spotify: '', notes: '' },
-    { title: 'Tequila Sunrise', artist: 'Eagles', spotify: '', notes: '' },
-    { title: 'The Wind Cries Mary', artist: 'Jimi Hendrix', spotify: '', notes: '' },
-    { title: 'Folsom Prison Blues', artist: 'Johnny Cash', spotify: '', notes: '' },
-    { title: 'Time', artist: 'Pink Floyd', spotify: '', notes: '' },
-    { title: 'Easy Like Sunday Morning', artist: 'Lionel Richie', spotify: '', notes: '' },
-    { title: 'King of the Road', artist: 'Roger Miller', spotify: '', notes: '' },
-    { title: 'I Shot the Sheriff', artist: 'Bob Marley', spotify: '', notes: '' },
-    { title: 'Run to You', artist: 'Bryan Adams', spotify: '', notes: '' },
-    { title: 'Harvest Moon', artist: 'Neil Young', spotify: '', notes: '' },
-    { title: 'You Can\'t Do That', artist: 'The Beatles', spotify: '', notes: '' },
-    { title: 'Green River', artist: 'Creedence Clearwater Revival', spotify: '', notes: '' },
-    { title: 'Knockin\' on Heaven\'s Door', artist: 'Bob Dylan', spotify: '', notes: '' },
-    { title: 'Sailing', artist: 'Christopher Cross', spotify: '', notes: '' },
-    { title: 'Suspicious Minds', artist: 'Elvis Presley', spotify: '', notes: '' },
-    { title: 'Rainbow Connection', artist: 'Willie Nelson', spotify: '', notes: '' },
-    { title: 'You May Be Right', artist: 'Billy Joel', spotify: '', notes: '' },
-    { title: 'Take On Me', artist: 'a-ha', spotify: '', notes: '' },
-    { title: 'Fortunate Son', artist: 'Creedence Clearwater Revival', spotify: '', notes: '' },
-    { title: 'No Woman No Cry', artist: 'Bob Marley', spotify: '', notes: '' },
-    { title: 'Stir It Up', artist: 'Bob Marley', spotify: '', notes: '' },
-    { title: 'My Way', artist: 'Frank Sinatra', spotify: '', notes: '' }
+    { title: 'Troubadour', artist: 'George Strait', spotify: spotifyUrl('George Strait', 'Troubadour'), notes: '' },
+    { title: "Don't Be Cruel", artist: 'Elvis Presley', spotify: spotifyUrl('Elvis Presley', "Don't Be Cruel"), notes: '' },
+    { title: 'La Bamba', artist: 'Ritchie Valens', spotify: spotifyUrl('Ritchie Valens', 'La Bamba'), notes: '' },
+    { title: 'Have You Ever Seen the Rain', artist: 'Creedence Clearwater Revival', spotify: spotifyUrl('CCR', 'Have You Ever Seen the Rain'), notes: '' },
+    { title: 'Tequila Sunrise', artist: 'Eagles', spotify: spotifyUrl('Eagles', 'Tequila Sunrise'), notes: '' },
+    { title: 'The Wind Cries Mary', artist: 'Jimi Hendrix', spotify: spotifyUrl('Jimi Hendrix', 'The Wind Cries Mary'), notes: '' },
+    { title: 'Folsom Prison Blues', artist: 'Johnny Cash', spotify: spotifyUrl('Johnny Cash', 'Folsom Prison Blues'), notes: '' },
+    { title: 'Time', artist: 'Pink Floyd', spotify: spotifyUrl('Pink Floyd', 'Time'), notes: '' },
+    { title: 'Easy Like Sunday Morning', artist: 'Lionel Richie', spotify: spotifyUrl('Lionel Richie', 'Easy Like Sunday Morning'), notes: '' },
+    { title: 'King of the Road', artist: 'Roger Miller', spotify: spotifyUrl('Roger Miller', 'King of the Road'), notes: '' },
+    { title: 'I Shot the Sheriff', artist: 'Bob Marley', spotify: spotifyUrl('Bob Marley', 'I Shot the Sheriff'), notes: '' },
+    { title: 'Run to You', artist: 'Bryan Adams', spotify: spotifyUrl('Bryan Adams', 'Run to You'), notes: '' },
+    { title: 'Harvest Moon', artist: 'Neil Young', spotify: spotifyUrl('Neil Young', 'Harvest Moon'), notes: '' },
+    { title: 'You Can\'t Do That', artist: 'The Beatles', spotify: spotifyUrl('The Beatles', 'You Cant Do That'), notes: '' },
+    { title: 'Green River', artist: 'Creedence Clearwater Revival', spotify: spotifyUrl('CCR', 'Green River'), notes: '' },
+    { title: 'Knockin\' on Heaven\'s Door', artist: 'Bob Dylan', spotify: spotifyUrl('Bob Dylan', 'Knocking on Heavens Door'), notes: '' },
+    { title: 'Sailing', artist: 'Christopher Cross', spotify: spotifyUrl('Christopher Cross', 'Sailing'), notes: '' },
+    { title: 'Suspicious Minds', artist: 'Elvis Presley', spotify: spotifyUrl('Elvis Presley', 'Suspicious Minds'), notes: '' },
+    { title: 'Rainbow Connection', artist: 'Willie Nelson', spotify: spotifyUrl('Willie Nelson', 'Rainbow Connection'), notes: '' },
+    { title: 'You May Be Right', artist: 'Billy Joel', spotify: spotifyUrl('Billy Joel', 'You May Be Right'), notes: '' },
+    { title: 'Take On Me', artist: 'a-ha', spotify: spotifyUrl('a-ha', 'Take On Me'), notes: '' },
+    { title: 'Fortunate Son', artist: 'Creedence Clearwater Revival', spotify: spotifyUrl('CCR', 'Fortunate Son'), notes: '' },
+    { title: 'No Woman No Cry', artist: 'Bob Marley', spotify: spotifyUrl('Bob Marley', 'No Woman No Cry'), notes: '' },
+    { title: 'Stir It Up', artist: 'Bob Marley', spotify: spotifyUrl('Bob Marley', 'Stir It Up'), notes: '' },
+    { title: 'My Way', artist: 'Frank Sinatra', spotify: spotifyUrl('Frank Sinatra', 'My Way'), notes: '' }
   ];
 
   if (songs.length === 0) {
