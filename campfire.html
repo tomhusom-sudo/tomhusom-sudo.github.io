@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Honest Tom's Campfire Songs</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: url('campfire.JPEG') center/cover no-repeat fixed;
+      color: #f5e6d3;
+      font-family: 'Georgia', serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(20, 10, 0, 0.55);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    header { text-align: center; margin: 40px 0 50px; }
+
+    h1 {
+      font-size: 3.2rem;
+      font-weight: normal;
+      letter-spacing: 0.08em;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #d4a574;
+      letter-spacing: 0.04em;
+      font-style: italic;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .section {
+      background: rgba(20, 10, 0, 0.75);
+      border: 1px solid rgba(212, 165, 116, 0.3);
+      border-radius: 8px;
+      padding: 30px;
+      backdrop-filter: blur(8px);
+    }
+
+    .section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #d4a574;
+      border-bottom: 2px solid rgba(212, 165, 116, 0.4);
+      padding-bottom: 12px;
+    }
+
+    .form-group { margin-bottom: 16px; }
+
+    label {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      color: #d4a574;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid rgba(212, 165, 116, 0.3);
+      background: rgba(50, 40, 30, 0.6);
+      color: #f5e6d3;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #d4a574;
+      box-shadow: 0 0 8px rgba(212, 165, 116, 0.3);
+    }
+
+    textarea { resize: vertical; min-height: 70px; }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+
+    .btn-primary { background: #c0522a; color: #fff; }
+    .btn-primary:hover { background: #e06b38; transform: translateY(-2px); }
+
+    .btn-secondary { background: rgba(212, 165, 116, 0.3); color: #d4a574; border: 1px solid #d4a574; }
+    .btn-secondary:hover { background: rgba(212, 165, 116, 0.5); }
+
+    .btn-danger { background: #8b4513; color: #fff; }
+    .btn-danger:hover { background: #a0522d; }
+
+    .btn-group { display: flex; gap: 8px; margin-top: 16px; }
+    .btn-group .btn { flex: 1; }
+
+    .songs-list {
+      display: grid;
+      gap: 16px;
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .song-card {
+      background: rgba(80, 60, 40, 0.6);
+      border: 1px solid rgba(212, 165, 116, 0.2);
+      border-radius: 6px;
+      padding: 14px;
+    }
+
+    .song-card-title { font-size: 1.1rem; font-weight: bold; color: #d4a574; margin-bottom: 4px; }
+    .song-card-artist { font-size: 0.9rem; color: #b8956a; margin-bottom: 8px; }
+    .song-card-note { font-size: 0.85rem; color: #999; margin-bottom: 10px; font-style: italic; }
+
+    .song-card a { color: #d4a574; text-decoration: none; font-size: 0.85rem; }
+    .song-card a:hover { text-decoration: underline; }
+
+    .song-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .song-actions button { flex: 1; padding: 6px 10px; font-size: 0.8rem; }
+
+    .tuner-section {
+      grid-column: 1 / -1;
+      background: rgba(20, 10, 0, 0.75);
+      border: 1px solid rgba(212, 165, 116, 0.3);
+      border-radius: 8px;
+      padding: 30px;
+      backdrop-filter: blur(8px);
+    }
+
+    .tuner-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      color: #d4a574;
+      border-bottom: 2px solid rgba(212, 165, 116, 0.4);
+      padding-bottom: 12px;
+    }
+
+    .tuner-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+
+    .tuning-strings { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    .string-tuner {
+      background: rgba(80, 60, 40, 0.6);
+      border: 1px solid rgba(212, 165, 116, 0.2);
+      border-radius: 6px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .string-note { font-size: 1.4rem; font-weight: bold; color: #d4a574; margin-bottom: 10px; }
+    .string-freq { font-size: 0.85rem; color: #999; margin-bottom: 12px; }
+
+    .freq-slider { width: 100%; cursor: pointer; }
+
+    .pitch-display {
+      background: rgba(80, 60, 40, 0.6);
+      border: 1px solid rgba(212, 165, 116, 0.2);
+      border-radius: 6px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .pitch-freq { font-size: 2.4rem; color: #d4a574; font-weight: bold; margin-bottom: 10px; }
+    .pitch-note { font-size: 1.3rem; color: #b8956a; margin-bottom: 16px; }
+
+    .play-btn { width: 100%; padding: 14px; font-size: 1.1rem; margin-bottom: 16px; }
+
+    .preset-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .preset-buttons button { padding: 10px; font-size: 0.9rem; }
+
+    .export-section {
+      grid-column: 1 / -1;
+      background: rgba(20, 10, 0, 0.75);
+      border: 1px solid rgba(212, 165, 116, 0.3);
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .export-section h2 { margin-bottom: 20px; color: #d4a574; }
+
+    .export-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .export-buttons button { padding: 12px 28px; font-size: 1rem; }
+
+    @media (max-width: 900px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .tuner-container { grid-template-columns: 1fr; }
+      h1 { font-size: 2.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>🔥 Campfire Songs 🎸</h1>
+    <p class="subtitle">Honest Tom's Collection of Acoustic Favorites</p>
+  </header>
+
+  <div class="main-grid">
+    <div class="section">
+      <h2>Add/Edit Song</h2>
+      <form id="songForm">
+        <div class="form-group">
+          <label for="songTitle">Song Title</label>
+          <input type="text" id="songTitle" placeholder="e.g., Rocky Raccoon" required />
+        </div>
+        <div class="form-group">
+          <label for="artistName">Artist</label>
+          <input type="text" id="artistName" placeholder="e.g., The Beatles" required />
+        </div>
+        <div class="form-group">
+          <label for="spotifyLink">Spotify Link</label>
+          <input type="url" id="spotifyLink" placeholder="https://open.spotify.com/..." />
+        </div>
+        <div class="form-group">
+          <label for="songNotes">Notes</label>
+          <textarea id="songNotes" placeholder="e.g., Acoustic version preferred..."></textarea>
+        </div>
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary">Save Song</button>
+          <button type="reset" class="btn btn-secondary">Clear</button>
+        </div>
+        <button type="button" class="btn btn-secondary" id="cancelEdit" style="display:none;width:100%;margin-top:8px;">Cancel Edit</button>
+      </form>
+    </div>
+
+    <div class="section">
+      <h2>Songs</h2>
+      <div class="songs-list" id="songsList"></div>
+    </div>
+  </div>
+
+  <div class="tuner-section">
+    <h2>🎵 Guitar Tuner</h2>
+    <div class="tuner-container">
+      <div class="tuning-strings" id="tuningStrings"></div>
+      <div class="pitch-display">
+        <div class="pitch-note" id="pitchNote">Play a note...</div>
+        <div class="pitch-freq" id="pitchFreq">-- Hz</div>
+        <button class="btn btn-primary play-btn" id="playBtn">▶ Play Test Tone</button>
+        <div class="preset-buttons">
+          <button class="btn btn-secondary" data-freq="110">Low E</button>
+          <button class="btn btn-secondary" data-freq="164.81">A</button>
+          <button class="btn btn-secondary" data-freq="246.94">B</button>
+          <button class="btn btn-secondary" data-freq="329.63">E</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="export-section">
+    <h2>📥 Export Songs</h2>
+    <div class="export-buttons">
+      <button class="btn btn-primary" id="exportCsv">Download as CSV</button>
+      <button class="btn btn-secondary" id="exportJson">Download as JSON</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STRING_NOTES = [
+  { note: 'E', freq: 82.41, index: 0 },
+  { note: 'A', freq: 110.00, index: 1 },
+  { note: 'D', freq: 146.83, index: 2 },
+  { note: 'G', freq: 196.00, index: 3 },
+  { note: 'B', freq: 246.94, index: 4 },
+  { note: 'E', freq: 329.63, index: 5 }
+];
+
+let audioCtx, osc, gainNode;
+let songs = [];
+let editingId = null;
+
+function loadSongs() {
+  const saved = localStorage.getItem('campfireSongs');
+  songs = saved ? JSON.parse(saved) : [];
+  renderSongs();
+}
+
+function saveSongs() {
+  localStorage.setItem('campfireSongs', JSON.stringify(songs));
+}
+
+function renderSongs() {
+  const list = document.getElementById('songsList');
+  list.innerHTML = '';
+
+  if (songs.length === 0) {
+    list.innerHTML = '<p style="color:#999;text-align:center;">No songs yet. Add one above!</p>';
+    return;
+  }
+
+  songs.forEach((song, idx) => {
+    const card = document.createElement('div');
+    card.className = 'song-card';
+    card.innerHTML = `
+      <div class="song-card-title">${song.title}</div>
+      <div class="song-card-artist">${song.artist}</div>
+      ${song.notes ? `<div class="song-card-note">${song.notes}</div>` : ''}
+      ${song.spotify ? `<a href="${song.spotify}" target="_blank">🎵 Listen on Spotify</a>` : ''}
+      <div class="song-actions">
+        <button class="btn btn-secondary" style="flex:1;padding:6px 10px;font-size:0.8rem;" onclick="editSong(${idx})">Edit</button>
+        <button class="btn btn-danger" style="flex:1;padding:6px 10px;font-size:0.8rem;" onclick="deleteSong(${idx})">Delete</button>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+document.getElementById('songForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const song = {
+    title: document.getElementById('songTitle').value,
+    artist: document.getElementById('artistName').value,
+    spotify: document.getElementById('spotifyLink').value || '',
+    notes: document.getElementById('songNotes').value || ''
+  };
+
+  if (editingId !== null) {
+    songs[editingId] = song;
+    editingId = null;
+    document.getElementById('cancelEdit').style.display = 'none';
+  } else {
+    songs.push(song);
+  }
+
+  saveSongs();
+  renderSongs();
+  document.getElementById('songForm').reset();
+});
+
+function editSong(idx) {
+  const song = songs[idx];
+  document.getElementById('songTitle').value = song.title;
+  document.getElementById('artistName').value = song.artist;
+  document.getElementById('spotifyLink').value = song.spotify;
+  document.getElementById('songNotes').value = song.notes;
+  editingId = idx;
+  document.getElementById('cancelEdit').style.display = 'block';
+  document.getElementById('songTitle').focus();
+}
+
+function deleteSong(idx) {
+  if (confirm(`Delete "${songs[idx].title}"?`)) {
+    songs.splice(idx, 1);
+    saveSongs();
+    renderSongs();
+  }
+}
+
+document.getElementById('cancelEdit').addEventListener('click', () => {
+  document.getElementById('songForm').reset();
+  editingId = null;
+  document.getElementById('cancelEdit').style.display = 'none';
+});
+
+document.getElementById('exportCsv').addEventListener('click', () => {
+  let csv = 'Song,Artist,Spotify,Notes\n';
+  songs.forEach(song => {
+    csv += `"${song.title}","${song.artist}","${song.spotify}","${song.notes}"\n`;
+  });
+  downloadFile(csv, 'campfire-songs.csv', 'text/csv');
+});
+
+document.getElementById('exportJson').addEventListener('click', () => {
+  const json = JSON.stringify(songs, null, 2);
+  downloadFile(json, 'campfire-songs.json', 'application/json');
+});
+
+function downloadFile(content, filename, type) {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function initTuner() {
+  const container = document.getElementById('tuningStrings');
+  container.innerHTML = '';
+
+  STRING_NOTES.forEach(str => {
+    const div = document.createElement('div');
+    div.className = 'string-tuner';
+    div.innerHTML = `
+      <div class="string-note">${str.note}</div>
+      <div class="string-freq">${str.freq.toFixed(2)} Hz</div>
+      <input type="range" class="freq-slider" min="${str.freq * 0.8}" max="${str.freq * 1.2}" step="0.1" value="${str.freq}" />
+      <button class="btn btn-secondary" style="width:100%;margin-top:8px;padding:6px;font-size:0.8rem;" onclick="playTone(${str.freq})">Play</button>
+    `;
+
+    const slider = div.querySelector('.freq-slider');
+    slider.addEventListener('input', (e) => {
+      const freq = parseFloat(e.target.value);
+      div.querySelector('.string-freq').textContent = freq.toFixed(2) + ' Hz';
+      playTone(freq);
+    });
+
+    container.appendChild(div);
+  });
+
+  document.getElementById('playBtn').addEventListener('click', () => {
+    playTone(261.63);
+  });
+
+  document.querySelectorAll('[data-freq]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const freq = parseFloat(btn.dataset.freq);
+      playTone(freq);
+      document.getElementById('pitchFreq').textContent = freq.toFixed(2) + ' Hz';
+    });
+  });
+}
+
+function playTone(freq, duration = 0.5) {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  if (osc) {
+    osc.stop();
+    gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+  }
+
+  osc = audioCtx.createOscillator();
+  gainNode = audioCtx.createGain();
+
+  osc.frequency.value = freq;
+  osc.type = 'sine';
+  gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+
+  osc.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  osc.start(audioCtx.currentTime);
+  osc.stop(audioCtx.currentTime + duration);
+
+  document.getElementById('pitchFreq').textContent = freq.toFixed(2) + ' Hz';
+  document.getElementById('pitchNote').textContent = getNoteFromFreq(freq);
+}
+
+function getNoteFromFreq(freq) {
+  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  const a = 440;
+  const c0 = a / Math.pow(2, 9/12);
+  const h = 12 * Math.log2(freq / c0);
+  const octave = Math.floor(h / 12);
+  const n = Math.round(h % 12);
+  return notes[n] + octave;
+}
+
+function populateInitial() {
+  const initialSongs = [
+    { title: 'Rocky Raccoon', artist: 'The Beatles', spotify: '', notes: '' },
+    { title: "Can't Buy Me Love", artist: 'The Beatles', spotify: '', notes: '' },
+    { title: 'Norwegian Wood', artist: 'The Beatles', spotify: '', notes: 'Acoustic version' },
+    { title: 'Imagine', artist: 'John Lennon', spotify: '', notes: '' },
+    { title: 'Bad Moon Rising', artist: 'Creedence Clearwater Revival', spotify: '', notes: '' },
+    { title: 'Sundown', artist: 'Gordon Lightfoot', spotify: '', notes: '' },
+    { title: 'Billie Jean', artist: 'Michael Jackson', spotify: '', notes: '' },
+    { title: 'Squeeze Box', artist: 'The Who', spotify: '', notes: '' },
+    { title: 'A Hard Day\'s Night', artist: 'The Beatles', spotify: '', notes: '' },
+    { title: 'Aberdeen', artist: 'Tom Husom', spotify: '', notes: "Tom's Original" },
+    { title: 'Back on the Drink', artist: 'Tom Husom', spotify: '', notes: "Tom's Original" },
+    { title: 'Lost and the Found', artist: 'Tom Husom', spotify: '', notes: "Tom's Original" },
+    { title: 'Troubadour', artist: 'George Strait', spotify: '', notes: '' },
+    { title: "Don't Be Cruel", artist: 'Elvis Presley', spotify: '', notes: '' },
+    { title: 'La Bamba', artist: 'Ritchie Valens', spotify: '', notes: '' },
+    { title: 'Have You Ever Seen the Rain', artist: 'Creedence Clearwater Revival', spotify: '', notes: '' },
+    { title: 'Tequila Sunrise', artist: 'Eagles', spotify: '', notes: '' },
+    { title: 'The Wind Cries Mary', artist: 'Jimi Hendrix', spotify: '', notes: '' },
+    { title: 'Folsom Prison Blues', artist: 'Johnny Cash', spotify: '', notes: '' },
+    { title: 'Time', artist: 'Pink Floyd', spotify: '', notes: '' },
+    { title: 'Easy Like Sunday Morning', artist: 'Lionel Richie', spotify: '', notes: '' },
+    { title: 'King of the Road', artist: 'Roger Miller', spotify: '', notes: '' },
+    { title: 'I Shot the Sheriff', artist: 'Bob Marley', spotify: '', notes: '' },
+    { title: 'Run to You', artist: 'Bryan Adams', spotify: '', notes: '' },
+    { title: 'Harvest Moon', artist: 'Neil Young', spotify: '', notes: '' },
+    { title: 'You Can\'t Do That', artist: 'The Beatles', spotify: '', notes: '' },
+    { title: 'Green River', artist: 'Creedence Clearwater Revival', spotify: '', notes: '' },
+    { title: 'Knockin\' on Heaven\'s Door', artist: 'Bob Dylan', spotify: '', notes: '' },
+    { title: 'Sailing', artist: 'Christopher Cross', spotify: '', notes: '' },
+    { title: 'Suspicious Minds', artist: 'Elvis Presley', spotify: '', notes: '' },
+    { title: 'Rainbow Connection', artist: 'Willie Nelson', spotify: '', notes: '' },
+    { title: 'You May Be Right', artist: 'Billy Joel', spotify: '', notes: '' },
+    { title: 'Take On Me', artist: 'a-ha', spotify: '', notes: '' },
+    { title: 'Fortunate Son', artist: 'Creedence Clearwater Revival', spotify: '', notes: '' },
+    { title: 'No Woman No Cry', artist: 'Bob Marley', spotify: '', notes: '' },
+    { title: 'Stir It Up', artist: 'Bob Marley', spotify: '', notes: '' },
+    { title: 'My Way', artist: 'Frank Sinatra', spotify: '', notes: '' }
+  ];
+
+  if (songs.length === 0) {
+    songs = initialSongs;
+    saveSongs();
+    renderSongs();
+  }
+}
+
+loadSongs();
+populateInitial();
+initTuner();
+</script>
+
+</body>
+</html>
