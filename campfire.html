@@ -402,9 +402,17 @@ function populateInitial() {
 
   if (songs.length === 0) {
     songs = initialSongs;
-    saveSongs();
-    renderSongs();
+  } else {
+    // Merge Spotify URLs into existing songs
+    initialSongs.forEach(init => {
+      const existing = songs.find(s => s.title === init.title && s.artist === init.artist);
+      if (existing && !existing.spotify && init.spotify) {
+        existing.spotify = init.spotify;
+      }
+    });
   }
+  saveSongs();
+  renderSongs();
 }
 
 loadSongs();
