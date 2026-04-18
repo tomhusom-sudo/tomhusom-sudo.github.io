@@ -9,7 +9,8 @@
     html { scroll-behavior: smooth; }
 
     body {
-      background: url('campfire.JPEG') center/cover no-repeat fixed;
+      background: linear-gradient(135deg, rgba(20, 10, 0, 0.7) 0%, rgba(40, 20, 0, 0.7) 100%),
+                  url('https://honesttom.ai/campfire.JPEG') center/cover no-repeat fixed;
       color: #f5e6d3;
       font-family: 'Georgia', serif;
       min-height: 100vh;
@@ -140,6 +141,26 @@
 
     .song-card a { color: #d4a574; text-decoration: none; font-size: 0.85rem; }
     .song-card a:hover { text-decoration: underline; }
+
+    .spotify-icon {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      background: #1DB954;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 32px;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .spotify-icon:hover {
+      background: #1ed760;
+      transform: scale(1.1);
+    }
 
     .song-actions { display: flex; gap: 8px; margin-top: 10px; }
     .song-actions button { flex: 1; padding: 6px 10px; font-size: 0.8rem; }
@@ -321,10 +342,14 @@ function renderSongs() {
     const card = document.createElement('div');
     card.className = 'song-card';
     card.innerHTML = `
-      <div class="song-card-title">${song.title}</div>
-      <div class="song-card-artist">${song.artist}</div>
+      <div style="display:flex;align-items:start;gap:12px;margin-bottom:8px;">
+        <div style="flex:1;">
+          <div class="song-card-title">${song.title}</div>
+          <div class="song-card-artist">${song.artist}</div>
+        </div>
+        ${song.spotify ? `<a href="${song.spotify}" target="_blank" class="spotify-icon" title="Listen on Spotify">🎵</a>` : ''}
+      </div>
       ${song.notes ? `<div class="song-card-note">${song.notes}</div>` : ''}
-      ${song.spotify ? `<a href="${song.spotify}" target="_blank">🎵 Listen on Spotify</a>` : ''}
       <div class="song-actions">
         <button class="btn btn-secondary" style="flex:1;padding:6px 10px;font-size:0.8rem;" onclick="editSong(${idx})">Edit</button>
         <button class="btn btn-danger" style="flex:1;padding:6px 10px;font-size:0.8rem;" onclick="deleteSong(${idx})">Delete</button>
