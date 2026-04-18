@@ -92,9 +92,7 @@
       justify-content: center;
       text-align: center;
       padding: 80px 20px 100px;
-      background:
-        radial-gradient(ellipse at 50% 50%, rgba(13,13,13,0.38) 0%, rgba(13,13,13,0.72) 55%, rgba(13,13,13,0.96) 100%),
-        var(--bg);
+      background: #000;
     }
 
     .hero::after {
@@ -126,8 +124,9 @@
       width: min(620px, 86vw);
       max-height: 58vh;
       object-fit: contain;
-      border-radius: 8px;
-      filter: drop-shadow(0 0 48px rgba(224,107,56,0.45));
+      background: #000;
+      mix-blend-mode: screen;
+      filter: drop-shadow(0 0 48px rgba(224,107,56,0.35));
     }
 
     .brand { text-align: center; }
