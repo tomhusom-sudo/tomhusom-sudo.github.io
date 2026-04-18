@@ -297,21 +297,7 @@ function fetchCovers() {
   }
 
   songs.forEach((song, idx) => {
-    if (song.spotify) {
-      pending++;
-      fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(song.spotify))
-        .then(r => r.json())
-        .then(data => {
-          if (data && data.thumbnail_url) {
-            song.coverUrl = data.thumbnail_url;
-            changed = true;
-            const el = document.getElementById('cover-' + idx);
-            if (el) el.innerHTML = `<img src="${song.coverUrl}" alt="${song.title}" onerror="this.parentNode.innerHTML='<span class=song-cover-placeholder>🎵</span>'">`;
-          }
-          done();
-        })
-        .catch(() => done());
-    } else if (!song.coverUrl && song.title && song.artist) {
+    if (!song.coverUrl && song.title && song.artist) {
       pending++;
       const url = 'https://itunes.apple.com/search?term=' + encodeURIComponent(song.title + ' ' + song.artist) + '&media=music&limit=1';
       fetch(url)
