@@ -94,7 +94,6 @@
       padding: 80px 20px 100px;
       background:
         radial-gradient(ellipse at 50% 50%, rgba(13,13,13,0.38) 0%, rgba(13,13,13,0.72) 55%, rgba(13,13,13,0.96) 100%),
-        url('Made_Art/kellys_logo.PNG') center/72% no-repeat,
         var(--bg);
     }
 
@@ -121,6 +120,14 @@
       height: 240px;
       object-fit: contain;
       filter: drop-shadow(0 0 32px rgba(192,82,42,0.65));
+    }
+
+    .logo-video {
+      width: min(620px, 86vw);
+      max-height: 58vh;
+      object-fit: contain;
+      border-radius: 8px;
+      filter: drop-shadow(0 0 48px rgba(224,107,56,0.45));
     }
 
     .brand { text-align: center; }
@@ -653,9 +660,9 @@
       .hero {
         background:
           radial-gradient(ellipse at 50% 50%, rgba(13,13,13,0.30) 0%, rgba(13,13,13,0.68) 55%, rgba(13,13,13,0.96) 100%),
-          url('Made_Art/kellys_logo.PNG') center/90% no-repeat,
           var(--bg);
       }
+      .logo-video { width: 92vw; max-height: 48vh; }
       .section { padding: 60px 20px; }
       .photo-strip { height: 300px; }
       .media-row, .contact-inner { grid-template-columns: 1fr; gap: 32px; }
@@ -670,9 +677,9 @@
       .hero {
         background:
           radial-gradient(ellipse at 50% 50%, rgba(13,13,13,0.25) 0%, rgba(13,13,13,0.65) 55%, rgba(13,13,13,0.96) 100%),
-          url('Made_Art/kellys_logo.PNG') center/100% no-repeat,
           var(--bg);
       }
+      .logo-video { width: 96vw; max-height: 42vh; }
       .photo-strip { grid-template-columns: 1fr 1fr; height: 230px; }
       .photo-strip-item:last-child { display: none; }
       .gallery-masonry { grid-template-columns: 1fr 1fr; grid-auto-rows: 200px; }
@@ -702,6 +709,9 @@
 <!-- HERO -->
 <section class="hero">
   <div class="logo-wrap">
+    <video class="logo-video" autoplay muted loop playsinline preload="auto" poster="Made_Art/kellys_logo.PNG">
+      <source src="Made_Art/Video_of_Animated_Logo_and_Sparks2.mp4" type="video/mp4" />
+    </video>
     <div class="brand">
       <div class="brand-sub">Aberdeen, South Dakota · Est. 2022</div>
     </div>
