@@ -311,36 +311,54 @@ function renderSongs() {
 function fetchCovers() {
   var changed = false;
   var pending = 0;
+  var cache = JSON.parse(localStorage.getItem('coverUrlCache') || '{}');
+
+  function saveCoverCache() {
+    localStorage.setItem('coverUrlCache', JSON.stringify(cache));
+  }
 
   function done() {
     if (--pending === 0 && changed) {
+      saveCoverCache();
       saveSongs();
     }
   }
 
-  function tryFetch(searchTerm, idx, song) {
+  function tryFetch(searchTerm, idx, song, cacheKey) {
+    if (cache[cacheKey]) {
+      song.coverUrl = cache[cacheKey];
+      changed = true;
+      const el = document.getElementById('cover-' + idx);
+      if (el) el.innerHTML = `<img src="${song.coverUrl}" alt="${song.title}" onerror="this.parentNode.innerHTML='<span class=song-cover-placeholder>🎵</span>'">`;
+      return Promise.resolve(true);
+    }
+
     const url = 'https://itunes.apple.com/search?term=' + encodeURIComponent(searchTerm) + '&media=music&limit=1';
     return fetch(url, {signal: AbortSignal.timeout(5000)})
       .then(r => r.json())
       .then(data => {
         const result = data && data.results && data.results[0];
         if (result && result.artworkUrl100) {
-          song.coverUrl = result.artworkUrl100.replace('100x100bb', '500x500bb');
+          const artwork = result.artworkUrl100.replace('100x100bb', '500x500bb');
+          cache[cacheKey] = artwork;
+          song.coverUrl = artwork;
           changed = true;
           const el = document.getElementById('cover-' + idx);
-          if (el) el.innerHTML = `<img src="${song.coverUrl}" alt="${song.title}" onerror="this.parentNode.innerHTML='<span class=song-cover-placeholder>🎵</span>'">`;
+          if (el) el.innerHTML = `<img src="${artwork}" alt="${song.title}" onerror="this.parentNode.innerHTML='<span class=song-cover-placeholder>🎵</span>'">`;
           return true;
         }
         return false;
-      });
+      })
+      .catch(() => false);
   }
 
   songs.forEach((song, idx) => {
     if (!song.coverUrl && song.title && song.artist) {
       pending++;
-      tryFetch(song.title + ' ' + song.artist, idx, song)
+      const cacheKey = song.title + '|' + song.artist;
+      tryFetch(song.title + ' ' + song.artist, idx, song, cacheKey)
         .then(found => {
-          if (!found) return tryFetch(song.artist, idx, song);
+          if (!found) return tryFetch(song.artist, idx, song, cacheKey);
         })
         .catch(() => {})
         .finally(() => done());
