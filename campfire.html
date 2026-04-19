@@ -57,6 +57,43 @@
       margin-bottom: 60px;
     }
 
+    @media (max-width: 768px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+      .add-form-section {
+        display: none;
+      }
+      .add-form-section.visible {
+        display: block;
+      }
+      .songs-list {
+        max-height: 70vh;
+        overflow-y: auto;
+        position: relative;
+      }
+      .songs-list::after {
+        content: '⬇ Scroll to see more';
+        display: block;
+        text-align: center;
+        color: #d4a660;
+        font-size: 0.85rem;
+        margin-top: 20px;
+        padding: 10px;
+      }
+    }
+
+    .add-song-link {
+      color: #d4a660;
+      cursor: pointer;
+      text-decoration: underline;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+    .add-song-link:hover {
+      color: #e06b38;
+    }
+
     .section {
       background: rgba(26, 42, 58, 0.7);
       border: 1px solid rgba(212, 165, 116, 0.4);
@@ -216,7 +253,7 @@
   </header>
 
   <div class="main-grid">
-    <div class="section">
+    <div class="section add-form-section" id="addFormSection">
       <h2>Add/Edit Song</h2>
       <form id="songForm">
         <div class="form-group">
@@ -244,7 +281,7 @@
     </div>
 
     <div class="section">
-      <h2>Songs</h2>
+      <h2>Songs <span class="add-song-link" id="toggleAddForm">+ Add</span></h2>
       <div class="songs-list" id="songsList"></div>
     </div>
   </div>
@@ -458,6 +495,12 @@ document.getElementById('cancelEdit').addEventListener('click', () => {
   document.getElementById('songForm').reset();
   editingId = null;
   document.getElementById('cancelEdit').style.display = 'none';
+});
+
+document.getElementById('toggleAddForm').addEventListener('click', () => {
+  const formSection = document.getElementById('addFormSection');
+  formSection.classList.toggle('visible');
+  document.getElementById('songTitle').focus();
 });
 
 document.getElementById('exportCsv').addEventListener('click', () => {
