@@ -262,6 +262,50 @@
 let songs = [];
 let editingId = null;
 
+// Pre-seed cache with artwork URLs so images load instantly
+function seedCoverCache() {
+  const cache = JSON.parse(localStorage.getItem('coverUrlCache') || '{}');
+  const artwork = {
+    'Rocky Raccoon|The Beatles': 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/fa/5b/89/fa5b898d-bad6-e053-4195-260e5c74f2bb/00602567725466.rgb.jpg/500x500bb.jpg',
+    "Can't Buy Me Love|The Beatles": 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/db/a2/7a/dba27a46-3685-508d-d32e-a0e73cc82251/00602567713296.rgb.jpg/500x500bb.jpg',
+    'Norwegian Wood|The Beatles': 'https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/af/20/aa/af20aa89-4002-11fb-25d8-ff544af67eb4/00602567725404.rgb.jpg/500x500bb.jpg',
+    'Imagine|John Lennon': 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/21/e3/b0/21e3b048-c917-92c4-bd7d-ace44797b388/13UABIM52808.rgb.jpg/500x500bb.jpg',
+    'Bad Moon Rising|Creedence Clearwater Revival': 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/a1/47/ba/a147ba91-31cd-ef4d-d785-040036d14598/12CMGIM34362.rgb.jpg/500x500bb.jpg',
+    'Sundown|Gordon Lightfoot': 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/2d/3f/6c/2d3f6cc6-3162-50c9-eaed-c4051963fb63/mzi.cbqwbgfl.jpg/500x500bb.jpg',
+    'Billie Jean|Michael Jackson': 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/32/4f/fd/324ffda2-9e51-8f6a-0c2d-c6fd2b41ac55/074643811224.jpg/500x500bb.jpg',
+    'Squeeze Box|The Who': 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/08/a8/7a/08a87a4a-17bf-cbba-b3a3-36b27ad840a0/14UMGIM33739.rgb.jpg/500x500bb.jpg',
+    'A Hard Day\'s Night|The Beatles': 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/db/a2/7a/dba27a46-3685-508d-d32e-a0e73cc82251/00602567713296.rgb.jpg/500x500bb.jpg',
+    'Troubadour|George Strait': 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/e7/d6/53/e7d65307-63b5-ea14-7b00-90b0a0fa917f/08UMGIM02875.rgb.jpg/500x500bb.jpg',
+    "Don't Be Cruel|Elvis Presley": 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/10/53/1d/10531d93-d6d2-996d-516f-5ea58bc4dbfa/884977724691.jpg/500x500bb.jpg',
+    'La Bamba|Ritchie Valens': 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/7b/e3/aa/7be3aa70-5cbe-26ce-b368-363d1cb6ae5e/mzi.gninxwgv.jpg/500x500bb.jpg',
+    'Have You Ever Seen the Rain|Creedence Clearwater Revival': 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/6d/79/6c/6d796cfd-722a-d61d-4f67-1cc28162a0fc/00888072319141.rgb.jpg/500x500bb.jpg',
+    'Tequila Sunrise|Eagles': 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/f5/ef/50/f5ef504b-c66a-6645-621c-c279468cc28f/075596062725.jpg/500x500bb.jpg',
+    'The Wind Cries Mary|Jimi Hendrix': 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/00/67/45/006745f5-95d5-5a06-35ed-d515e9cfd7d8/dj.tbwlxwoh.jpg/500x500bb.jpg',
+    'Folsom Prison Blues|Johnny Cash': 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/d7/4b/b6/d74bb621-7319-d6a7-6f69-b43249253c60/LM00177737.jpg/500x500bb.jpg',
+    'Time|Pink Floyd': 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3e/76/b0/3e76b0e3-762b-2286-a019-8afb19cee541/886445635829.jpg/500x500bb.jpg',
+    'Easy Like Sunday Morning|Lionel Richie': 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/a2/42/21/a24221ca-86a6-7bc0-6497-904434415c32/06UMGIM11025.rgb.jpg/500x500bb.jpg',
+    'King of the Road|Roger Miller': 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/d7/76/f5/d776f529-194c-b45f-a2d5-ab398e4a96b6/00602577172687.rgb.jpg/500x500bb.jpg',
+    'I Shot the Sheriff|Bob Marley': 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3c/c2/0d/3cc20dcc-8f4e-f060-36dd-7de52a7ec8fe/12UMGIM14712.rgb.jpg/500x500bb.jpg',
+    'Run to You|Bryan Adams': 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/67/10/6b/67106b63-8edc-ef66-78f2-ad85b275074f/06UMGIM28735.rgb.jpg/500x500bb.jpg',
+    'Harvest Moon|Neil Young': 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/4d/45/41/4d45414c-6364-51cf-2874-7c8aa755caaa/mzi.oetoyyot.jpg/500x500bb.jpg',
+    'You Can\'t Do That|The Beatles': 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/db/a2/7a/dba27a46-3685-508d-d32e-a0e73cc82251/00602567713296.rgb.jpg/500x500bb.jpg',
+    'Green River|Creedence Clearwater Revival': 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/88/16/20/881620df-9161-61e8-2295-99c6740871b8/00888072355972.rgb.jpg/500x500bb.jpg',
+    'Knockin\' on Heaven\'s Door|Bob Dylan': 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/7e/06/12/7e06123a-c3af-75cf-c611-94334cb0bf20/886444247238.jpg/500x500bb.jpg',
+    'Sailing|Christopher Cross': 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/68/67/7c/68677c9f-8c6c-2c8c-e5a2-4cc4d20dddb7/8721093378327_Cover.jpg/500x500bb.jpg',
+    'Suspicious Minds|Elvis Presley': 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/10/53/1d/10531d93-d6d2-996d-516f-5ea58bc4dbfa/884977724691.jpg/500x500bb.jpg',
+    'Rainbow Connection|Willie Nelson': 'https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/0f/eb/c2/0febc228-977a-84d2-7fc3-899c5ffb9876/00602547742490.rgb.jpg/500x500bb.jpg',
+    'You May Be Right|Billy Joel': 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/f0/7a/54/f07a54ab-3ebc-6813-e515-86200b8138fc/dj.uthntyfe.jpg/500x500bb.jpg',
+    'Take On Me|a-ha': 'https://is1-ssl.mzstatic.com/image/thumb/Music/c6/e1/c8/mzi.ixgzfcmc.jpg/500x500bb.jpg',
+    'Fortunate Son|Creedence Clearwater Revival': 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/a1/47/ba/a147ba91-31cd-ef4d-d785-040036d14598/12CMGIM34362.rgb.jpg/500x500bb.jpg',
+    'No Woman No Cry|Bob Marley': 'https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/b9/ec/9f/b9ec9f4a-c4f1-5136-7587-86826e28d67b/06UMGIM34964.rgb.jpg/500x500bb.jpg',
+    'Stir It Up|Bob Marley': 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/15/0b/db/150bdba3-8dbb-8e66-79b3-c8e1dead908b/20UMGIM03868.rgb.jpg/500x500bb.jpg',
+    'My Way|Frank Sinatra': 'https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/3f/c2/45/3fc2454d-f1ef-8cef-a1f3-0c5a6d751e0a/19UMGIM69266.rgb.jpg/500x500bb.jpg'
+  };
+  Object.assign(cache, artwork);
+  localStorage.setItem('coverUrlCache', JSON.stringify(cache));
+}
+seedCoverCache();
+
 function loadSongs() {
   const saved = localStorage.getItem('campfireSongs');
   songs = saved ? JSON.parse(saved) : [];
