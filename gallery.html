@@ -215,7 +215,7 @@
     // Load from localStorage first (instant), drop entries with oversized photos
     const local = localStorage.getItem('campfireJournal');
     let allLocal = local ? JSON.parse(local) : [];
-    const cleaned = allLocal.filter(e => !e.photo || e.photo.length < 500000);
+    const cleaned = allLocal.filter(e => !e.photo || e.photo.length < 3000000);
     if (cleaned.length !== allLocal.length) {
       localStorage.setItem('campfireJournal', JSON.stringify(cleaned));
     }

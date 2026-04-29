@@ -713,7 +713,7 @@ function loadJournal() {
   const saved = localStorage.getItem('campfireJournal');
   let allEntries = saved ? JSON.parse(saved) : [];
   // Drop oversized photos to prevent re-uploading them
-  const cleaned = allEntries.filter(e => !e.photo || e.photo.length < 500000);
+  const cleaned = allEntries.filter(e => !e.photo || e.photo.length < 3000000);
   if (cleaned.length !== allEntries.length) {
     localStorage.setItem('campfireJournal', JSON.stringify(cleaned));
   }
