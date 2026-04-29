@@ -708,186 +708,127 @@ document.getElementById('toggleAddWayneForm').addEventListener('click', (e) => {
   showAddForm('wayne');
 });
 
-// Journal functionality
+// === Campfire Journal — clean impl mirroring journal.html ===
+var CF_STORE = 'campfireJournal';
+var CF_SECTION = 'campfire-journal';
+
+function cfCompress(dataUrl, callback) {
+  var img = new Image();
+  img.onload = function() {
+    var MAX = 900, w = img.width, h = img.height;
+    if (w > MAX || h > MAX) {
+      if (w >= h) { h = Math.round(h * MAX / w); w = MAX; }
+      else { w = Math.round(w * MAX / h); h = MAX; }
+    }
+    var canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    callback(canvas.toDataURL('image/jpeg', 0.72));
+  };
+  img.onerror = function() { callback(dataUrl); };
+  img.src = dataUrl;
+}
+
+function cfLoadFromStorage() { try { return JSON.parse(localStorage.getItem(CF_STORE) || '[]'); } catch(e) { return []; } }
+function cfSaveToStorage(entries) {
+  try { localStorage.setItem(CF_STORE, JSON.stringify(entries)); return true; }
+  catch(e) { return false; }
+}
+
+function cfSyncPush() {
+  if (!window.GistSync || !GistSync.isConfigured()) return;
+  GistSync.setSection(CF_SECTION, cfLoadFromStorage());
+}
+
+function cfSyncInit() {
+  if (!window.GistSync || !GistSync.isConfigured()) return;
+  GistSync.getSection(CF_SECTION, function(data, err) {
+    if (!err && Array.isArray(data) && data.length) {
+      cfSaveToStorage(data);
+      journalEntries = data;
+      renderJournalEntries();
+    } else {
+      var local = cfLoadFromStorage();
+      if (local.length) cfSyncPush();
+    }
+  });
+}
+
 function loadJournal() {
-  const saved = localStorage.getItem('campfireJournal');
-  let allEntries = saved ? JSON.parse(saved) : [];
-  // Drop oversized photos to prevent re-uploading them
-  const cleaned = allEntries.filter(e => !e.photo || e.photo.length < 3000000);
-  if (cleaned.length !== allEntries.length) {
-    localStorage.setItem('campfireJournal', JSON.stringify(cleaned));
-  }
-  journalEntries = cleaned;
+  journalEntries = cfLoadFromStorage();
   renderJournalEntries();
-  // Pull from Gist after local load - merge any remote entries we don't have
-  if (window.GistSync && GistSync.isConfigured()) {
-    GistSync.getSection('campfire-journal', function(data, err) {
-      if (data && Array.isArray(data) && data.length > 0) {
-        const localDates = new Set(journalEntries.map(e => e.date));
-        let added = 0;
-        data.forEach(remote => {
-          if (!localDates.has(remote.date)) { journalEntries.push(remote); added++; }
-        });
-        if (added > 0) {
-          journalEntries.sort((a,b) => new Date(a.date) - new Date(b.date));
-          try { localStorage.setItem('campfireJournal', JSON.stringify(journalEntries)); } catch(e){}
-          renderJournalEntries();
-          showNotification('✓ ' + added + ' new entries synced from cloud');
-        }
-      }
-    });
-  }
+  cfSyncInit();
 }
 
 function renderJournalEntries() {
-  const container = document.getElementById('journalEntries');
-  if (journalEntries.length === 0) {
-    container.innerHTML = '<p style="color:#999;">No entries yet!</p>';
-    return;
-  }
-  container.innerHTML = '';
-  journalEntries.slice().reverse().forEach((entry, idx) => {
-    const realIdx = journalEntries.length - 1 - idx;
-    const date = new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-    const entryDiv = document.createElement('div');
-    entryDiv.style.cssText = 'background:rgba(15,28,45,0.4);border:1px solid rgba(212,165,116,0.3);border-radius:8px;padding:12px;margin-bottom:10px;';
-    entryDiv.innerHTML = `
-      <div style="font-size:0.85rem;color:#999;margin-bottom:6px;">${date}</div>
-      ${entry.photo ? `<img src="${entry.photo}" style="max-width:100%;height:auto;border-radius:6px;margin-bottom:10px;max-height:300px;">` : ''}
-      <div style="color:#f5e6d3;margin-bottom:6px;">${entry.notes}</div>
-      ${entry.location ? `<div style="color:#d4a660;font-size:0.9rem;margin-bottom:6px;">📍 ${entry.location}</div>` : ''}
-      <button class="btn btn-danger" style="width:100%;padding:4px;font-size:0.75rem;" onclick="deleteJournal(${realIdx})">Delete</button>
-    `;
-    container.appendChild(entryDiv);
-  });
+  // Hidden div, render is no-op (gallery shows entries)
+  var c = document.getElementById('journalEntries');
+  if (c) c.innerHTML = '';
 }
 
-function deleteJournal(idx) {
-  if (confirm('Delete this entry?')) {
-    journalEntries.splice(idx, 1);
-    saveAndRender();
-  }
-}
-
-// Compress photo to keep localStorage from filling up (cause of disappearing photos)
-function compressPhoto(file, maxDim, quality) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        let w = img.width, h = img.height;
-        if (w > h && w > maxDim) { h = h * (maxDim/w); w = maxDim; }
-        else if (h > maxDim) { w = w * (maxDim/h); h = maxDim; }
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL('image/jpeg', quality));
-      };
-      img.onerror = reject;
-      img.src = e.target.result;
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-function syncJournalToGist() {
-  if (window.GistSync && GistSync.isConfigured()) {
-    GistSync.setSection('campfire-journal', journalEntries, function(){});
-  }
-}
-
-function saveAndRender() {
-  try {
-    localStorage.setItem('campfireJournal', JSON.stringify(journalEntries));
-  } catch (e) {
-    // localStorage full - drop oldest entries with photos until it fits
-    while (journalEntries.length > 5) {
-      journalEntries.shift();
-      try { localStorage.setItem('campfireJournal', JSON.stringify(journalEntries)); break; }
-      catch(e2) { continue; }
-    }
-  }
-  syncJournalToGist();
+function deleteJournal(id) {
+  if (!confirm('Delete this entry?')) return;
+  journalEntries = journalEntries.filter(function(e) { return e.id !== id; });
+  cfSaveToStorage(journalEntries);
+  cfSyncPush();
   renderJournalEntries();
 }
 
-document.getElementById('saveJournalBtn').addEventListener('click', async () => {
-  const btn = document.getElementById('saveJournalBtn');
-  const notes = document.getElementById('journalNotes').value.trim();
-  const location = document.getElementById('journalLocation').value.trim();
-  const photoInput = document.getElementById('journalPhoto');
+document.getElementById('saveJournalBtn').addEventListener('click', function() {
+  var btn = document.getElementById('saveJournalBtn');
+  var notes = document.getElementById('journalNotes').value.trim();
+  var location = document.getElementById('journalLocation').value.trim();
+  var photoInput = document.getElementById('journalPhoto');
 
   if (!notes && !(photoInput.files && photoInput.files[0])) {
-    alert('Please add notes or a photo!');
+    alert('Add a photo or some notes first.');
     return;
   }
 
-  btn.disabled = true;
-  btn.textContent = 'Processing photo...';
+  function finish(photo) {
+    var entry = {
+      id: Date.now(),
+      date: new Date().toISOString(),
+      notes: notes,
+      location: location,
+      photo: photo || null
+    };
+    var entries = cfLoadFromStorage();
+    entries.unshift(entry);
 
-  const entryData = { date: new Date().toISOString(), notes, location };
+    var ok = cfSaveToStorage(entries);
+    if (!ok && entry.photo) {
+      entries[0].photo = null;
+      ok = cfSaveToStorage(entries);
+      if (ok) alert('Local storage full — photo not saved locally but will sync to cloud.');
+    }
+    if (!ok) { alert('Could not save: storage is full. Delete some old entries.'); return; }
+
+    journalEntries = entries;
+    document.getElementById('journalNotes').value = '';
+    document.getElementById('journalLocation').value = '';
+    photoInput.value = '';
+
+    btn.textContent = 'Saved!';
+    btn.style.background = '#4ade80';
+    setTimeout(function(){ btn.textContent = 'Save Entry'; btn.style.background=''; }, 1800);
+
+    renderJournalEntries();
+    cfSyncPush();
+  }
 
   if (photoInput.files && photoInput.files[0]) {
-    const file = photoInput.files[0];
-    if (file.size > 15 * 1024 * 1024) {
-      alert('Photo must be smaller than 15MB');
-      btn.disabled = false; btn.textContent = 'Save Entry';
-      return;
-    }
-    try {
-      entryData.photo = await compressPhoto(file, 1280, 0.7);
-    } catch (e) {
-      alert('Could not process photo: ' + e.message);
-      btn.disabled = false; btn.textContent = 'Save Entry';
-      return;
-    }
-  }
-
-  journalEntries.push(entryData);
-  // Try to save locally; if quota exceeded, drop oldest entries until it fits
-  let saved = false;
-  while (!saved && journalEntries.length > 0) {
-    try {
-      localStorage.setItem('campfireJournal', JSON.stringify(journalEntries));
-      saved = true;
-    } catch (e) {
-      // Drop oldest entry and retry (always keep current new one at the end)
-      if (journalEntries.length > 1) {
-        journalEntries.shift();
-      } else {
-        // Only have current entry and still won't fit - skip local cache, rely on gist
-        break;
-      }
-    }
-  }
-
-  // Push to cloud with visible feedback
-  btn.textContent = 'Uploading to cloud...';
-  if (window.GistSync && GistSync.isConfigured()) {
-    GistSync.setSection('campfire-journal', journalEntries, function(ok, errMsg) {
-      if (ok !== false) {
-        btn.textContent = '✓ Saved! Tap Gallery →';
-        showNotification('✓ Saved to cloud — visible on all devices');
-      } else {
-        btn.textContent = '⚠ ' + (errMsg || 'Cloud save failed').slice(0, 40);
-        alert('Cloud save failed: ' + (errMsg || 'unknown error') + '\n\nEntry was saved locally.');
-      }
-      setTimeout(() => { btn.disabled = false; btn.textContent = 'Save Entry'; }, 5000);
-    });
+    btn.textContent = 'Processing...';
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      cfCompress(e.target.result, function(compressed) { finish(compressed); });
+    };
+    reader.readAsDataURL(photoInput.files[0]);
   } else {
-    btn.textContent = '⚠ Sync not configured';
-    showNotification('⚠ Sync not configured — saved locally only');
-    setTimeout(() => { btn.disabled = false; btn.textContent = 'Save Entry'; }, 3000);
+    finish(null);
   }
-
-  renderJournalEntries();
-  document.getElementById('journalNotes').value = '';
-  document.getElementById('journalLocation').value = '';
-  photoInput.value = '';
-  showNotification('✓ Journal entry saved!');
 });
+
 
 document.getElementById('exportCsv').addEventListener('click', () => {
   let csv = 'Song,Artist,Spotify,Notes\n';

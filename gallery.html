@@ -170,103 +170,81 @@
   </div>
 
   <script>
-    let entries = [];
+    var CF_STORE = 'campfireJournal';
+    var CF_SECTION = 'campfire-journal';
+    var entries = [];
 
-    function renderGallery() {
-      const gallery = document.getElementById('gallery');
-      const photoEntries = entries.filter(e => e.photo);
+    function load() { try { return JSON.parse(localStorage.getItem(CF_STORE) || '[]'); } catch(e) { return []; } }
+    function save(es) { try { localStorage.setItem(CF_STORE, JSON.stringify(es)); return true; } catch(e) { return false; } }
 
-      if (photoEntries.length === 0) {
-        gallery.innerHTML = '<div class="empty"><h3 style="margin-bottom:10px;">No photos yet</h3><p>Add a journal entry with a photo on the Campfire page.</p></div>';
-        return;
-      }
-
-      gallery.innerHTML = '';
-      photoEntries.slice().reverse().forEach(entry => {
-        const date = new Date(entry.date).toLocaleDateString('en-US', {
-          month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
-        });
-        const card = document.createElement('div');
-        card.className = 'photo-card';
-        card.onclick = () => openLightbox(entry.photo);
-        card.innerHTML = `
-          <button class="delete-btn" onclick="event.stopPropagation(); deletePhoto('${entry.date}')" title="Delete">×</button>
-          <img src="${entry.photo}" alt="Journal photo" loading="lazy">
-          <div class="photo-info">
-            <div class="photo-date">${date}</div>
-            ${entry.notes ? `<div class="photo-notes">${entry.notes}</div>` : ''}
-            ${entry.location ? `<div class="photo-location">📍 ${entry.location}</div>` : ''}
-          </div>
-        `;
-        gallery.appendChild(card);
-      });
-    }
+    function setStatus(t) { var el = document.getElementById('syncStatus'); if (el) el.textContent = t; }
 
     function openLightbox(src) {
       document.getElementById('lightboxImg').src = src;
       document.getElementById('lightbox').classList.add('open');
     }
-    function closeLightbox() {
-      document.getElementById('lightbox').classList.remove('open');
-    }
+    function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
 
-    function setStatus(t) { document.getElementById('syncStatus').textContent = t; }
-
-    // Load from localStorage first (instant), drop entries with oversized photos
-    const local = localStorage.getItem('campfireJournal');
-    let allLocal = local ? JSON.parse(local) : [];
-    const cleaned = allLocal.filter(e => !e.photo || e.photo.length < 3000000);
-    if (cleaned.length !== allLocal.length) {
-      localStorage.setItem('campfireJournal', JSON.stringify(cleaned));
-    }
-    entries = cleaned;
-    setStatus('Loaded ' + entries.length + ' from local storage. Checking cloud...');
-    renderGallery();
-
-    // Then sync from Gist if configured
-    if (window.GistSync && GistSync.isConfigured()) {
-      GistSync.getSection('campfire-journal', function(data, err) {
-        if (err) {
-          setStatus('⚠ Cloud sync error: ' + err + ' — showing ' + entries.length + ' local photos');
-          return;
-        }
-        if (!data) {
-          setStatus('Cloud has no journal data — showing ' + entries.length + ' local photos');
-          return;
-        }
-        if (!Array.isArray(data)) {
-          setStatus('⚠ Cloud data malformed (' + typeof data + ') — local only');
-          return;
-        }
-        // Merge by date
-        const localDates = new Set(entries.map(e => e.date));
-        let added = 0;
-        data.forEach(remoteEntry => {
-          if (!localDates.has(remoteEntry.date)) { entries.push(remoteEntry); added++; }
-        });
-        entries.sort((a,b) => new Date(a.date) - new Date(b.date));
-        try { localStorage.setItem('campfireJournal', JSON.stringify(entries)); } catch(e){}
-        renderGallery();
-        setStatus('✓ Cloud has ' + data.length + ' entries, ' + added + ' new — total ' + entries.length + ' photos');
+    function renderGallery() {
+      var gallery = document.getElementById('gallery');
+      var photoEntries = entries.filter(function(e){ return e.photo; });
+      if (photoEntries.length === 0) {
+        gallery.innerHTML = '<div class="empty"><h3 style="margin-bottom:10px;">No photos yet</h3><p>Add a journal entry with a photo on the Campfire page.</p></div>';
+        return;
+      }
+      gallery.innerHTML = '';
+      photoEntries.forEach(function(entry) {
+        var d = entry.date ? new Date(entry.date) : new Date(entry.id || Date.now());
+        var dateStr = isNaN(d) ? '' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        var card = document.createElement('div');
+        card.className = 'photo-card';
+        card.onclick = function() { openLightbox(entry.photo); };
+        card.innerHTML = (
+          '<button class="delete-btn" onclick="event.stopPropagation(); deletePhoto(' + (entry.id || 'null') + ')" title="Delete">×</button>' +
+          '<img src="' + entry.photo + '" alt="Journal photo" loading="lazy">' +
+          '<div class="photo-info">' +
+          (dateStr ? '<div class="photo-date">' + dateStr + '</div>' : '') +
+          (entry.notes ? '<div class="photo-notes">' + entry.notes + '</div>' : '') +
+          (entry.location ? '<div class="photo-location">📍 ' + entry.location + '</div>' : '') +
+          '</div>'
+        );
+        gallery.appendChild(card);
       });
-    } else {
-      setStatus('⚠ Sync not configured — local photos only (' + entries.length + ')');
     }
 
-    function deletePhoto(entryDate) {
+    function deletePhoto(id) {
       if (!confirm('Hey Chump — Are You Sure?!
 
 This will delete the photo for EVERYONE around the campfire.')) return;
-      entries = entries.filter(e => e.date !== entryDate);
-      localStorage.setItem('campfireJournal', JSON.stringify(entries));
+      entries = entries.filter(function(e){ return e.id !== id; });
+      save(entries);
       renderGallery();
-      // Sync deletion to gist so it's removed for everyone
       if (window.GistSync && GistSync.isConfigured()) {
-        document.getElementById('syncStatus').textContent = 'Removing from cloud...';
-        GistSync.setSection('campfire-journal', entries, function(ok) {
-          document.getElementById('syncStatus').textContent = ok ? '✓ Photo removed from cloud' : '⚠ Removed locally; cloud sync failed';
+        setStatus('Removing from cloud...');
+        GistSync.setSection(CF_SECTION, entries, function(ok) {
+          setStatus(ok !== false ? '✓ Photo removed from cloud' : '⚠ Removed locally; cloud sync failed');
         });
       }
+    }
+
+    // Load local first
+    entries = load();
+    setStatus('Loaded ' + entries.length + ' from local. Checking cloud...');
+    renderGallery();
+
+    // Pull from cloud
+    if (window.GistSync && GistSync.isConfigured()) {
+      GistSync.getSection(CF_SECTION, function(data, err) {
+        if (err) { setStatus('⚠ Cloud error: ' + err + ' — showing ' + entries.length + ' local'); return; }
+        if (!data || !Array.isArray(data) || !data.length) { setStatus('Cloud has no entries — showing ' + entries.length + ' local'); return; }
+        // Cloud is source of truth
+        entries = data;
+        save(entries);
+        renderGallery();
+        setStatus('✓ Cloud has ' + data.length + ' entries — showing all');
+      });
+    } else {
+      setStatus('⚠ Sync not configured — local only (' + entries.length + ')');
     }
   </script>
 </body>
