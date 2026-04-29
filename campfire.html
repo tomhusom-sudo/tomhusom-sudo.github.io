@@ -654,14 +654,28 @@ document.getElementById('cancelEdit').addEventListener('click', () => {
   document.getElementById('cancelEdit').style.display = 'none';
 });
 
-document.getElementById('toggleAddForm').addEventListener('click', () => {
-  editingList = 'honest';
-  document.getElementById('addFormSection').classList.toggle('visible');
+function showAddForm(list) {
+  editingList = list;
+  const sec = document.getElementById('addFormSection');
+  sec.classList.add('visible');
+  // Update form heading to show which list
+  const h2 = sec.querySelector('h2');
+  if (h2) h2.textContent = list === 'wayne' ? "Add to Wayne's List" : "Add to Honest Tom's Songs";
+  // Scroll into view so user sees the form on mobile
+  setTimeout(() => {
+    sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('songTitle').focus();
+  }, 100);
+}
+
+document.getElementById('toggleAddForm').addEventListener('click', (e) => {
+  e.preventDefault();
+  showAddForm('honest');
 });
 
-document.getElementById('toggleAddWayneForm').addEventListener('click', () => {
-  editingList = 'wayne';
-  document.getElementById('addFormSection').classList.toggle('visible');
+document.getElementById('toggleAddWayneForm').addEventListener('click', (e) => {
+  e.preventDefault();
+  showAddForm('wayne');
 });
 
 // Journal functionality
