@@ -856,15 +856,17 @@ document.getElementById('saveJournalBtn').addEventListener('click', async () => 
   // Push to cloud with visible feedback
   btn.textContent = 'Uploading to cloud...';
   if (window.GistSync && GistSync.isConfigured()) {
-    GistSync.setSection('campfire-journal', journalEntries, function(ok) {
+    GistSync.setSection('campfire-journal', journalEntries, function(ok, errMsg) {
       if (ok !== false) {
         btn.textContent = '✓ Saved! Tap Gallery →';
         showNotification('✓ Saved to cloud — visible on all devices');
       } else {
-        btn.textContent = '⚠ Cloud save failed (saved locally)';
-        showNotification('⚠ Saved locally only — cloud failed');
+        btn.textContent = '⚠ ' + (errMsg || 'Cloud save failed').slice(0, 40);
+        alert('Cloud save failed: ' + (errMsg || 'unknown error') + '
+
+Entry was saved locally.');
       }
-      setTimeout(() => { btn.disabled = false; btn.textContent = 'Save Entry'; }, 3000);
+      setTimeout(() => { btn.disabled = false; btn.textContent = 'Save Entry'; }, 5000);
     });
   } else {
     btn.textContent = '⚠ Sync not configured';

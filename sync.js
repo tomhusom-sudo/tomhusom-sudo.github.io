@@ -72,12 +72,16 @@ var GistSync = (function () {
         ? JSON.stringify({ description: "Honest Tom's Dashboard", public: false, files: files })
         : JSON.stringify({ files: files })
     })
-      .then(function(r) { return r.json(); })
-      .then(function(resp) {
-        if (isNew && resp.id) setGist(resp.id);
-        if (cb) cb(!!(resp.id || resp.files), null);
+      .then(function(r) { 
+        var status = r.status;
+        return r.json().then(function(j){ return {status: status, body: j}; });
       })
-      .catch(function() { if (cb) cb(false, 'network_error'); });
+      .then(function(resp) {
+        if (isNew && resp.body.id) setGist(resp.body.id);
+        var ok = !!(resp.body.id || resp.body.files);
+        if (cb) cb(ok, ok ? null : ('http_' + resp.status + '_' + (resp.body.message || 'unknown')));
+      })
+      .catch(function(err) { if (cb) cb(false, 'network_error: ' + (err.message || err)); });
   }
 
   // ── Get one section from the live Gist ──
