@@ -32,7 +32,7 @@ var GistSync = (function () {
     try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch(e) {}
   }
 
-  // ── Pull: fetch Gist → update cache ──
+  // ── Pull: fetch Gist → update cache (handles truncation via raw_url) ──
   function pull(cb) {
     var id = gistId(), t = tok();
     if (!id || !t) { cb(null, 'not_configured'); return; }
@@ -41,6 +41,13 @@ var GistSync = (function () {
       .then(function(d) {
         var f = d.files && d.files[FILE];
         if (!f) { cb({}, null); return; }
+        // If truncated (>1MB), fetch full content from raw_url
+        if (f.truncated && f.raw_url) {
+          return fetch(f.raw_url).then(function(r){ return r.text(); }).then(function(text){
+            try { var parsed = JSON.parse(text || '{}'); setCache(parsed); cb(parsed, null); }
+            catch(e){ cb(null, 'parse_error'); }
+          });
+        }
         try {
           var parsed = JSON.parse(f.content || '{}');
           setCache(parsed);
