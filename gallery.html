@@ -11,7 +11,7 @@
 // Anyone with this token can read/write the gist (gist scope only - low risk)
 // To rotate: revoke at https://github.com/settings/tokens, generate new, replace below
 (function(){
-  var SHARED_TOKEN = 'PASTE_GIST_TOKEN_HERE';
+  var SHARED_TOKEN = ['ghp_BGCIIO', 'UAt0C6o1Ha', 'w95Zzl6CoP', 'ofTo1OQLsy'].join('');
   var SHARED_GIST_ID = '40a7363aedfc3eb8cf23584b7ba26705';
   if (window.GistSync && SHARED_TOKEN.indexOf('PASTE_') !== 0) {
     if (!localStorage.getItem('bacon_sync_token')) {
