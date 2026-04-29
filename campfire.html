@@ -403,6 +403,18 @@ function saveSongs(listType) {
 }
 
 async function fetchAlbumArt(title, artist) {
+  // Check localStorage cache first - load instantly if cached
+  const cacheKey = `${title}|${artist}`;
+  const cache = JSON.parse(localStorage.getItem('albumArtCache') || '{}');
+  if (cache[cacheKey]) return cache[cacheKey];
+
+  function saveToCache(url) {
+    const c = JSON.parse(localStorage.getItem('albumArtCache') || '{}');
+    c[cacheKey] = url;
+    localStorage.setItem('albumArtCache', JSON.stringify(c));
+    return url;
+  }
+
   try {
     // First try iTunes API
     const query = encodeURIComponent(`${title} ${artist}`);
@@ -421,7 +433,7 @@ async function fetchAlbumArt(title, artist) {
         const result = data.results[0];
         if (result.artworkUrl100) {
           // Replace 100x100 with 500x500 for better quality
-          return result.artworkUrl100.replace('100x100bb', '500x500bb');
+          return saveToCache(result.artworkUrl100.replace('100x100bb', '500x500bb'));
         }
       }
     }
@@ -443,7 +455,7 @@ async function fetchAlbumArt(title, artist) {
         if (data.results && data.results.length > 0) {
           const result = data.results[0];
           if (result.artworkUrl100) {
-            return result.artworkUrl100.replace('100x100bb', '500x500bb');
+            return saveToCache(result.artworkUrl100.replace('100x100bb', '500x500bb'));
           }
         }
       }
