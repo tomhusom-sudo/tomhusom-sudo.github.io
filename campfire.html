@@ -298,6 +298,75 @@
     </p>
   </div>
 
+
+  <div class="section" style="margin-top:40px;">
+    <h2 style="text-align:center;color:#d4a660;font-size:1.8rem;margin-bottom:8px;">🎣 Fishing Report & Weather</h2>
+    <p style="text-align:center;color:#f5e6d3;font-style:italic;margin-bottom:25px;">Pickerel Lake / Lake City, SD area</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-bottom:20px;" id="fishing-grid">
+      <!-- Weather Card -->
+      <div style="background:rgba(15,28,45,0.5);border:1px solid rgba(212,165,116,0.3);border-radius:8px;padding:20px;">
+        <h3 style="color:#d4a660;margin-bottom:15px;font-size:1.3rem;">⛅ Current Weather</h3>
+        <div id="weather-content" style="color:#f5e6d3;">
+          <p style="color:#999;">Loading weather...</p>
+        </div>
+      </div>
+
+      <!-- Fishing Reports Card -->
+      <div style="background:rgba(15,28,45,0.5);border:1px solid rgba(212,165,116,0.3);border-radius:8px;padding:20px;">
+        <h3 style="color:#d4a660;margin-bottom:15px;font-size:1.3rem;">🐟 Fishing Reports</h3>
+        <div style="color:#f5e6d3;">
+          <p style="margin-bottom:12px;font-size:0.95rem;">Latest reports for the Glacial Lakes region:</p>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <a href="https://gfp.sd.gov/fishing-report/" target="_blank" rel="noopener" style="color:#d4a660;text-decoration:none;background:rgba(212,165,116,0.1);padding:10px 14px;border-radius:6px;border:1px solid rgba(212,165,116,0.3);font-weight:600;">
+              📋 SD Game Fish & Parks Reports
+            </a>
+            <a href="https://www.google.com/search?q=Pickerel+Lake+SD+fishing+report+2026&tbs=qdr:w" target="_blank" rel="noopener" style="color:#d4a660;text-decoration:none;background:rgba(212,165,116,0.1);padding:10px 14px;border-radius:6px;border:1px solid rgba(212,165,116,0.3);font-weight:600;">
+              🔍 Pickerel Lake — Recent Reports
+            </a>
+            <a href="https://www.google.com/search?q=Waubay+Lake+SD+fishing+report&tbs=qdr:w" target="_blank" rel="noopener" style="color:#d4a660;text-decoration:none;background:rgba(212,165,116,0.1);padding:10px 14px;border-radius:6px;border:1px solid rgba(212,165,116,0.3);font-weight:600;">
+              🔍 Waubay Lake — Recent Reports
+            </a>
+            <a href="https://www.in-fisherman.com/regional/midwest/" target="_blank" rel="noopener" style="color:#d4a660;text-decoration:none;background:rgba(212,165,116,0.1);padding:10px 14px;border-radius:6px;border:1px solid rgba(212,165,116,0.3);font-weight:600;">
+              🎣 In-Fisherman Midwest
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p style="text-align:center;color:#999;font-size:0.85rem;margin-top:10px;">Walleye, perch, and northern pike country</p>
+  </div>
+
+  <script>
+  (async function loadWeather(){
+    try {
+      // Lake City, SD coordinates: 45.7283, -97.3939
+      const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=45.7283&longitude=-97.3939&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&temperature_unit=fahrenheit&wind_speed_unit=mph&forecast_days=3&timezone=America/Chicago');
+      const d = await r.json();
+      const codes = {0:'☀️ Clear',1:'🌤️ Mostly Clear',2:'⛅ Partly Cloudy',3:'☁️ Overcast',45:'🌫️ Foggy',48:'🌫️ Foggy',51:'🌦️ Drizzle',53:'🌦️ Drizzle',55:'🌧️ Rain',61:'🌧️ Rain',63:'🌧️ Rain',65:'🌧️ Heavy Rain',71:'🌨️ Snow',73:'🌨️ Snow',75:'❄️ Heavy Snow',80:'🌦️ Showers',81:'🌧️ Showers',82:'⛈️ Heavy Showers',95:'⛈️ Thunderstorm',96:'⛈️ Storm',99:'⛈️ Storm'};
+      const wc = (c)=>codes[c]||'🌡️';
+      const now = d.current;
+      let html = `<div style="font-size:2.2rem;font-weight:bold;margin-bottom:5px;">${Math.round(now.temperature_2m)}°F</div>`;
+      html += `<div style="margin-bottom:8px;font-size:1rem;">${wc(now.weather_code)}</div>`;
+      html += `<div style="font-size:0.9rem;color:#d4a660;margin-bottom:15px;">💧 ${now.relative_humidity_2m}% &nbsp; 💨 ${Math.round(now.wind_speed_10m)} mph</div>`;
+      html += `<div style="border-top:1px solid rgba(212,165,116,0.3);padding-top:12px;"><div style="font-size:0.85rem;color:#d4a660;margin-bottom:8px;">3-Day Forecast</div>`;
+      const days = ['Today','Tomorrow','Day After'];
+      for(let i=0;i<3;i++){
+        html += `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.9rem;">`;
+        html += `<span>${days[i]}</span>`;
+        html += `<span>${wc(d.daily.weather_code[i])}</span>`;
+        html += `<span><strong>${Math.round(d.daily.temperature_2m_max[i])}°</strong> / ${Math.round(d.daily.temperature_2m_min[i])}°</span>`;
+        html += `</div>`;
+      }
+      html += `</div>`;
+      document.getElementById('weather-content').innerHTML = html;
+    } catch(e) {
+      document.getElementById('weather-content').innerHTML = '<p style="color:#f87171;">Could not load weather. <a href="https://forecast.weather.gov/MapClick.php?lat=45.7283&lon=-97.3939" target="_blank" style="color:#d4a660;">View on weather.gov</a></p>';
+    }
+  })();
+  </script>
+
   <div class="export-section">
     <h2>📥 Export Songs</h2>
     <div class="export-buttons">
