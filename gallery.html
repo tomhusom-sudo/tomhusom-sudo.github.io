@@ -24,10 +24,11 @@
   var SHARED_TOKEN = ['ghp_BGCIIO', 'UAt0C6o1Ha', 'w95Zzl6CoP', 'ofTo1OQLsy'].join('');
   var SHARED_GIST_ID = '40a7363aedfc3eb8cf23584b7ba26705';
   if (window.GistSync && SHARED_TOKEN.indexOf('PASTE_') !== 0) {
-    if (!localStorage.getItem('bacon_sync_token')) {
+    // Force-set the shared token (overwrites any old/revoked tokens cached on this device)
+    if (localStorage.getItem('bacon_sync_token') !== SHARED_TOKEN) {
       GistSync.setToken(SHARED_TOKEN);
     }
-    if (!localStorage.getItem('bacon_sync_gist_id')) {
+    if (localStorage.getItem('bacon_sync_gist_id') !== SHARED_GIST_ID) {
       localStorage.setItem('bacon_sync_gist_id', SHARED_GIST_ID);
     }
   }
