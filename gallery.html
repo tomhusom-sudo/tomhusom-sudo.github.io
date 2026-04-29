@@ -6,6 +6,24 @@
   <title>Glaser Fishing Trip 2026 — Photo Gallery</title>
   <link rel="manifest" href="/manifest.json">
   <script src="/sync.js"></script>
+<script>
+// SHARED SYNC CONFIG — everyone visiting this page uses this gist for photos/journal
+// Anyone with this token can read/write the gist (gist scope only - low risk)
+// To rotate: revoke at https://github.com/settings/tokens, generate new, replace below
+(function(){
+  var SHARED_TOKEN = 'PASTE_GIST_TOKEN_HERE';
+  var SHARED_GIST_ID = '40a7363aedfc3eb8cf23584b7ba26705';
+  if (window.GistSync && SHARED_TOKEN.indexOf('PASTE_') !== 0) {
+    if (!localStorage.getItem('bacon_sync_token')) {
+      GistSync.setToken(SHARED_TOKEN);
+    }
+    if (!localStorage.getItem('bacon_sync_gist_id')) {
+      localStorage.setItem('bacon_sync_gist_id', SHARED_GIST_ID);
+    }
+  }
+})();
+</script>
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
