@@ -813,6 +813,7 @@ function saveAndRender() {
 }
 
 document.getElementById('saveJournalBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('saveJournalBtn');
   const notes = document.getElementById('journalNotes').value.trim();
   const location = document.getElementById('journalLocation').value.trim();
   const photoInput = document.getElementById('journalPhoto');
@@ -822,25 +823,56 @@ document.getElementById('saveJournalBtn').addEventListener('click', async () => 
     return;
   }
 
+  btn.disabled = true;
+  btn.textContent = 'Processing photo...';
+
   const entryData = { date: new Date().toISOString(), notes, location };
 
   if (photoInput.files && photoInput.files[0]) {
     const file = photoInput.files[0];
     if (file.size > 15 * 1024 * 1024) {
       alert('Photo must be smaller than 15MB');
+      btn.disabled = false; btn.textContent = 'Save Entry';
       return;
     }
     try {
-      // Compress to max 1280px wide, 70% quality JPEG (~100-300KB typical)
       entryData.photo = await compressPhoto(file, 1280, 0.7);
     } catch (e) {
-      alert('Could not process photo. Try a different one.');
+      alert('Could not process photo: ' + e.message);
+      btn.disabled = false; btn.textContent = 'Save Entry';
       return;
     }
   }
 
   journalEntries.push(entryData);
-  saveAndRender();
+  try {
+    localStorage.setItem('campfireJournal', JSON.stringify(journalEntries));
+  } catch (e) {
+    alert('Local save failed: ' + e.message);
+    btn.disabled = false; btn.textContent = 'Save Entry';
+    return;
+  }
+
+  // Push to cloud with visible feedback
+  btn.textContent = 'Uploading to cloud...';
+  if (window.GistSync && GistSync.isConfigured()) {
+    GistSync.setSection('campfire-journal', journalEntries, function(ok) {
+      if (ok !== false) {
+        btn.textContent = '✓ Saved! Tap Gallery →';
+        showNotification('✓ Saved to cloud — visible on all devices');
+      } else {
+        btn.textContent = '⚠ Cloud save failed (saved locally)';
+        showNotification('⚠ Saved locally only — cloud failed');
+      }
+      setTimeout(() => { btn.disabled = false; btn.textContent = 'Save Entry'; }, 3000);
+    });
+  } else {
+    btn.textContent = '⚠ Sync not configured';
+    showNotification('⚠ Sync not configured — saved locally only');
+    setTimeout(() => { btn.disabled = false; btn.textContent = 'Save Entry'; }, 3000);
+  }
+
+  renderJournalEntries();
   document.getElementById('journalNotes').value = '';
   document.getElementById('journalLocation').value = '';
   photoInput.value = '';
