@@ -846,12 +846,21 @@ document.getElementById('saveJournalBtn').addEventListener('click', async () => 
   }
 
   journalEntries.push(entryData);
-  try {
-    localStorage.setItem('campfireJournal', JSON.stringify(journalEntries));
-  } catch (e) {
-    alert('Local save failed: ' + e.message);
-    btn.disabled = false; btn.textContent = 'Save Entry';
-    return;
+  // Try to save locally; if quota exceeded, drop oldest entries until it fits
+  let saved = false;
+  while (!saved && journalEntries.length > 0) {
+    try {
+      localStorage.setItem('campfireJournal', JSON.stringify(journalEntries));
+      saved = true;
+    } catch (e) {
+      // Drop oldest entry and retry (always keep current new one at the end)
+      if (journalEntries.length > 1) {
+        journalEntries.shift();
+      } else {
+        // Only have current entry and still won't fit - skip local cache, rely on gist
+        break;
+      }
+    }
   }
 
   // Push to cloud with visible feedback
