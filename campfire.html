@@ -6,6 +6,16 @@
   <title>Honest Tom's Campfire Songs</title>
   <script src="/sync.js"></script>
 <script>
+// One-time reset to clear stale photos from local browsers (run once per browser)
+(function(){
+  if (localStorage.getItem('campfire_reset_v1') !== 'done') {
+    localStorage.removeItem('campfireJournal');
+    localStorage.setItem('campfire_reset_v1', 'done');
+  }
+})();
+</script>
+
+<script>
 // SHARED SYNC CONFIG — everyone visiting this page uses this gist for photos/journal
 // Anyone with this token can read/write the gist (gist scope only - low risk)
 // To rotate: revoke at https://github.com/settings/tokens, generate new, replace below
