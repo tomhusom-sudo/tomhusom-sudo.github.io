@@ -229,7 +229,9 @@
     }
 
     function deletePhoto(entryDate) {
-      if (!confirm('Delete this photo? This will remove it for everyone.')) return;
+      if (!confirm('Hey Chump — Are You Sure?!
+
+This will delete the photo for EVERYONE around the campfire.')) return;
       entries = entries.filter(e => e.date !== entryDate);
       localStorage.setItem('campfireJournal', JSON.stringify(entries));
       renderGallery();
