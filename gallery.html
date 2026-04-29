@@ -199,33 +199,42 @@
       document.getElementById('lightbox').classList.remove('open');
     }
 
+    function setStatus(t) { document.getElementById('syncStatus').textContent = t; }
+
     // Load from localStorage first (instant)
     const local = localStorage.getItem('campfireJournal');
     entries = local ? JSON.parse(local) : [];
+    setStatus('Loaded ' + entries.length + ' from local storage. Checking cloud...');
     renderGallery();
 
     // Then sync from Gist if configured
     if (window.GistSync && GistSync.isConfigured()) {
-      document.getElementById('syncStatus').textContent = 'Syncing photos from cloud...';
       GistSync.getSection('campfire-journal', function(data, err) {
-        if (data && Array.isArray(data) && data.length > 0) {
-          // Merge: prefer remote dates we don't have locally
-          const localDates = new Set(entries.map(e => e.date));
-          data.forEach(remoteEntry => {
-            if (!localDates.has(remoteEntry.date)) {
-              entries.push(remoteEntry);
-            }
-          });
-          entries.sort((a,b) => new Date(a.date) - new Date(b.date));
-          localStorage.setItem('campfireJournal', JSON.stringify(entries));
-          renderGallery();
-          document.getElementById('syncStatus').textContent = '✓ Synced from cloud — all photos visible';
-        } else {
-          document.getElementById('syncStatus').textContent = 'Showing local photos only';
+        if (err) {
+          setStatus('⚠ Cloud sync error: ' + err + ' — showing ' + entries.length + ' local photos');
+          return;
         }
+        if (!data) {
+          setStatus('Cloud has no journal data — showing ' + entries.length + ' local photos');
+          return;
+        }
+        if (!Array.isArray(data)) {
+          setStatus('⚠ Cloud data malformed (' + typeof data + ') — local only');
+          return;
+        }
+        // Merge by date
+        const localDates = new Set(entries.map(e => e.date));
+        let added = 0;
+        data.forEach(remoteEntry => {
+          if (!localDates.has(remoteEntry.date)) { entries.push(remoteEntry); added++; }
+        });
+        entries.sort((a,b) => new Date(a.date) - new Date(b.date));
+        try { localStorage.setItem('campfireJournal', JSON.stringify(entries)); } catch(e){}
+        renderGallery();
+        setStatus('✓ Cloud has ' + data.length + ' entries, ' + added + ' new — total ' + entries.length + ' photos');
       });
     } else {
-      document.getElementById('syncStatus').textContent = 'Local photos only (sync not configured)';
+      setStatus('⚠ Sync not configured — local photos only (' + entries.length + ')');
     }
 
     function deletePhoto(entryDate) {
