@@ -81,7 +81,28 @@
       display: block;
       background: rgba(0,0,0,0.4);
     }
-    .photo-info { padding: 12px; }
+    .photo-info { padding: 12px; position: relative; }
+    .delete-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(220, 38, 38, 0.85);
+      color: #fff;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .delete-btn:hover { background: rgba(220, 38, 38, 1); }
+    .photo-card { position: relative; }
     .photo-date { font-size: 0.85rem; color: #d4a660; margin-bottom: 6px; }
     .photo-notes { color: #f5e6d3; font-size: 0.95rem; line-height: 1.4; }
     .photo-location { color: #d4a660; font-size: 0.85rem; margin-top: 6px; }
@@ -158,6 +179,7 @@
         card.className = 'photo-card';
         card.onclick = () => openLightbox(entry.photo);
         card.innerHTML = `
+          <button class="delete-btn" onclick="event.stopPropagation(); deletePhoto('${entry.date}')" title="Delete">×</button>
           <img src="${entry.photo}" alt="Journal photo" loading="lazy">
           <div class="photo-info">
             <div class="photo-date">${date}</div>
@@ -204,6 +226,20 @@
       });
     } else {
       document.getElementById('syncStatus').textContent = 'Local photos only (sync not configured)';
+    }
+
+    function deletePhoto(entryDate) {
+      if (!confirm('Delete this photo? This will remove it for everyone.')) return;
+      entries = entries.filter(e => e.date !== entryDate);
+      localStorage.setItem('campfireJournal', JSON.stringify(entries));
+      renderGallery();
+      // Sync deletion to gist so it's removed for everyone
+      if (window.GistSync && GistSync.isConfigured()) {
+        document.getElementById('syncStatus').textContent = 'Removing from cloud...';
+        GistSync.setSection('campfire-journal', entries, function(ok) {
+          document.getElementById('syncStatus').textContent = ok ? '✓ Photo removed from cloud' : '⚠ Removed locally; cloud sync failed';
+        });
+      }
     }
   </script>
 </body>
