@@ -684,6 +684,24 @@ function loadJournal() {
   const saved = localStorage.getItem('campfireJournal');
   journalEntries = saved ? JSON.parse(saved) : [];
   renderJournalEntries();
+  // Pull from Gist after local load - merge any remote entries we don't have
+  if (window.GistSync && GistSync.isConfigured()) {
+    GistSync.getSection('campfire-journal', function(data, err) {
+      if (data && Array.isArray(data) && data.length > 0) {
+        const localDates = new Set(journalEntries.map(e => e.date));
+        let added = 0;
+        data.forEach(remote => {
+          if (!localDates.has(remote.date)) { journalEntries.push(remote); added++; }
+        });
+        if (added > 0) {
+          journalEntries.sort((a,b) => new Date(a.date) - new Date(b.date));
+          try { localStorage.setItem('campfireJournal', JSON.stringify(journalEntries)); } catch(e){}
+          renderJournalEntries();
+          showNotification('✓ ' + added + ' new entries synced from cloud');
+        }
+      }
+    });
+  }
 }
 
 function renderJournalEntries() {
@@ -758,24 +776,6 @@ function saveAndRender() {
   }
   syncJournalToGist();
   renderJournalEntries();
-}
-
-// Pull existing entries from Gist on load (so others' photos show up)
-if (window.GistSync && GistSync.isConfigured()) {
-  GistSync.getSection('campfire-journal', function(data, err) {
-    if (data && Array.isArray(data) && data.length > 0) {
-      const localDates = new Set(journalEntries.map(e => e.date));
-      let added = 0;
-      data.forEach(remote => {
-        if (!localDates.has(remote.date)) { journalEntries.push(remote); added++; }
-      });
-      if (added > 0) {
-        journalEntries.sort((a,b) => new Date(a.date) - new Date(b.date));
-        try { localStorage.setItem('campfireJournal', JSON.stringify(journalEntries)); } catch(e){}
-        renderJournalEntries();
-      }
-    }
-  });
 }
 
 document.getElementById('saveJournalBtn').addEventListener('click', async () => {
