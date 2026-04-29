@@ -700,7 +700,13 @@ document.getElementById('toggleAddWayneForm').addEventListener('click', (e) => {
 // Journal functionality
 function loadJournal() {
   const saved = localStorage.getItem('campfireJournal');
-  journalEntries = saved ? JSON.parse(saved) : [];
+  let allEntries = saved ? JSON.parse(saved) : [];
+  // Drop oversized photos to prevent re-uploading them
+  const cleaned = allEntries.filter(e => !e.photo || e.photo.length < 500000);
+  if (cleaned.length !== allEntries.length) {
+    localStorage.setItem('campfireJournal', JSON.stringify(cleaned));
+  }
+  journalEntries = cleaned;
   renderJournalEntries();
   // Pull from Gist after local load - merge any remote entries we don't have
   if (window.GistSync && GistSync.isConfigured()) {

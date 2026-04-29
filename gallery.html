@@ -201,9 +201,14 @@
 
     function setStatus(t) { document.getElementById('syncStatus').textContent = t; }
 
-    // Load from localStorage first (instant)
+    // Load from localStorage first (instant), drop entries with oversized photos
     const local = localStorage.getItem('campfireJournal');
-    entries = local ? JSON.parse(local) : [];
+    let allLocal = local ? JSON.parse(local) : [];
+    const cleaned = allLocal.filter(e => !e.photo || e.photo.length < 500000);
+    if (cleaned.length !== allLocal.length) {
+      localStorage.setItem('campfireJournal', JSON.stringify(cleaned));
+    }
+    entries = cleaned;
     setStatus('Loaded ' + entries.length + ' from local storage. Checking cloud...');
     renderGallery();
 
