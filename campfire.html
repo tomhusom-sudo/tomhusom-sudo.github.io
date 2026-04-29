@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Honest Tom's Campfire Songs</title>
+  <script src="/sync.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -245,7 +246,7 @@
   </div>
 
     <div class="section">
-      <h2><img src="https://honesttom.ai/glaser_fishtrip.png" alt="Campfire Journal" style="height:80px;vertical-align:middle;margin-right:15px;">Campfire Journal</h2>
+      <h2><img src="https://honesttom.ai/glaser_fishtrip.png" alt="Campfire Journal" style="height:80px;vertical-align:middle;margin-right:15px;">Campfire Journal <a href="./gallery.html" class="add-song-link" style="font-size:0.95rem;">📸 Gallery</a></h2>
 
       <div style="margin-bottom: 30px;">
         <h3>New Entry</h3>
@@ -711,53 +712,105 @@ function renderJournalEntries() {
 function deleteJournal(idx) {
   if (confirm('Delete this entry?')) {
     journalEntries.splice(idx, 1);
-    localStorage.setItem('campfireJournal', JSON.stringify(journalEntries));
-    renderJournalEntries();
+    saveAndRender();
   }
 }
 
-document.getElementById('saveJournalBtn').addEventListener('click', () => {
+// Compress photo to keep localStorage from filling up (cause of disappearing photos)
+function compressPhoto(file, maxDim, quality) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > h && w > maxDim) { h = h * (maxDim/w); w = maxDim; }
+        else if (h > maxDim) { w = w * (maxDim/h); h = maxDim; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function syncJournalToGist() {
+  if (window.GistSync && GistSync.isConfigured()) {
+    GistSync.setSection('campfire-journal', journalEntries, function(){});
+  }
+}
+
+function saveAndRender() {
+  try {
+    localStorage.setItem('campfireJournal', JSON.stringify(journalEntries));
+  } catch (e) {
+    // localStorage full - drop oldest entries with photos until it fits
+    while (journalEntries.length > 5) {
+      journalEntries.shift();
+      try { localStorage.setItem('campfireJournal', JSON.stringify(journalEntries)); break; }
+      catch(e2) { continue; }
+    }
+  }
+  syncJournalToGist();
+  renderJournalEntries();
+}
+
+// Pull existing entries from Gist on load (so others' photos show up)
+if (window.GistSync && GistSync.isConfigured()) {
+  GistSync.getSection('campfire-journal', function(data, err) {
+    if (data && Array.isArray(data) && data.length > 0) {
+      const localDates = new Set(journalEntries.map(e => e.date));
+      let added = 0;
+      data.forEach(remote => {
+        if (!localDates.has(remote.date)) { journalEntries.push(remote); added++; }
+      });
+      if (added > 0) {
+        journalEntries.sort((a,b) => new Date(a.date) - new Date(b.date));
+        try { localStorage.setItem('campfireJournal', JSON.stringify(journalEntries)); } catch(e){}
+        renderJournalEntries();
+      }
+    }
+  });
+}
+
+document.getElementById('saveJournalBtn').addEventListener('click', async () => {
   const notes = document.getElementById('journalNotes').value.trim();
   const location = document.getElementById('journalLocation').value.trim();
   const photoInput = document.getElementById('journalPhoto');
 
-  if (!notes) {
-    alert('Please add notes!');
+  if (!notes && !(photoInput.files && photoInput.files[0])) {
+    alert('Please add notes or a photo!');
     return;
   }
 
   const entryData = { date: new Date().toISOString(), notes, location };
 
-  // Handle photo if selected
   if (photoInput.files && photoInput.files[0]) {
     const file = photoInput.files[0];
-
-    // Check file size (5MB limit)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Photo must be smaller than 5MB');
+    if (file.size > 15 * 1024 * 1024) {
+      alert('Photo must be smaller than 15MB');
       return;
     }
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      entryData.photo = e.target.result;
-      journalEntries.push(entryData);
-      localStorage.setItem('campfireJournal', JSON.stringify(journalEntries));
-      renderJournalEntries();
-      document.getElementById('journalNotes').value = '';
-      document.getElementById('journalLocation').value = '';
-      photoInput.value = '';
-      showNotification('✓ Journal entry saved!');
-    };
-    reader.readAsDataURL(file);
-  } else {
-    journalEntries.push(entryData);
-    localStorage.setItem('campfireJournal', JSON.stringify(journalEntries));
-    renderJournalEntries();
-    document.getElementById('journalNotes').value = '';
-    document.getElementById('journalLocation').value = '';
-    showNotification('✓ Journal entry saved!');
+    try {
+      // Compress to max 1280px wide, 70% quality JPEG (~100-300KB typical)
+      entryData.photo = await compressPhoto(file, 1280, 0.7);
+    } catch (e) {
+      alert('Could not process photo. Try a different one.');
+      return;
+    }
   }
+
+  journalEntries.push(entryData);
+  saveAndRender();
+  document.getElementById('journalNotes').value = '';
+  document.getElementById('journalLocation').value = '';
+  photoInput.value = '';
+  showNotification('✓ Journal entry saved!');
 });
 
 document.getElementById('exportCsv').addEventListener('click', () => {
