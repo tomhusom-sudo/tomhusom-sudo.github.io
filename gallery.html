@@ -213,9 +213,7 @@
     }
 
     function deletePhoto(id) {
-      if (!confirm('Hey Chump — Are You Sure?!
-
-This will delete the photo for EVERYONE around the campfire.')) return;
+      if (!confirm('Hey Chump — Are You Sure?!\n\nThis will delete the photo for EVERYONE around the campfire.')) return;
       entries = entries.filter(function(e){ return e.id !== id; });
       save(entries);
       renderGallery();
