@@ -21,9 +21,9 @@
       location.replace(location.pathname + '?' + VER);
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bangers&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bangers&display=swap"></noscript>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Inter', sans-serif; background: linear-gradient(160deg, rgba(46,74,26,0.88) 0%, rgba(18,26,9,0.94) 50%, rgba(30,14,7,0.97) 100%), url('./angry_lincoln.png') center 20% / cover no-repeat fixed; color: #e2eed8; min-height: 100vh; padding: 32px 16px 80px; }
     .header { max-width: 860px; margin: 0 auto 28px; }
@@ -434,8 +434,14 @@
     save_image: false,
     calendar: false
   });
-  document.getElementById('tv-iframe').src =
-    'https://s.tradingview.com/embed-widget/advanced-chart/?locale=en#' + encodeURIComponent(cfg);
+  // Load the remote chart iframe after the page has finished loading so it
+  // never blocks the window 'load' event / first render.
+  (function () {
+    var tvSrc = 'https://s.tradingview.com/embed-widget/advanced-chart/?locale=en#' + encodeURIComponent(cfg);
+    var loadTv = function () { document.getElementById('tv-iframe').src = tvSrc; };
+    if (document.readyState === 'complete') { setTimeout(loadTv, 0); }
+    else { window.addEventListener('load', function () { setTimeout(loadTv, 0); }); }
+  })();
 
   // News — rss2json.com reliably proxies Google News RSS to JSON
   var RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
