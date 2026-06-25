@@ -19,8 +19,8 @@
     body {
       min-height: 100vh;
       background:
-        linear-gradient(160deg, rgba(46,74,26,0.90) 0%, rgba(18,26,9,0.95) 50%, rgba(8,14,22,0.97) 100%),
-        url('./lincoln.jpg') center 15% / cover no-repeat fixed;
+        linear-gradient(160deg, rgba(46,74,26,0.88) 0%, rgba(18,26,9,0.93) 50%, rgba(8,14,22,0.96) 100%),
+        url('./market.png') center 20% / cover no-repeat fixed;
       color: #e2eed8;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       overflow-x: hidden;
@@ -76,6 +76,24 @@
     .btn:hover { filter:brightness(1.1); }
     .save-note { font-size:0.74rem; color:#9fb487; }
 
+    /* ── DAILY BRIEF ── */
+    .brief { border-color: rgba(227,179,65,0.34); }
+    .brief h2 { color:#e9cf86; }
+    .brief h2 .dot { background:#e3b341; box-shadow:0 0 10px #e3b341; }
+    .brief .kicker { font-family:'Rajdhani',sans-serif; font-weight:600; letter-spacing:0.18em; text-transform:uppercase;
+      font-size:0.66rem; color:#caa64a; margin-left:8px; }
+    .brief-body { font-size:0.98rem; line-height:1.62; color:#eef5e4; outline:none; }
+    .brief-body p { margin-bottom:12px; }
+    .brief-body .lead { font-size:1.08rem; font-weight:600; color:#f6efd9; }
+    .brief-body ul { list-style:none; margin:8px 0 14px; padding:0; }
+    .brief-body li { position:relative; padding-left:20px; margin-bottom:8px; }
+    .brief-body li::before { content:'▸'; position:absolute; left:0; color:#e3b341; }
+    .brief-body li b, .brief-body p b { color:#f6efd9; }
+    .tk { display:inline-block; font-family:'Rajdhani',sans-serif; font-weight:700; letter-spacing:0.04em;
+      font-size:0.82rem; color:#0c130a; background:linear-gradient(135deg,#e3c155,#cfa23a);
+      padding:1px 8px; border-radius:6px; margin:0 1px; }
+    .brief-body[contenteditable="true"] { border:1px dashed rgba(227,179,65,0.5); border-radius:10px; padding:12px; }
+
     /* ── CHART CONTROLS ── */
     .chart-controls { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
     .ranges { display:flex; gap:5px; flex-wrap:wrap; }
@@ -109,6 +127,28 @@
         <div class="tagline">Tom&rsquo;s Market Journal</div>
       </div>
       <div class="datechip" id="todayChip"></div>
+    </div>
+
+    <!-- DAILY BRIEF -->
+    <div class="panel brief" id="brief">
+      <div class="thoughts-head">
+        <h2><span class="dot"></span> The Daily Brief <span class="kicker">Tom&rsquo;s Tips</span></h2>
+        <button class="tab" id="briefEditBtn">Edit</button>
+      </div>
+      <div class="brief-body" id="briefBody" contenteditable="false">
+        <p class="lead">India&rsquo;s real GDP is set to grow at a robust <b>6.5%&ndash;6.9%</b> range &mdash; making it the fastest-growing major economy on the planet.</p>
+        <p>While much of the developed world (and China) is facing an aging population, India has the opposite &ldquo;problem.&rdquo;</p>
+        <ul>
+          <li><b>The Youth Wave:</b> the median age in India is roughly 28 years old.</li>
+          <li><b>Workforce Expansion:</b> millions of ambitious, educated young people enter the workforce every single year, hitting their peak earning and spending years.</li>
+        </ul>
+        <p><b>The play:</b> <span class="tk">INDA</span> or <span class="tk">EPI</span> ETFs &mdash; or find the big one that&rsquo;ll give us huge profits.</p>
+        <p>If I had the capital I&rsquo;d add <span class="tk">CBRS</span> (Cerebras Systems), <span class="tk">IREN</span> (Iris Energy Limited) and <span class="tk">NBIS</span> (Nebius Group N.V.) to the TPH fund.</p>
+      </div>
+      <div class="save-row" id="briefSaveRow" style="display:none;">
+        <button class="btn" id="briefSaveBtn">Save Brief</button>
+        <span class="save-note" id="briefNote"></span>
+      </div>
     </div>
 
     <!-- THOUGHTS -->
@@ -198,6 +238,31 @@
       period = tab.getAttribute('data-period');
       loadThoughts();
     });
+  });
+
+  // ── Daily Brief (editable, localStorage) ──
+  var briefBody = document.getElementById('briefBody');
+  var briefSaveRow = document.getElementById('briefSaveRow');
+  var briefEditBtn = document.getElementById('briefEditBtn');
+  var briefNote = document.getElementById('briefNote');
+  var savedBrief = localStorage.getItem('tph_brief');
+  if (savedBrief) briefBody.innerHTML = savedBrief;
+  var savedBriefTs = localStorage.getItem('tph_brief_ts');
+  if (savedBriefTs) briefNote.textContent = 'Last saved ' + savedBriefTs;
+  briefEditBtn.addEventListener('click', function(){
+    briefBody.setAttribute('contenteditable','true');
+    briefBody.focus();
+    briefSaveRow.style.display = 'flex';
+    briefEditBtn.style.display = 'none';
+  });
+  document.getElementById('briefSaveBtn').addEventListener('click', function(){
+    briefBody.setAttribute('contenteditable','false');
+    localStorage.setItem('tph_brief', briefBody.innerHTML);
+    var now = new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    localStorage.setItem('tph_brief_ts', now);
+    briefNote.textContent = 'Saved ' + now;
+    briefSaveRow.style.display = 'none';
+    briefEditBtn.style.display = '';
   });
 
   // ── Date chip ──
