@@ -274,7 +274,7 @@
 
       <div class="foot">
         Prices via Yahoo Finance &middot; delayed &amp; for entertainment only &mdash; not investment advice.<br>
-        Part of <a href="./dashboard.html">honesttom.ai</a> &middot; auto-refreshes every 60s.
+        Part of <a href="./dashboard.html">honesttom.ai</a> &middot; auto-refreshes every 5 min.
       </div>
     </div>
   </div>
@@ -403,6 +403,17 @@
     });
   }
 
+  // Primary source: our own serverless endpoint (one call, no browser CORS proxy).
+  var TPH_API = 'https://tph-market-api.netlify.app/.netlify/functions/market';
+  function fetchBoardBatch(){
+    var qs = ASSETS.map(function(a){ return a.sym; }).join(',');
+    var ctrl = new AbortController(); var timer = setTimeout(function(){ ctrl.abort(); }, 9000);
+    return fetch(TPH_API + '?quotes=' + encodeURIComponent(qs), { signal: ctrl.signal })
+      .then(function(r){ return r.json(); })
+      .then(function(d){ clearTimeout(timer); return (d && d.quotes) ? d.quotes : null; })
+      .catch(function(){ clearTimeout(timer); return null; });
+  }
+
   var quotes = {};
   function fetchPass(list){
     return runLimited(list, function(a){
@@ -413,14 +424,17 @@
   function load(){
     document.getElementById('updated').textContent = 'Updating…';
     quotes = {};
-    fetchPass(ASSETS).then(function(results){
+    fetchBoardBatch().then(function(batch){
       var failed = [];
-      results.forEach(function(r){ if (!r) return; var s = paintTile(r.a, r.q); if (s) quotes[r.a.key] = s; else failed.push(r.a); });
+      ASSETS.forEach(function(a){
+        var q = batch ? batch[a.sym] : null;
+        var s = paintTile(a, q || null);
+        if (s) quotes[a.key] = s; else failed.push(a);
+      });
+      // Fallback only for whatever the endpoint missed
       if (failed.length){
-        return new Promise(function(res){ setTimeout(res, 1400); }).then(function(){
-          return fetchPass(failed).then(function(rs){
-            rs.forEach(function(r){ if (!r) return; var s = paintTile(r.a, r.q); if (s) quotes[r.a.key] = s; });
-          });
+        return fetchPass(failed).then(function(rs){
+          rs.forEach(function(r){ if (!r) return; var s = paintTile(r.a, r.q); if (s) quotes[r.a.key] = s; });
         });
       }
     }).then(function(){
@@ -499,7 +513,7 @@
   // ── Go ──
   document.getElementById('refreshBtn').addEventListener('click', load);
   load();
-  setInterval(load, 60000);
+  setInterval(load, 300000); // auto-refresh every 5 min
 
 })();
 
@@ -610,22 +624,31 @@
     });
   }
 
+  var TPH_API = 'https://tph-market-api.netlify.app/.netlify/functions/market';
+  function fetchHistBatch(){
+    var qs = CMP.map(function(a){ return a.sym; }).join(',');
+    var ctrl = new AbortController(); var timer = setTimeout(function(){ ctrl.abort(); }, 11000);
+    return fetch(TPH_API + '?history=' + encodeURIComponent(qs) + '&range=' + range + '&interval=1d', { signal: ctrl.signal })
+      .then(function(r){ return r.json(); })
+      .then(function(d){ clearTimeout(timer); return (d && d.history) ? d.history : null; })
+      .catch(function(){ clearTimeout(timer); return null; });
+  }
+
   function load(){
     statusEl.textContent = 'Loading comparison…';
     var series = {};
-    runLimited(CMP, function(a){
-      return fetchSeries(a.sym).then(function(pts){ if (pts) series[a.key] = normPct(pts); return a; });
-    }, 3).then(function(){
+    fetchHistBatch().then(function(hist){
+      CMP.forEach(function(a){
+        var arr = hist ? hist[a.sym] : null;
+        if (arr && arr.length) series[a.key] = normPct(arr.map(function(p){ return { t:p[0], v:p[1] }; }));
+      });
       var missing = CMP.filter(function(a){ return !series[a.key]; });
       if (missing.length){
-        return new Promise(function(res){ setTimeout(res, 1400); }).then(function(){
-          return runLimited(missing, function(a){
-            return fetchSeries(a.sym).then(function(pts){ if (pts) series[a.key] = normPct(pts); });
-          }, 3);
-        }).then(function(){ return series; });
+        return runLimited(missing, function(a){
+          return fetchSeries(a.sym).then(function(pts){ if (pts) series[a.key] = normPct(pts); });
+        }, 3);
       }
-      return series;
-    }).then(function(series){
+    }).then(function(){
       var got = Object.keys(series).length;
       if (!got){ statusEl.textContent = '⚠ Comparison data unavailable — tap a range to retry.'; return; }
       render(series); buildLegend(series);
