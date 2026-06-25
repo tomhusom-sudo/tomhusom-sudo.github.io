@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The TPH Daily Almanac</title>
+  <meta name="description" content="The TPH Daily Almanac — Tom's honest daily reading of the market.">
+  <link rel="apple-touch-icon" href="/lincoln.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=Spline+Sans+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --paper:#e8dcbe; --paper2:#e0d2af; --panel:#efe6cd;
+      --ink:#241c12; --ink-soft:#5a4a33; --rule:#a8946c; --rule-soft:#c4b491;
+      --oxblood:#8a2b20; --forest:#2e4f2e; --gold:#9c6f12;
+      --serif:'Newsreader', Georgia, serif;
+      --press:'IM Fell English', Georgia, serif;
+      --sc:'IM Fell English SC', Georgia, serif;
+      --mono:'Spline Sans Mono', ui-monospace, monospace;
+    }
+    *{box-sizing:border-box; margin:0; padding:0;}
+    html{overflow-x:hidden;}
+    body{
+      background:var(--paper); color:var(--ink); font-family:var(--serif);
+      font-size:18px; line-height:1.55; -webkit-font-smoothing:antialiased;
+      background-image:
+        radial-gradient(circle at 18% 12%, rgba(120,90,40,0.05), transparent 40%),
+        radial-gradient(circle at 82% 78%, rgba(80,50,20,0.06), transparent 45%);
+    }
+    /* faint paper grain */
+    body::before{
+      content:''; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.5;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    }
+    .sheet{position:relative; z-index:1; max-width:880px; margin:0 auto; padding:30px 26px 80px;}
+
+    a{color:inherit;}
+    .ink-rule{height:0; border:0; border-top:1.5px solid var(--ink); }
+    .double-rule{height:5px; border-top:1.5px solid var(--ink); border-bottom:1.5px solid var(--ink); }
+    .thin-rule{height:0; border-top:1px solid var(--rule); }
+
+    /* ── MASTHEAD (signature) ── */
+    .nav{display:flex; justify-content:space-between; align-items:center; font-family:var(--sc); font-size:0.74rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:14px;}
+    .nav a{text-decoration:none; border-bottom:1px solid var(--rule); padding-bottom:1px;}
+    .nav a:hover{color:var(--oxblood); border-color:var(--oxblood);}
+
+    .masthead{text-align:center; padding:8px 0 6px;}
+    .mast-ornament{font-family:var(--press); color:var(--oxblood); letter-spacing:0.5em; font-size:0.9rem; margin-bottom:4px;}
+    .nameplate{font-family:var(--press); font-weight:400; line-height:0.92; letter-spacing:0.01em;
+      font-size:clamp(2.6rem,9vw,5.2rem); text-transform:uppercase;}
+    .nameplate .tph{font-style:italic; color:var(--oxblood);}
+    .mast-sub{font-family:var(--sc); letter-spacing:0.34em; text-transform:uppercase; font-size:0.72rem; color:var(--ink-soft); margin-top:8px;}
+    .edition{display:flex; justify-content:space-between; align-items:center; font-family:var(--sc); text-transform:uppercase; letter-spacing:0.08em; font-size:0.7rem; color:var(--ink-soft); padding:7px 2px; }
+    .edition .status{display:inline-flex; align-items:center; gap:6px; color:var(--ink);}
+    .edition .seal{width:8px; height:8px; border-radius:50%; background:var(--ink);}
+    .edition .seal.open{background:var(--forest);}
+    .edition .seal.closed{background:var(--oxblood);}
+
+    /* ── EDITOR'S NOTE (Hey Timmy banner) ── */
+    .note{position:relative; margin:22px 0; padding:16px 20px; background:var(--panel);
+      border:1.5px solid var(--ink); box-shadow:5px 5px 0 rgba(36,28,18,0.12);}
+    .note-stamp{font-family:var(--sc); text-transform:uppercase; letter-spacing:0.18em; font-size:0.66rem; color:var(--oxblood); margin-bottom:5px;}
+    .note-body{font-family:var(--serif); font-style:italic; font-size:1.12rem; line-height:1.5;}
+    .note-body .red{color:var(--oxblood); font-weight:600; font-style:normal;}
+    .note-edit{position:absolute; top:12px; right:14px; font-family:var(--sc); text-transform:uppercase; letter-spacing:0.08em; font-size:0.62rem; cursor:pointer; background:none; border:1px solid var(--rule); color:var(--ink-soft); padding:3px 9px;}
+    .note-edit:hover{border-color:var(--oxblood); color:var(--oxblood);}
+    .note-body[contenteditable="true"]{outline:none; box-shadow:0 1px 0 var(--oxblood);}
+
+    /* ── SECTION HEADERS ── */
+    .dept{display:flex; align-items:center; gap:14px; margin:36px 0 14px;}
+    .dept h2{font-family:var(--sc); text-transform:uppercase; letter-spacing:0.12em; font-size:1.05rem; white-space:nowrap; font-weight:400;}
+    .dept .line{flex:1; border-top:1.5px solid var(--ink);}
+    .dept .flourish{font-family:var(--press); color:var(--oxblood); font-size:1.1rem;}
+
+    /* ── BRIEF ── */
+    .brief-body{font-size:1.12rem; line-height:1.62;}
+    .brief-body .drop{float:left; font-family:var(--press); font-size:4.4rem; line-height:0.74; padding:6px 10px 0 0; color:var(--oxblood);}
+    .brief-body p{margin-bottom:12px;}
+    .brief-body ul{list-style:none; margin:4px 0 12px; padding:0;}
+    .brief-body li{position:relative; padding-left:22px; margin-bottom:6px;}
+    .brief-body li::before{content:'\261E'; position:absolute; left:0; color:var(--gold);}
+    .brief-body b{font-weight:600;}
+    a.tk{font-family:var(--mono); font-weight:600; font-size:0.92em; color:var(--oxblood); text-decoration:none;
+      border-bottom:2px solid var(--gold); padding:0 1px; white-space:nowrap;}
+    a.tk:hover{background:rgba(156,111,18,0.14);}
+    a.tk::after{content:'\2197'; font-size:0.66em; vertical-align:super; opacity:0.7; margin-left:1px;}
+    .brief-edit{font-family:var(--sc); text-transform:uppercase; letter-spacing:0.08em; font-size:0.62rem; cursor:pointer; background:none; border:1px solid var(--rule); color:var(--ink-soft); padding:3px 9px;}
+    .brief-edit:hover{border-color:var(--oxblood); color:var(--oxblood);}
+    .brief-body[contenteditable="true"]{outline:none; background:rgba(255,255,255,0.25);}
+    .save-row{display:flex; align-items:center; gap:12px; margin-top:10px;}
+    .btn{font-family:var(--sc); text-transform:uppercase; letter-spacing:0.1em; font-size:0.72rem; cursor:pointer; background:var(--ink); color:var(--paper); border:none; padding:8px 18px;}
+    .btn:hover{background:var(--oxblood);}
+    .save-note{font-family:var(--mono); font-size:0.72rem; color:var(--ink-soft);}
+
+    /* ── READINGS (thermometers) ── */
+    .readings{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+    @media(max-width:560px){.readings{grid-template-columns:1fr;}}
+    .gauge{display:flex; gap:16px; align-items:center; border:1.5px solid var(--ink); padding:16px 18px; background:var(--panel);}
+    .gauge .thermo{width:52px; flex:none;}
+    .gauge .g-read{min-width:0;}
+    .g-name{font-family:var(--press); font-size:1.5rem; line-height:1;}
+    .g-sh{font-family:var(--sc); text-transform:uppercase; letter-spacing:0.08em; font-size:0.64rem; color:var(--ink-soft); margin-bottom:8px;}
+    .g-val{font-family:var(--mono); font-weight:700; font-size:1.5rem; line-height:1;}
+    .g-chg{font-family:var(--mono); font-size:0.8rem; margin-top:3px;}
+    .g-px{font-family:var(--mono); font-size:0.7rem; color:var(--ink-soft); margin-top:3px;}
+    .up{color:var(--forest);} .down{color:var(--oxblood);}
+    .grand{text-align:right; font-family:var(--sc); text-transform:uppercase; letter-spacing:0.1em; font-size:0.78rem; color:var(--ink-soft); margin-top:10px;}
+    .grand b{font-family:var(--mono); font-size:1.25rem; color:var(--ink); letter-spacing:0; margin-left:8px;}
+
+    /* ── MARKET TABLE (ledger) ── */
+    table.ledger{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums;}
+    table.ledger th{font-family:var(--sc); text-transform:uppercase; letter-spacing:0.08em; font-size:0.66rem; color:var(--ink-soft); text-align:right; padding:6px 10px; border-bottom:1.5px solid var(--ink);}
+    table.ledger th:first-child{text-align:left;}
+    table.ledger td{font-family:var(--mono); font-size:0.92rem; padding:9px 10px; text-align:right; border-bottom:1px solid var(--rule-soft);}
+    table.ledger td.instr{text-align:left; font-family:var(--serif); font-size:1.02rem; font-weight:500;}
+    table.ledger td.instr .sym{font-family:var(--sc); text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); font-size:0.66rem; margin-left:6px;}
+    table.ledger tr:hover td{background:rgba(160,140,100,0.12);}
+    .updated{font-family:var(--mono); font-size:0.72rem; color:var(--ink-soft);}
+
+    /* ── TOM'S WATCH (almanac bars) ── */
+    .ranges{display:flex; gap:0; border:1.5px solid var(--ink);}
+    .ranges button{font-family:var(--sc); text-transform:uppercase; letter-spacing:0.06em; font-size:0.66rem; cursor:pointer; background:none; border:none; border-right:1px solid var(--rule); color:var(--ink-soft); padding:5px 11px;}
+    .ranges button:last-child{border-right:none;}
+    .ranges button.active{background:var(--ink); color:var(--paper);}
+    .watch-row{display:grid; grid-template-columns:120px 1fr 78px; align-items:center; gap:12px; padding:7px 0; border-bottom:1px solid var(--rule-soft);}
+    .watch-row .wlabel{font-family:var(--serif); font-weight:500;}
+    .watch-row .wlabel .wt{font-family:var(--sc); text-transform:uppercase; font-size:0.6rem; letter-spacing:0.06em; color:var(--ink-soft); display:block;}
+    .wtrack{position:relative; height:18px; background:repeating-linear-gradient(90deg, transparent 0, transparent 19px, var(--rule-soft) 19px, var(--rule-soft) 20px); border-left:1.5px solid var(--ink);}
+    .wmid{position:absolute; top:-3px; bottom:-3px; left:50%; width:1.5px; background:var(--ink);}
+    .wbar{position:absolute; top:3px; bottom:3px;}
+    .wbar.pos{left:50%; background:var(--forest);}
+    .wbar.neg{right:50%; background:var(--oxblood);}
+    .wval{font-family:var(--mono); font-weight:600; font-size:0.86rem; text-align:right;}
+    .watch-note{font-family:var(--mono); font-size:0.7rem; color:var(--ink-soft); margin-top:8px; text-align:center;}
+
+    /* ── NOTES ── */
+    .field-date{font-family:var(--mono); font-size:0.72rem; color:var(--paper); background:var(--ink); padding:2px 9px; letter-spacing:0.02em;}
+    .tabs{display:inline-flex; border:1.5px solid var(--ink); margin-left:auto;}
+    .tabs button{font-family:var(--sc); text-transform:uppercase; letter-spacing:0.06em; font-size:0.66rem; cursor:pointer; background:none; border:none; border-right:1px solid var(--rule); color:var(--ink-soft); padding:4px 12px;}
+    .tabs button:last-child{border-right:none;}
+    .tabs button.active{background:var(--ink); color:var(--paper);}
+    textarea.notes{width:100%; min-height:150px; resize:vertical; background:rgba(255,255,255,0.35); border:1.5px solid var(--ink); color:var(--ink); font-family:var(--serif); font-size:1.04rem; line-height:1.55; padding:14px 16px;}
+    textarea.notes:focus{outline:none; background:rgba(255,255,255,0.55);}
+
+    .colophon{text-align:center; font-family:var(--sc); text-transform:uppercase; letter-spacing:0.14em; font-size:0.64rem; color:var(--ink-soft); margin-top:46px; line-height:2;}
+    .colophon a{color:var(--oxblood); text-decoration:none;}
+
+    :focus-visible{outline:2px solid var(--oxblood); outline-offset:2px;}
+    @media(prefers-reduced-motion:reduce){*{transition:none !important;}}
+    .thermo-fill{transition:height 0.6s ease, y 0.6s ease;}
+  </style>
+</head>
+<body>
+  <div class="sheet">
+
+    <div class="nav">
+      <a href="./dashboard.html">&larr; Honest Tom</a>
+      <span id="navEd">No. 1</span>
+    </div>
+
+    <!-- MASTHEAD -->
+    <div class="masthead">
+      <div class="mast-ornament">&#10087; &nbsp; &#10087; &nbsp; &#10087;</div>
+      <hr class="double-rule" style="margin-bottom:12px;">
+      <div class="nameplate">The <span class="tph">TPH</span> Daily Almanac</div>
+      <div class="mast-sub">Honest Readings &middot; Taken Fresh from the Market</div>
+      <hr class="ink-rule" style="margin-top:12px;">
+    </div>
+    <div class="edition">
+      <span id="edDate">&mdash;</span>
+      <span class="status"><span class="seal" id="edSeal"></span><span id="edStatus">&mdash;</span></span>
+      <span id="edClock">&mdash;</span>
+    </div>
+    <hr class="double-rule">
+
+    <!-- EDITOR'S NOTE -->
+    <div class="note">
+      <div class="note-stamp">&#9733; A Note to Timmy &#9733;</div>
+      <button class="note-edit" id="heyEditBtn">Edit</button>
+      <button class="note-edit" id="heySaveBtn" style="display:none;">Save</button>
+      <div class="note-body" id="heyMsg" contenteditable="false">Check out my daily. I&rsquo;ll update it from time to time. Market is tanking again &mdash; <span class="red">bullshit!</span></div>
+    </div>
+
+    <!-- THE BRIEF -->
+    <div class="dept"><h2>The Brief</h2><span class="line"></span><span class="flourish">&#10086;</span></div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:6px;">
+      <button class="brief-edit" id="briefEditBtn">Edit</button>
+    </div>
+    <div class="brief-body" id="briefBody" contenteditable="false">
+      <p><span class="drop">I</span>ndia&rsquo;s real GDP is set to grow at a robust <b>6.5%&ndash;6.9%</b> range &mdash; making it the fastest-growing major economy on the planet. While much of the developed world (and China) faces an aging population, India has the opposite &ldquo;problem.&rdquo;</p>
+      <ul>
+        <li><b>The Youth Wave:</b> the median age in India is roughly 28 years old.</li>
+        <li><b>Workforce Expansion:</b> millions of ambitious, educated young people enter the workforce every single year, hitting their peak earning and spending years.</li>
+      </ul>
+      <p><b>The play:</b> <a class="tk" href="https://finance.yahoo.com/quote/INDA" target="_blank" rel="noopener">INDA</a> or <a class="tk" href="https://finance.yahoo.com/quote/EPI" target="_blank" rel="noopener">EPI</a> ETFs &mdash; or find the big one that&rsquo;ll give us huge profits.</p>
+      <p>If I had the capital I&rsquo;d add <a class="tk" href="https://finance.yahoo.com/quote/CBRS" target="_blank" rel="noopener">CBRS</a> (Cerebras Systems), <a class="tk" href="https://finance.yahoo.com/quote/IREN" target="_blank" rel="noopener">IREN</a> (Iris Energy) and <a class="tk" href="https://finance.yahoo.com/quote/NBIS" target="_blank" rel="noopener">NBIS</a> (Nebius Group) to the TPH fund.</p>
+    </div>
+    <div class="save-row" id="briefSaveRow" style="display:none;">
+      <button class="btn" id="briefSaveBtn">Save Brief</button><span class="save-note" id="briefNote"></span>
+    </div>
+
+    <!-- THE DAY'S READINGS -->
+    <div class="dept"><h2>The Day&rsquo;s Readings</h2><span class="line"></span><span class="flourish">&#10086;</span></div>
+    <div class="readings">
+      <div class="gauge" id="gauge-VONG">
+        <svg class="thermo" viewBox="0 0 60 210" xmlns="http://www.w3.org/2000/svg">
+          <rect x="22" y="8" width="16" height="150" rx="8" fill="none" stroke="#241c12" stroke-width="2"/>
+          <rect class="thermo-fill" x="25" y="155" width="10" height="0" rx="5" fill="#2e4f2e"/>
+          <circle class="thermo-bulb" cx="30" cy="176" r="19" fill="#2e4f2e" stroke="#241c12" stroke-width="2"/>
+        </svg>
+        <div class="g-read">
+          <div class="g-name">VONG</div><div class="g-sh">813 Shares</div>
+          <div class="g-val">$&mdash;</div><div class="g-chg">&mdash;</div><div class="g-px">@ &mdash;</div>
+        </div>
+      </div>
+      <div class="gauge" id="gauge-VOO">
+        <svg class="thermo" viewBox="0 0 60 210" xmlns="http://www.w3.org/2000/svg">
+          <rect x="22" y="8" width="16" height="150" rx="8" fill="none" stroke="#241c12" stroke-width="2"/>
+          <rect class="thermo-fill" x="25" y="155" width="10" height="0" rx="5" fill="#2e4f2e"/>
+          <circle class="thermo-bulb" cx="30" cy="176" r="19" fill="#2e4f2e" stroke="#241c12" stroke-width="2"/>
+        </svg>
+        <div class="g-read">
+          <div class="g-name">VOO</div><div class="g-sh">432 Shares</div>
+          <div class="g-val">$&mdash;</div><div class="g-chg">&mdash;</div><div class="g-px">@ &mdash;</div>
+        </div>
+      </div>
+    </div>
+    <div class="grand">Grand Total of Holdings <b id="posTotal">$&mdash;</b></div>
+
+    <!-- MARKET TABLE -->
+    <div class="dept"><h2>Market Table</h2><span class="line"></span><span class="updated" id="updated">&mdash;</span></div>
+    <table class="ledger">
+      <thead><tr><th>Instrument</th><th>Last</th><th>Change</th><th>%</th></tr></thead>
+      <tbody id="ledger"></tbody>
+    </table>
+
+    <!-- TOM'S WATCH -->
+    <div class="dept"><h2>Tom&rsquo;s Watch</h2><span class="line"></span>
+      <div class="ranges" id="ranges">
+        <button data-range="1mo">1M</button><button data-range="3mo">3M</button>
+        <button data-range="6mo" class="active">6M</button><button data-range="1y">1Y</button>
+      </div>
+    </div>
+    <div id="watch"></div>
+    <div class="watch-note" id="watchNote">Reading the tape&hellip;</div>
+
+    <!-- FIELD NOTES -->
+    <div class="dept"><h2>Field Notes</h2><span class="line"></span><span class="field-date" id="fieldDate">&mdash;</span>
+      <div class="tabs"><button data-period="day" class="active">Day</button><button data-period="week">Week</button></div>
+    </div>
+    <textarea class="notes" id="notes" placeholder="Jot it down — what you're watching, the plays, the gut calls, levels to hit…"></textarea>
+    <div class="save-row"><button class="btn" id="saveBtn">Save</button><span class="save-note" id="saveNote"></span></div>
+
+    <div class="colophon">
+      &#10087; Printed daily at <a href="./dashboard.html">honesttom.ai</a> &#10087;<br>
+      Readings via Yahoo Finance &middot; delayed &middot; for amusement, not advice
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+  var API = 'https://tph-market-api.netlify.app/.netlify/functions/market';
+
+  var BOARD = [
+    { sym:'^DJI',    name:'Dow Jones Industrial', dec:2 },
+    { sym:'^IXIC',   name:'Nasdaq Composite',     dec:2 },
+    { sym:'^GSPC',   name:'S&amp;P 500',          dec:2 },
+    { sym:'GC=F',    name:'Gold, per oz.',        dec:1 },
+    { sym:'SI=F',    name:'Silver, per oz.',      dec:2 },
+    { sym:'BTC-USD', name:'Bitcoin',              dec:0 },
+    { sym:'CL=F',    name:'Crude Oil, WTI',       dec:2 },
+    { sym:'VOO',     name:'Vanguard S&amp;P 500', dec:2 },
+    { sym:'VONG',    name:'Vanguard Russell 1000 Growth', dec:2 }
+  ];
+  var HOLDINGS = [ { sym:'VONG', shares:813 }, { sym:'VOO', shares:432 } ];
+
+  function fmt(n,dec){ return (n==null||isNaN(n)) ? '—' : Number(n).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+  function money(n){ return '$' + Number(n).toLocaleString('en-US',{maximumFractionDigits:0}); }
+
+  // ── Build ledger rows ──
+  var ledger = document.getElementById('ledger');
+  BOARD.forEach(function(b){
+    var tr = document.createElement('tr'); tr.id = 'row-'+b.sym;
+    tr.innerHTML = '<td class="instr">'+b.name+'</td><td class="last">—</td><td class="chg">—</td><td class="pct">—</td>';
+    ledger.appendChild(tr);
+  });
+
+  function getQuotes(syms){
+    var url = API + '?quotes=' + encodeURIComponent(syms.join(','));
+    return fetch(url).then(function(r){ return r.json(); }).then(function(d){ return d && d.quotes ? d.quotes : null; }).catch(function(){ return null; });
+  }
+  function getHistory(syms, range){
+    var url = API + '?history=' + encodeURIComponent(syms.join(',')) + '&range=' + range + '&interval=1d';
+    return fetch(url).then(function(r){ return r.json(); }).then(function(d){ return d && d.history ? d.history : null; }).catch(function(){ return null; });
+  }
+
+  function paintRow(b, q){
+    var tr = document.getElementById('row-'+b.sym);
+    if (!q || q.price==null){ tr.querySelector('.last').textContent='—'; tr.querySelector('.chg').textContent='n/a'; tr.querySelector('.pct').textContent=''; return; }
+    var chg = q.price - q.prev, pct = q.prev ? chg/q.prev*100 : 0, dir = chg>=0?'up':'down';
+    tr.querySelector('.last').textContent = fmt(q.price, b.dec);
+    var c = tr.querySelector('.chg'); c.textContent = (chg>=0?'+':'−') + fmt(Math.abs(chg), b.dec); c.className = 'chg '+dir;
+    var pc = tr.querySelector('.pct'); pc.textContent = (chg>=0?'+':'−') + Math.abs(pct).toFixed(2) + '%'; pc.className = 'pct '+dir;
+  }
+
+  function setGauge(sym, shares, q){
+    var el = document.getElementById('gauge-'+sym); if (!el) return 0;
+    var fill = el.querySelector('.thermo-fill'), bulb = el.querySelector('.thermo-bulb');
+    var valEl = el.querySelector('.g-val'), chgEl = el.querySelector('.g-chg'), pxEl = el.querySelector('.g-px');
+    if (!q || q.price==null){ valEl.textContent='$—'; chgEl.textContent='unavailable'; chgEl.className='g-chg'; return 0; }
+    var val = shares*q.price, pct = q.prev ? (q.price-q.prev)/q.prev*100 : 0, dayChg = shares*(q.price-(q.prev||q.price));
+    var dir = pct>=0?'up':'down', color = pct>=0 ? '#2e4f2e' : '#8a2b20';
+    var pos = (q.hi!=null&&q.lo!=null&&q.hi>q.lo) ? (q.price-q.lo)/(q.hi-q.lo) : 0.5;
+    pos = Math.max(0.05, Math.min(1, pos));
+    var h = pos*148;
+    fill.setAttribute('height', h.toFixed(1)); fill.setAttribute('y', (156-h).toFixed(1)); fill.setAttribute('fill', color);
+    bulb.setAttribute('fill', color);
+    valEl.textContent = money(val);
+    chgEl.textContent = (dayChg>=0?'+':'−') + money(Math.abs(dayChg)).slice(1).replace('$','') ;
+    chgEl.textContent = (dayChg>=0?'+$':'−$') + Math.abs(dayChg).toLocaleString('en-US',{maximumFractionDigits:0}) + '  (' + (pct>=0?'+':'') + pct.toFixed(2) + '%)';
+    chgEl.className = 'g-chg '+dir;
+    pxEl.textContent = '@ $' + q.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    return val;
+  }
+
+  function loadBoard(){
+    document.getElementById('updated').textContent = 'Setting type…';
+    getQuotes(BOARD.map(function(b){return b.sym;})).then(function(quotes){
+      var got = 0;
+      BOARD.forEach(function(b){ var q = quotes ? quotes[b.sym] : null; if (q) got++; paintRow(b, q); });
+      var total = 0;
+      HOLDINGS.forEach(function(h){ total += setGauge(h.sym, h.shares, quotes ? quotes[h.sym] : null); });
+      document.getElementById('posTotal').textContent = total ? money(total) : '$—';
+      var now = new Date();
+      document.getElementById('updated').textContent = got
+        ? 'Set ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) + (got<BOARD.length?'  ·  '+got+'/'+BOARD.length:'')
+        : 'Press idle — readings unavailable';
+    });
+  }
+
+  // ── Tom's Watch ──
+  var WATCH = [
+    { sym:'VOO',  name:'Vanguard S&amp;P', tag:'Baseline' },
+    { sym:'VONG', name:'Russell 1000 Gr', tag:'Growth' },
+    { sym:'VHT',  name:'Health Care',      tag:'Sector' },
+    { sym:'LLY',  name:'Eli Lilly',        tag:'Pharma' },
+    { sym:'AMZN', name:'Amazon',           tag:'Mega-cap' }
+  ];
+  var range = '6mo';
+  function loadWatch(){
+    var note = document.getElementById('watchNote'); note.textContent = 'Reading the tape…';
+    getHistory(WATCH.map(function(w){return w.sym;}), range).then(function(hist){
+      if (!hist){ note.textContent = '⚠ Watch data unavailable — try another span.'; return; }
+      var rows = WATCH.map(function(w){
+        var arr = hist[w.sym];
+        var pct = (arr && arr.length>1) ? (arr[arr.length-1][1]-arr[0][1])/arr[0][1]*100 : null;
+        return { w:w, pct:pct };
+      });
+      var maxAbs = Math.max(1, Math.max.apply(null, rows.map(function(r){ return r.pct==null?0:Math.abs(r.pct); })));
+      var html = rows.map(function(r){
+        var w = r.w;
+        if (r.pct==null) return '<div class="watch-row"><div class="wlabel">'+w.name+'<span class="wt">'+w.tag+'</span></div><div class="wtrack"><span class="wmid"></span></div><div class="wval">—</div></div>';
+        var dir = r.pct>=0?'pos':'neg', cls = r.pct>=0?'up':'down';
+        var wPct = Math.abs(r.pct)/maxAbs*48; // up to 48% of half-track
+        var bar = '<span class="wbar '+dir+'" style="width:'+wPct.toFixed(1)+'%"></span>';
+        return '<div class="watch-row"><div class="wlabel">'+w.name+'<span class="wt">'+w.tag+'</span></div>'+
+               '<div class="wtrack"><span class="wmid"></span>'+bar+'</div>'+
+               '<div class="wval '+cls+'">'+(r.pct>=0?'+':'−')+Math.abs(r.pct).toFixed(1)+'%</div></div>';
+      }).join('');
+      document.getElementById('watch').innerHTML = html;
+      note.textContent = 'Total return · ' + range.toUpperCase().replace('MO','M') + ' · VOO held as the honest baseline';
+    });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#ranges button'), function(b){
+    b.addEventListener('click', function(){
+      var a = document.querySelector('#ranges button.active'); if (a) a.classList.remove('active');
+      b.classList.add('active'); range = b.getAttribute('data-range'); loadWatch();
+    });
+  });
+
+  // ── Clock + edition ──
+  function tick(){
+    var now = new Date();
+    document.getElementById('edDate').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+    document.getElementById('edClock').textContent = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+    var et = new Date(now.toLocaleString('en-US',{timeZone:'America/New_York'}));
+    var day = et.getDay(), mins = et.getHours()*60+et.getMinutes(), open = day>=1&&day<=5&&mins>=570&&mins<960;
+    document.getElementById('edStatus').textContent = open ? 'Exchange Open' : 'Exchange Closed';
+    document.getElementById('edSeal').className = 'seal ' + (open?'open':'closed');
+    document.getElementById('fieldDate').textContent = now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  }
+  tick(); setInterval(tick, 1000);
+
+  // ── Editor's note (server-persisted banner) ──
+  var heyMsg = document.getElementById('heyMsg'), heyEdit = document.getElementById('heyEditBtn'), heySave = document.getElementById('heySaveBtn');
+  fetch(API+'?banner=1').then(function(r){return r.json();}).then(function(d){ if (d && d.banner) heyMsg.innerHTML = d.banner; }).catch(function(){});
+  heyEdit.addEventListener('click', function(){ heyMsg.setAttribute('contenteditable','true'); heyMsg.focus(); heyEdit.style.display='none'; heySave.style.display=''; });
+  heySave.addEventListener('click', function(){
+    var pass = prompt('Passphrase to publish this note for everyone:'); if (pass==null) return;
+    heySave.textContent='Saving…';
+    fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:heyMsg.innerHTML,pass:pass})})
+      .then(function(r){return r.json();}).then(function(d){ heySave.textContent='Save';
+        if (d&&d.ok){ heyMsg.setAttribute('contenteditable','false'); heySave.style.display='none'; heyEdit.style.display=''; }
+        else alert(d&&d.error==='unauthorized'?'Wrong passphrase — not published.':'Save failed.'); })
+      .catch(function(){ heySave.textContent='Save'; alert('Save failed — network error.'); });
+  });
+
+  // ── Brief (localStorage) ──
+  var briefBody=document.getElementById('briefBody'), briefEdit=document.getElementById('briefEditBtn'),
+      briefSaveRow=document.getElementById('briefSaveRow'), briefNote=document.getElementById('briefNote');
+  var sb=localStorage.getItem('tph_brief'); if (sb) briefBody.innerHTML=sb;
+  var sbt=localStorage.getItem('tph_brief_ts'); if (sbt) briefNote.textContent='Saved '+sbt;
+  briefEdit.addEventListener('click', function(){ briefBody.setAttribute('contenteditable','true'); briefBody.focus(); briefSaveRow.style.display='flex'; briefEdit.style.display='none'; });
+  document.getElementById('briefSaveBtn').addEventListener('click', function(){
+    briefBody.setAttribute('contenteditable','false'); localStorage.setItem('tph_brief', briefBody.innerHTML);
+    var t=new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    localStorage.setItem('tph_brief_ts',t); briefNote.textContent='Saved '+t; briefSaveRow.style.display='none'; briefEdit.style.display='';
+  });
+
+  // ── Field Notes (localStorage) ──
+  var period='day', notesEl=document.getElementById('notes'), saveNote=document.getElementById('saveNote');
+  function nk(p){ return 'tph_notes_'+p; }
+  function loadNotes(){ notesEl.value=localStorage.getItem(nk(period))||''; var ts=localStorage.getItem(nk(period)+'_ts'); saveNote.textContent=ts?'Saved '+ts:''; }
+  document.getElementById('saveBtn').addEventListener('click', function(){
+    localStorage.setItem(nk(period), notesEl.value);
+    var t=new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    localStorage.setItem(nk(period)+'_ts',t); saveNote.textContent='Saved '+t;
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.tabs button'), function(tab){
+    tab.addEventListener('click', function(){
+      var a=document.querySelector('.tabs button.active'); if (a) a.classList.remove('active');
+      tab.classList.add('active'); period=tab.getAttribute('data-period'); loadNotes();
+    });
+  });
+  loadNotes();
+
+  // ── Go ──
+  loadBoard(); loadWatch();
+  setInterval(loadBoard, 300000);
+})();
+</script>
+</body>
+</html>
