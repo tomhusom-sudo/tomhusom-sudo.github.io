@@ -131,7 +131,9 @@
     .brief-body li{position:relative; padding-left:20px; margin-bottom:7px;}
     .brief-body li::before{content:'▸'; position:absolute; left:0; color:var(--gold);}
     .brief-body b{color:#f6efd9;}
-    .tk{display:inline-block; font-family:var(--mono); font-weight:700; font-size:0.8rem; color:#0c130a; background:linear-gradient(135deg,#e3c155,#cfa23a); padding:1px 7px; border-radius:5px; margin:0 1px;}
+    .tk{display:inline-block; font-family:var(--mono); font-weight:700; font-size:0.8rem; color:#0c130a; background:linear-gradient(135deg,#e3c155,#cfa23a); padding:1px 7px; border-radius:5px; margin:0 1px; text-decoration:none; cursor:pointer; transition:.15s;}
+    a.tk:hover{filter:brightness(1.12); box-shadow:0 0 11px rgba(227,179,65,0.55); transform:translateY(-1px);}
+    a.tk::after{content:'\2197'; font-size:0.62rem; margin-left:2px; opacity:0.65; vertical-align:top;}
     .brief-body[contenteditable="true"]{border:1px dashed rgba(227,179,65,0.5); border-radius:8px; padding:12px;}
 
     .tabs{display:flex; gap:6px;}
@@ -228,8 +230,8 @@
             <li><b>The Youth Wave:</b> the median age in India is roughly 28 years old.</li>
             <li><b>Workforce Expansion:</b> millions of ambitious, educated young people enter the workforce every single year, hitting their peak earning and spending years.</li>
           </ul>
-          <p><b>The play:</b> <span class="tk">INDA</span> or <span class="tk">EPI</span> ETFs &mdash; or find the big one that&rsquo;ll give us huge profits.</p>
-          <p>If I had the capital I&rsquo;d add <span class="tk">CBRS</span> (Cerebras Systems), <span class="tk">IREN</span> (Iris Energy) and <span class="tk">NBIS</span> (Nebius Group) to the TPH fund.</p>
+          <p><b>The play:</b> <a class="tk" href="https://finance.yahoo.com/quote/INDA" target="_blank" rel="noopener">INDA</a> or <a class="tk" href="https://finance.yahoo.com/quote/EPI" target="_blank" rel="noopener">EPI</a> ETFs &mdash; or find the big one that&rsquo;ll give us huge profits.</p>
+          <p>If I had the capital I&rsquo;d add <a class="tk" href="https://finance.yahoo.com/quote/CBRS" target="_blank" rel="noopener">CBRS</a> (Cerebras Systems), <a class="tk" href="https://finance.yahoo.com/quote/IREN" target="_blank" rel="noopener">IREN</a> (Iris Energy) and <a class="tk" href="https://finance.yahoo.com/quote/NBIS" target="_blank" rel="noopener">NBIS</a> (Nebius Group) to the TPH fund.</p>
         </div>
         <div class="save-row" id="briefSaveRow" style="display:none;">
           <button class="btn" id="briefSaveBtn">Save Brief</button>
