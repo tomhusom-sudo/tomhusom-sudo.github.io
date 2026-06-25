@@ -120,6 +120,9 @@
     .brief{border-color:rgba(227,179,65,0.3);}
     .notes .phead h3{color:#cfe7a3;} .notes .phead h3 .dot{background:var(--green); box-shadow:0 0 8px var(--green);}
     .kicker{font-family:var(--head); font-weight:500; letter-spacing:0.18em; text-transform:uppercase; font-size:0.62rem; color:var(--muted);}
+    .date-chip{font-family:var(--mono); font-size:0.72rem; font-weight:700; color:#0c130a; letter-spacing:0.02em;
+      background:linear-gradient(135deg,#e3c155,#9fd13f); padding:2px 10px; border-radius:5px; margin-left:10px;
+      box-shadow:0 0 12px rgba(227,179,65,0.3); white-space:nowrap;}
 
     .brief-body{font-size:0.96rem; line-height:1.62; color:#eef5e4; outline:none;}
     .brief-body p{margin-bottom:11px;}
@@ -205,6 +208,28 @@
 
     <div class="container">
 
+      <!-- DAILY BRIEF (below headline, above board) -->
+      <div class="panel brief" id="brief" style="margin-bottom:10px;">
+        <div class="phead">
+          <h3><span class="dot"></span> The Daily Brief <span class="kicker" style="margin-left:6px;">Tom&rsquo;s Tips</span></h3>
+          <button class="tab" id="briefEditBtn">Edit</button>
+        </div>
+        <div class="brief-body" id="briefBody" contenteditable="false">
+          <p class="lead">India&rsquo;s real GDP is set to grow at a robust <b>6.5%&ndash;6.9%</b> range &mdash; making it the fastest-growing major economy on the planet.</p>
+          <p>While much of the developed world (and China) is facing an aging population, India has the opposite &ldquo;problem.&rdquo;</p>
+          <ul>
+            <li><b>The Youth Wave:</b> the median age in India is roughly 28 years old.</li>
+            <li><b>Workforce Expansion:</b> millions of ambitious, educated young people enter the workforce every single year, hitting their peak earning and spending years.</li>
+          </ul>
+          <p><b>The play:</b> <span class="tk">INDA</span> or <span class="tk">EPI</span> ETFs &mdash; or find the big one that&rsquo;ll give us huge profits.</p>
+          <p>If I had the capital I&rsquo;d add <span class="tk">CBRS</span> (Cerebras Systems), <span class="tk">IREN</span> (Iris Energy) and <span class="tk">NBIS</span> (Nebius Group) to the TPH fund.</p>
+        </div>
+        <div class="save-row" id="briefSaveRow" style="display:none;">
+          <button class="btn" id="briefSaveBtn">Save Brief</button>
+          <span class="save-note" id="briefNote"></span>
+        </div>
+      </div>
+
       <!-- QUOTE BOARD -->
       <div class="sec-head">
         <h2>The Board</h2>
@@ -231,45 +256,20 @@
         <div class="updated" id="cmpStatus" style="margin-top:10px;text-align:center;">Loading comparison…</div>
       </div>
 
-      <!-- BRIEF + NOTES -->
-      <div class="cols" style="margin-top:34px;">
-
-        <div class="panel brief" id="brief">
-          <div class="phead">
-            <h3><span class="dot"></span> The Daily Brief <span class="kicker" style="margin-left:6px;">Tom&rsquo;s Tips</span></h3>
-            <button class="tab" id="briefEditBtn">Edit</button>
-          </div>
-          <div class="brief-body" id="briefBody" contenteditable="false">
-            <p class="lead">India&rsquo;s real GDP is set to grow at a robust <b>6.5%&ndash;6.9%</b> range &mdash; making it the fastest-growing major economy on the planet.</p>
-            <p>While much of the developed world (and China) is facing an aging population, India has the opposite &ldquo;problem.&rdquo;</p>
-            <ul>
-              <li><b>The Youth Wave:</b> the median age in India is roughly 28 years old.</li>
-              <li><b>Workforce Expansion:</b> millions of ambitious, educated young people enter the workforce every single year, hitting their peak earning and spending years.</li>
-            </ul>
-            <p><b>The play:</b> <span class="tk">INDA</span> or <span class="tk">EPI</span> ETFs &mdash; or find the big one that&rsquo;ll give us huge profits.</p>
-            <p>If I had the capital I&rsquo;d add <span class="tk">CBRS</span> (Cerebras Systems), <span class="tk">IREN</span> (Iris Energy) and <span class="tk">NBIS</span> (Nebius Group) to the TPH fund.</p>
-          </div>
-          <div class="save-row" id="briefSaveRow" style="display:none;">
-            <button class="btn" id="briefSaveBtn">Save Brief</button>
-            <span class="save-note" id="briefNote"></span>
+      <!-- NOTES -->
+      <div class="panel notes" style="margin-top:34px;">
+        <div class="phead">
+          <h3><span class="dot"></span> Tom&rsquo;s Notes <span class="date-chip" id="notesDate">&mdash;</span></h3>
+          <div class="tabs">
+            <button class="tab active" data-period="day">Day</button>
+            <button class="tab" data-period="week">Week</button>
           </div>
         </div>
-
-        <div class="panel notes">
-          <div class="phead">
-            <h3><span class="dot"></span> Tom&rsquo;s Notes</h3>
-            <div class="tabs">
-              <button class="tab active" data-period="day">Day</button>
-              <button class="tab" data-period="week">Week</button>
-            </div>
-          </div>
-          <textarea class="notes-area" id="notes" placeholder="Scratchpad — what are you watching, plays, gut calls, levels to hit…"></textarea>
-          <div class="save-row">
-            <button class="btn" id="saveBtn">Save</button>
-            <span class="save-note" id="saveNote"></span>
-          </div>
+        <textarea class="notes-area" id="notes" placeholder="Scratchpad — what are you watching, plays, gut calls, levels to hit…"></textarea>
+        <div class="save-row">
+          <button class="btn" id="saveBtn">Save</button>
+          <span class="save-note" id="saveNote"></span>
         </div>
-
       </div>
 
       <div class="foot">
@@ -472,6 +472,8 @@
   var period = 'day';
   var notesEl = document.getElementById('notes');
   var saveNote = document.getElementById('saveNote');
+  document.getElementById('notesDate').textContent =
+    new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
   function nKey(p){ return 'tph_notes_' + p; }
   function loadNotes(){
     notesEl.value = localStorage.getItem(nKey(period)) || '';
