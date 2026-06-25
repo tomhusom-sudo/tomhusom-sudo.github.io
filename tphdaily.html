@@ -154,9 +154,14 @@
 
     /* ── HEY TIMMY BANNER ── */
     .hey-wrap{max-width:1180px; margin:16px auto 0; padding:0 20px;}
-    .hey{display:flex; align-items:center; gap:16px; padding:16px 22px; border-radius:10px;
+    .hey{position:relative; display:flex; align-items:center; gap:16px; padding:16px 70px 16px 22px; border-radius:10px;
       background:linear-gradient(100deg, rgba(227,179,65,0.16) 0%, rgba(143,201,58,0.12) 55%, rgba(35,201,122,0.10) 100%);
       border:1px solid rgba(227,179,65,0.45); box-shadow:0 0 28px rgba(227,179,65,0.12), inset 0 0 0 1px rgba(255,255,255,0.03);}
+    .hey-edit{position:absolute; top:8px; right:10px; font-family:var(--head); font-size:0.66rem; font-weight:600;
+      letter-spacing:0.04em; cursor:pointer; color:#e9cf86; background:rgba(0,0,0,0.28);
+      border:1px solid rgba(227,179,65,0.4); padding:3px 10px; border-radius:5px; transition:.15s;}
+    .hey-edit:hover{background:rgba(227,179,65,0.18); border-color:rgba(227,179,65,0.7);}
+    .hey-msg[contenteditable="true"]{outline:none; border-radius:4px; box-shadow:0 0 0 1px rgba(227,179,65,0.5); padding:2px 6px;}
     .hey-burst{font-size:2rem; line-height:1; filter:drop-shadow(0 0 8px rgba(227,179,65,0.6)); animation:bob 1.4s ease-in-out infinite;}
     @keyframes bob{50%{transform:translateY(-4px) rotate(-6deg);}}
     .hey-lead{font-family:var(--head); font-weight:700; font-size:clamp(1.3rem,3.6vw,1.9rem); letter-spacing:0.03em;
@@ -202,7 +207,9 @@
     <div class="hey-wrap">
       <div class="hey">
         <span class="hey-burst">&#128075;</span>
-        <div><span class="hey-lead">Hey Timmy</span><span class="hey-msg">&mdash; check out my daily. I&rsquo;ll update it from time to time. Market is tanking again &mdash; <span style="color:#ef5454;font-weight:700;">bullshit!</span></span></div>
+        <div><span class="hey-lead">Hey Timmy</span><span class="hey-msg" id="heyMsg">&mdash; check out my daily. I&rsquo;ll update it from time to time. Market is tanking again &mdash; <span style="color:#ef5454;font-weight:700;">bullshit!</span></span></div>
+        <button class="hey-edit" id="heyEditBtn" title="Edit message">&#9998; Edit</button>
+        <button class="hey-edit" id="heySaveBtn" title="Publish for everyone" style="display:none;">Save</button>
       </div>
     </div>
 
@@ -480,6 +487,37 @@
     localStorage.setItem('tph_brief_ts', nowS);
     briefNote.textContent = 'Saved ' + nowS;
     briefSaveRow.style.display='none'; briefEditBtn.style.display='';
+  });
+
+  // ── Headline banner (server-persisted via market API, passphrase to publish) ──
+  var BANNER_API = 'https://tph-market-api.netlify.app/.netlify/functions/market';
+  var heyMsg = document.getElementById('heyMsg');
+  var heyEditBtn = document.getElementById('heyEditBtn');
+  var heySaveBtn = document.getElementById('heySaveBtn');
+  // Load the latest published message (so everyone sees Tom's updates)
+  fetch(BANNER_API + '?banner=1').then(function(r){ return r.json(); })
+    .then(function(d){ if (d && d.banner) heyMsg.innerHTML = d.banner; }).catch(function(){});
+  heyEditBtn.addEventListener('click', function(){
+    heyMsg.setAttribute('contenteditable','true'); heyMsg.focus();
+    heyEditBtn.style.display = 'none'; heySaveBtn.style.display = '';
+  });
+  heySaveBtn.addEventListener('click', function(){
+    var pass = prompt('Enter your TPH passphrase to publish this update for everyone:');
+    if (pass == null) return;
+    heySaveBtn.textContent = 'Saving…';
+    fetch(BANNER_API, { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ text: heyMsg.innerHTML, pass: pass }) })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        heySaveBtn.textContent = 'Save';
+        if (d && d.ok){
+          heyMsg.setAttribute('contenteditable','false');
+          heySaveBtn.style.display = 'none'; heyEditBtn.style.display = '';
+        } else {
+          alert(d && d.error === 'unauthorized' ? 'Wrong passphrase — not published.' : 'Save failed — try again.');
+        }
+      })
+      .catch(function(){ heySaveBtn.textContent = 'Save'; alert('Save failed — network error.'); });
   });
 
   // ── Notes (Day/Week, editable) ──
