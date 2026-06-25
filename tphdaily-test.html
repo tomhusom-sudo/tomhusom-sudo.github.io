@@ -198,34 +198,6 @@
       <button class="btn" id="briefSaveBtn">Save Brief</button><span class="save-note" id="briefNote"></span>
     </div>
 
-    <!-- THE DAY'S READINGS -->
-    <div class="dept"><h2>The Day&rsquo;s Readings</h2><span class="line"></span><span class="flourish">&#10086;</span></div>
-    <div class="readings">
-      <div class="gauge" id="gauge-VONG">
-        <svg class="thermo" viewBox="0 0 60 210" xmlns="http://www.w3.org/2000/svg">
-          <rect x="22" y="8" width="16" height="150" rx="8" fill="none" stroke="#241c12" stroke-width="2"/>
-          <rect class="thermo-fill" x="25" y="155" width="10" height="0" rx="5" fill="#2e4f2e"/>
-          <circle class="thermo-bulb" cx="30" cy="176" r="19" fill="#2e4f2e" stroke="#241c12" stroke-width="2"/>
-        </svg>
-        <div class="g-read">
-          <div class="g-name">VONG</div><div class="g-sh">813 Shares</div>
-          <div class="g-val">$&mdash;</div><div class="g-chg">&mdash;</div><div class="g-px">@ &mdash;</div>
-        </div>
-      </div>
-      <div class="gauge" id="gauge-VOO">
-        <svg class="thermo" viewBox="0 0 60 210" xmlns="http://www.w3.org/2000/svg">
-          <rect x="22" y="8" width="16" height="150" rx="8" fill="none" stroke="#241c12" stroke-width="2"/>
-          <rect class="thermo-fill" x="25" y="155" width="10" height="0" rx="5" fill="#2e4f2e"/>
-          <circle class="thermo-bulb" cx="30" cy="176" r="19" fill="#2e4f2e" stroke="#241c12" stroke-width="2"/>
-        </svg>
-        <div class="g-read">
-          <div class="g-name">VOO</div><div class="g-sh">432 Shares</div>
-          <div class="g-val">$&mdash;</div><div class="g-chg">&mdash;</div><div class="g-px">@ &mdash;</div>
-        </div>
-      </div>
-    </div>
-    <div class="grand">Grand Total of Holdings <b id="posTotal">$&mdash;</b></div>
-
     <!-- MARKET TABLE -->
     <div class="dept"><h2>Market Table</h2><span class="line"></span><span class="updated" id="updated">&mdash;</span></div>
     <table class="ledger">
@@ -328,9 +300,6 @@
     getQuotes(BOARD.map(function(b){return b.sym;})).then(function(quotes){
       var got = 0;
       BOARD.forEach(function(b){ var q = quotes ? quotes[b.sym] : null; if (q) got++; paintRow(b, q); });
-      var total = 0;
-      HOLDINGS.forEach(function(h){ total += setGauge(h.sym, h.shares, quotes ? quotes[h.sym] : null); });
-      document.getElementById('posTotal').textContent = total ? money(total) : '$—';
       var now = new Date();
       document.getElementById('updated').textContent = got
         ? 'Set ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) + (got<BOARD.length?'  ·  '+got+'/'+BOARD.length:'')
