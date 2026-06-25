@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TPH Daily | HonestTom Markets</title>
+  <meta name="description" content="TPH Daily — Tom's daily &amp; weekly market thoughts with a live graph of the Dow, Nasdaq, S&amp;P 500, Gold, Silver, Bitcoin, Oil, VOO and VONG.">
+  <meta property="og:title" content="TPH Daily"/>
+  <meta property="og:description" content="Daily &amp; weekly market thoughts with a live multi-asset graph."/>
+  <meta property="og:url" content="https://honesttom.ai/tphdaily.html"/>
+  <meta property="og:type" content="website"/>
+  <link rel="canonical" href="https://honesttom.ai/tphdaily.html"/>
+  <link rel="apple-touch-icon" href="/lincoln.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Bangers&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overflow-x: hidden; }
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(160deg, rgba(46,74,26,0.90) 0%, rgba(18,26,9,0.95) 50%, rgba(8,14,22,0.97) 100%),
+        url('./lincoln.jpg') center 15% / cover no-repeat fixed;
+      color: #e2eed8;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none; z-index: 0;
+    }
+    .page { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 44px 22px 72px; }
+
+    /* ── HEADER ── */
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:26px; flex-wrap:wrap; }
+    .back { text-decoration:none; color:#cfe0c0; font-size:0.82rem; font-weight:600; letter-spacing:0.04em;
+      border:1px solid rgba(255,255,255,0.22); padding:7px 16px; border-radius:20px; transition:.15s; white-space:nowrap; }
+    .back:hover { background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.5); }
+    .brand { text-align:center; flex:1 1 auto; }
+    .brand h1 { font-family:'Bangers', cursive; font-size:clamp(2.4rem,7vw,4.1rem); letter-spacing:0.05em;
+      line-height:0.95; color:#f4f7ee; text-shadow:0 2px 18px rgba(0,0,0,0.55); }
+    .brand h1 .tph { color:#b8d96a; }
+    .brand .tagline { font-family:'Rajdhani',sans-serif; font-weight:600; letter-spacing:0.28em; text-transform:uppercase;
+      font-size:0.74rem; color:#9fb487; margin-top:6px; }
+    .datechip { font-size:0.74rem; color:#cbe0b4; opacity:0.85; }
+
+    .panel {
+      background: linear-gradient(150deg, rgba(20,30,14,0.72) 0%, rgba(10,18,24,0.78) 100%);
+      border:1px solid rgba(184,217,106,0.20);
+      border-radius:18px; padding:22px; margin-bottom:24px;
+      box-shadow:0 12px 40px rgba(0,0,0,0.35);
+      backdrop-filter: blur(3px);
+    }
+    .panel h2 { font-family:'Rajdhani',sans-serif; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+      font-size:1.0rem; color:#cfe9a3; margin-bottom:14px; display:flex; align-items:center; gap:9px; }
+    .panel h2 .dot { width:9px; height:9px; border-radius:50%; background:#b8d96a; box-shadow:0 0 10px #b8d96a; }
+
+    /* ── THOUGHTS ── */
+    .thoughts-head { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    .tabs { display:flex; gap:6px; }
+    .tab { font-size:0.74rem; font-weight:600; letter-spacing:0.05em; color:#a9c089; cursor:pointer;
+      border:1px solid rgba(255,255,255,0.18); background:transparent; padding:6px 14px; border-radius:16px; transition:.15s; }
+    .tab.active { background:rgba(184,217,106,0.18); border-color:rgba(184,217,106,0.5); color:#eaf6cf; }
+    textarea.thoughts {
+      width:100%; min-height:140px; margin-top:14px; resize:vertical;
+      background:rgba(0,0,0,0.28); border:1px solid rgba(255,255,255,0.14); border-radius:12px;
+      color:#eef5e4; font-family:'Inter',sans-serif; font-size:0.95rem; line-height:1.55; padding:14px 16px;
+    }
+    textarea.thoughts:focus { outline:none; border-color:rgba(184,217,106,0.55); }
+    .save-row { display:flex; align-items:center; gap:12px; margin-top:10px; }
+    .btn { cursor:pointer; border:none; border-radius:10px; padding:8px 18px; font-weight:700; font-size:0.82rem;
+      letter-spacing:0.03em; background:linear-gradient(135deg,#7fae34,#5c7a3e); color:#0c130a; transition:.15s; }
+    .btn:hover { filter:brightness(1.1); }
+    .save-note { font-size:0.74rem; color:#9fb487; }
+
+    /* ── CHART CONTROLS ── */
+    .chart-controls { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+    .ranges { display:flex; gap:5px; flex-wrap:wrap; }
+    .range { font-size:0.74rem; font-weight:600; color:#a9c089; cursor:pointer; background:transparent;
+      border:1px solid rgba(255,255,255,0.18); padding:5px 12px; border-radius:14px; transition:.15s; }
+    .range.active { background:rgba(184,217,106,0.20); border-color:rgba(184,217,106,0.55); color:#eaf6cf; }
+    .chart-wrap { position:relative; height:430px; }
+    @media(max-width:600px){ .chart-wrap{ height:340px; } }
+
+    .legend { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+    .lg { display:inline-flex; align-items:center; gap:7px; cursor:pointer; user-select:none;
+      font-size:0.78rem; font-weight:600; padding:6px 12px; border-radius:14px;
+      border:1px solid rgba(255,255,255,0.14); background:rgba(0,0,0,0.22); transition:.15s; }
+    .lg .sw { width:12px; height:12px; border-radius:3px; }
+    .lg.off { opacity:0.35; text-decoration:line-through; }
+    .lg .pct { font-weight:700; margin-left:2px; }
+    .pct.up { color:#7fe08a; } .pct.down { color:#f08a8a; }
+
+    .status { font-size:0.78rem; color:#9fb487; margin-top:12px; text-align:center; min-height:18px; }
+    .foot { text-align:center; font-size:0.72rem; color:#8aa074; margin-top:30px; line-height:1.6; }
+    .foot a { color:#b8d96a; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <div class="topbar">
+      <a class="back" href="./dashboard.html">&larr; HonestTom</a>
+      <div class="brand">
+        <h1><span class="tph">TPH</span> Daily</h1>
+        <div class="tagline">Tom&rsquo;s Market Journal</div>
+      </div>
+      <div class="datechip" id="todayChip"></div>
+    </div>
+
+    <!-- THOUGHTS -->
+    <div class="panel">
+      <div class="thoughts-head">
+        <h2><span class="dot"></span> Thoughts of the <span id="periodWord" style="margin-left:4px;color:#eaf6cf;">Day</span></h2>
+        <div class="tabs">
+          <button class="tab active" data-period="day">Day</button>
+          <button class="tab" data-period="week">Week</button>
+        </div>
+      </div>
+      <textarea class="thoughts" id="thoughts" placeholder="What are you watching today? Jot down the market thoughts, plays, and gut calls&hellip;"></textarea>
+      <div class="save-row">
+        <button class="btn" id="saveBtn">Save</button>
+        <span class="save-note" id="saveNote"></span>
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="panel">
+      <h2><span class="dot"></span> The Tape &mdash; Normalized % Move</h2>
+      <div class="chart-controls">
+        <div class="ranges" id="ranges">
+          <button class="range" data-range="5d" data-interval="15m">5D</button>
+          <button class="range active" data-range="1mo" data-interval="1d">1M</button>
+          <button class="range" data-range="3mo" data-interval="1d">3M</button>
+          <button class="range" data-range="6mo" data-interval="1d">6M</button>
+          <button class="range" data-range="1y" data-interval="1d">1Y</button>
+          <button class="range" data-range="5y" data-interval="1wk">5Y</button>
+        </div>
+        <button class="range" id="refreshBtn">&#x21bb; Refresh</button>
+      </div>
+      <div class="chart-wrap"><canvas id="chart"></canvas></div>
+      <div class="legend" id="legend"></div>
+      <div class="status" id="status">Loading markets&hellip;</div>
+    </div>
+
+    <div class="foot">
+      Prices via Yahoo Finance, delayed &amp; for entertainment only &mdash; not investment advice.<br>
+      Part of <a href="./dashboard.html">honesttom.ai</a> &middot; built with Claude Code.
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ── Asset universe ──
+  var ASSETS = [
+    { key:'DOW',     sym:'^DJI',     label:'Dow',      color:'#5b9bd5' },
+    { key:'NASDAQ',  sym:'^IXIC',    label:'Nasdaq',   color:'#8e6fd5' },
+    { key:'SP500',   sym:'^GSPC',    label:'S&P 500',  color:'#4ec9a8' },
+    { key:'GOLD',    sym:'GC=F',     label:'Gold',     color:'#e3b341' },
+    { key:'SILVER',  sym:'SI=F',     label:'Silver',   color:'#c7ccd1' },
+    { key:'BTC',     sym:'BTC-USD',  label:'Bitcoin',  color:'#f7931a' },
+    { key:'OIL',     sym:'CL=F',     label:'Oil (WTI)',color:'#9aa37a' },
+    { key:'VOO',     sym:'VOO',      label:'VOO',      color:'#6fcf97' },
+    { key:'VONG',    sym:'VONG',     label:'VONG',     color:'#eb6f9e' }
+  ];
+
+  var hidden = {};            // key -> true if toggled off
+  var curRange = '1mo', curInterval = '1d';
+  var chart = null;
+
+  // ── Thoughts (localStorage) ──
+  var period = 'day';
+  function tKey(p){ return 'tph_thoughts_' + p; }
+  var thoughtsEl = document.getElementById('thoughts');
+  var saveNote = document.getElementById('saveNote');
+
+  function loadThoughts(){
+    thoughtsEl.value = localStorage.getItem(tKey(period)) || '';
+    var ts = localStorage.getItem(tKey(period) + '_ts');
+    saveNote.textContent = ts ? ('Last saved ' + ts) : '';
+    document.getElementById('periodWord').textContent = period === 'day' ? 'Day' : 'Week';
+  }
+  document.getElementById('saveBtn').addEventListener('click', function(){
+    localStorage.setItem(tKey(period), thoughtsEl.value);
+    var now = new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    localStorage.setItem(tKey(period) + '_ts', now);
+    saveNote.textContent = 'Saved ' + now;
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.tab'), function(tab){
+    tab.addEventListener('click', function(){
+      document.querySelector('.tab.active').classList.remove('active');
+      tab.classList.add('active');
+      period = tab.getAttribute('data-period');
+      loadThoughts();
+    });
+  });
+
+  // ── Date chip ──
+  document.getElementById('todayChip').textContent =
+    new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric',year:'numeric'});
+
+  // ── Fetch one Yahoo series via proxy chain ──
+  function fetchSeries(sym){
+    var url = 'https://query1.finance.yahoo.com/v8/finance/chart/'
+            + encodeURIComponent(sym)
+            + '?interval=' + curInterval + '&range=' + curRange;
+    var proxies = [
+      'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
+      'https://corsproxy.io/?' + encodeURIComponent(url),
+      'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url)
+    ];
+    return new Promise(function(resolve){
+      var i = 0;
+      function attempt(){
+        if (i >= proxies.length){ resolve(null); return; }
+        var ctrl = new AbortController();
+        var timer = setTimeout(function(){ ctrl.abort(); }, 9000);
+        fetch(proxies[i], { signal: ctrl.signal })
+          .then(function(r){ return r.json(); })
+          .then(function(data){
+            clearTimeout(timer);
+            var res = data && data.chart && data.chart.result && data.chart.result[0];
+            if (!res || !res.timestamp) throw new Error('no data');
+            var ts = res.timestamp;
+            var q = res.indicators.quote[0].close;
+            var pts = [];
+            for (var k=0;k<ts.length;k++){
+              if (q[k] == null) continue;
+              pts.push({ t: ts[k]*1000, v: q[k] });
+            }
+            resolve(pts.length ? pts : null);
+          })
+          .catch(function(){ clearTimeout(timer); i++; attempt(); });
+      }
+      attempt();
+    });
+  }
+
+  function normalize(pts){
+    var base = pts[0].v;
+    return pts.map(function(p){ return { x: p.t, y: ((p.v - base)/base)*100 }; });
+  }
+
+  function buildLegend(series){
+    var lg = document.getElementById('legend');
+    lg.innerHTML = '';
+    ASSETS.forEach(function(a){
+      var data = series[a.key];
+      var pct = (data && data.length) ? data[data.length-1].y : null;
+      var el = document.createElement('div');
+      el.className = 'lg' + (hidden[a.key] ? ' off' : '');
+      var pctTxt = (pct==null) ? '&mdash;'
+        : '<span class="pct ' + (pct>=0?'up':'down') + '">' + (pct>=0?'+':'') + pct.toFixed(2) + '%</span>';
+      el.innerHTML = '<span class="sw" style="background:'+a.color+'"></span>' + a.label + ' ' + pctTxt;
+      el.addEventListener('click', function(){
+        hidden[a.key] = !hidden[a.key];
+        el.classList.toggle('off');
+        var ds = chart.data.datasets.filter(function(d){ return d._key===a.key; })[0];
+        if (ds){ ds.hidden = hidden[a.key]; chart.update(); }
+      });
+      lg.appendChild(el);
+    });
+  }
+
+  function render(series){
+    var datasets = ASSETS.filter(function(a){ return series[a.key]; }).map(function(a){
+      return {
+        _key: a.key, label: a.label, data: series[a.key],
+        borderColor: a.color, backgroundColor: a.color,
+        borderWidth: a.key==='BTC' ? 2.4 : 1.8,
+        pointRadius: 0, pointHoverRadius: 4, tension: 0.18,
+        hidden: !!hidden[a.key]
+      };
+    });
+    if (chart) chart.destroy();
+    var ctx = document.getElementById('chart').getContext('2d');
+    chart = new Chart(ctx, {
+      type: 'line',
+      data: { datasets: datasets },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode:'index', intersect:false },
+        plugins: {
+          legend: { display:false },
+          tooltip: {
+            backgroundColor:'rgba(10,16,8,0.94)', borderColor:'rgba(184,217,106,0.4)', borderWidth:1,
+            callbacks: {
+              label: function(c){ return c.dataset.label + ': ' + (c.parsed.y>=0?'+':'') + c.parsed.y.toFixed(2) + '%'; }
+            }
+          }
+        },
+        scales: {
+          x: { type:'time', time:{ unit: (curRange==='5d'?'day':(curRange==='1y'||curRange==='5y'?'month':'day')) },
+               grid:{ color:'rgba(255,255,255,0.05)' }, ticks:{ color:'#9fb487', maxTicksLimit:8, font:{size:10} } },
+          y: { grid:{ color:'rgba(255,255,255,0.06)' },
+               ticks:{ color:'#9fb487', font:{size:10}, callback:function(v){ return (v>=0?'+':'')+v+'%'; } } }
+        }
+      }
+    });
+  }
+
+  function load(){
+    var status = document.getElementById('status');
+    status.textContent = 'Loading markets…';
+    var series = {};
+    Promise.all(ASSETS.map(function(a){
+      return fetchSeries(a.sym).then(function(pts){
+        if (pts) series[a.key] = normalize(pts);
+      });
+    })).then(function(){
+      var got = Object.keys(series).length;
+      if (!got){ status.textContent = '⚠ Could not reach market data — try Refresh in a moment.'; return; }
+      render(series);
+      buildLegend(series);
+      status.textContent = 'Updated ' + new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})
+                         + (got < ASSETS.length ? '  ·  ' + got + '/' + ASSETS.length + ' tickers loaded' : '');
+    });
+  }
+
+  // ── Range buttons ──
+  Array.prototype.forEach.call(document.querySelectorAll('#ranges .range'), function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelector('#ranges .range.active').classList.remove('active');
+      btn.classList.add('active');
+      curRange = btn.getAttribute('data-range');
+      curInterval = btn.getAttribute('data-interval');
+      load();
+    });
+  });
+  document.getElementById('refreshBtn').addEventListener('click', load);
+
+  // ── Chart.js date adapter (lightweight) ──
+  // Chart.js time scale needs an adapter; load date-fns adapter, then start.
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js';
+  s.onload = function(){ loadThoughts(); load(); };
+  s.onerror = function(){ loadThoughts(); load(); };
+  document.head.appendChild(s);
+
+})();
+</script>
+</body>
+</html>
