@@ -385,18 +385,52 @@
     document.getElementById('tape').innerHTML = inner + inner; // duplicate for seamless loop
   }
 
+  // Run promises with limited concurrency to avoid hammering the free proxies
+  function runLimited(items, worker, limit){
+    return new Promise(function(resolve){
+      if (!items.length){ resolve([]); return; }
+      var idx = 0, active = 0, done = 0, out = new Array(items.length);
+      function next(){
+        while (active < limit && idx < items.length){
+          (function(i){
+            active++;
+            worker(items[i]).then(function(v){ out[i] = v; }, function(){ out[i] = null; })
+              .then(function(){ active--; done++; if (done === items.length) resolve(out); else next(); });
+          })(idx++);
+        }
+      }
+      next();
+    });
+  }
+
+  var quotes = {};
+  function fetchPass(list){
+    return runLimited(list, function(a){
+      return fetchQuote(a).then(function(q){ return { a:a, q:q }; });
+    }, 4);
+  }
+
   function load(){
     document.getElementById('updated').textContent = 'Updating…';
-    var quotes = {};
-    Promise.all(ASSETS.map(function(a){
-      return fetchQuote(a).then(function(q){ quotes[a.key] = paintTile(a, q); });
-    })).then(function(){
-      var got = ASSETS.filter(function(a){ return quotes[a.key]; }).length;
+    quotes = {};
+    fetchPass(ASSETS).then(function(results){
+      var failed = [];
+      results.forEach(function(r){ if (!r) return; var s = paintTile(r.a, r.q); if (s) quotes[r.a.key] = s; else failed.push(r.a); });
+      if (failed.length){
+        return new Promise(function(res){ setTimeout(res, 1400); }).then(function(){
+          return fetchPass(failed).then(function(rs){
+            rs.forEach(function(r){ if (!r) return; var s = paintTile(r.a, r.q); if (s) quotes[r.a.key] = s; });
+          });
+        });
+      }
+    }).then(function(){
+      var got = Object.keys(quotes).length;
       buildTape(quotes);
       var now = new Date();
       document.getElementById('updated').textContent =
-        (got ? 'As of ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit'}) : '⚠ Market data unavailable — retry') +
+        (got ? 'As of ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit'}) : '⚠ Market data unavailable — tap Refresh') +
         (got && got < ASSETS.length ? '  ·  ' + got + '/' + ASSETS.length : '');
+      try { window.dispatchEvent(new Event('tph:boardDone')); } catch(e){}
     });
   }
 
@@ -507,6 +541,20 @@
 
   function normPct(pts){ var b = pts[0].v; return pts.map(function(p){ return { t:p.t, y:((p.v-b)/b)*100 }; }); }
 
+  function runLimited(items, worker, limit){
+    return new Promise(function(resolve){
+      if (!items.length){ resolve([]); return; }
+      var idx=0, active=0, done=0, out=new Array(items.length);
+      function next(){
+        while (active<limit && idx<items.length){
+          (function(i){ active++; worker(items[i]).then(function(v){ out[i]=v; }, function(){ out[i]=null; })
+            .then(function(){ active--; done++; if (done===items.length) resolve(out); else next(); }); })(idx++);
+        }
+      }
+      next();
+    });
+  }
+
   function buildLegend(series){
     var lg = document.getElementById('cmpLegend'); lg.innerHTML = '';
     CMP.forEach(function(a){
@@ -563,33 +611,49 @@
   function load(){
     statusEl.textContent = 'Loading comparison…';
     var series = {};
-    Promise.all(CMP.map(function(a){
-      return fetchSeries(a.sym).then(function(pts){ if (pts) series[a.key] = normPct(pts); });
-    })).then(function(){
+    runLimited(CMP, function(a){
+      return fetchSeries(a.sym).then(function(pts){ if (pts) series[a.key] = normPct(pts); return a; });
+    }, 3).then(function(){
+      var missing = CMP.filter(function(a){ return !series[a.key]; });
+      if (missing.length){
+        return new Promise(function(res){ setTimeout(res, 1400); }).then(function(){
+          return runLimited(missing, function(a){
+            return fetchSeries(a.sym).then(function(pts){ if (pts) series[a.key] = normPct(pts); });
+          }, 3);
+        }).then(function(){ return series; });
+      }
+      return series;
+    }).then(function(series){
       var got = Object.keys(series).length;
-      if (!got){ statusEl.textContent = '⚠ Comparison data unavailable — retry.'; return; }
+      if (!got){ statusEl.textContent = '⚠ Comparison data unavailable — tap a range to retry.'; return; }
       render(series); buildLegend(series);
-      statusEl.textContent = 'Normalized % move · ' + range.toUpperCase().replace('MO','M').replace('Y','Y') +
+      statusEl.textContent = 'Normalized % move · ' + range.toUpperCase().replace('MO','M') +
         (got<CMP.length ? '  ·  '+got+'/'+CMP.length+' loaded' : '');
     });
   }
 
+  function ensureChart(cb){
+    if (window.Chart){ cb(); return; }
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
+    s.onload = cb;
+    s.onerror = function(){ statusEl.textContent = '⚠ Could not load chart library.'; };
+    document.head.appendChild(s);
+  }
+  function run(){ ensureChart(load); }
+
   Array.prototype.forEach.call(document.querySelectorAll('#cmpRanges .mini-btn'), function(b){
     b.addEventListener('click', function(){
       var cur = document.querySelector('#cmpRanges .mini-btn.active'); if (cur) cur.classList.remove('active');
-      b.classList.add('active'); range = b.getAttribute('data-range'); load();
+      b.classList.add('active'); range = b.getAttribute('data-range'); run();
     });
   });
 
-  // load Chart.js then render
-  if (window.Chart){ load(); }
-  else {
-    var s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
-    s.onload = load;
-    s.onerror = function(){ document.getElementById('cmpStatus').textContent = '⚠ Could not load chart library.'; };
-    document.head.appendChild(s);
-  }
+  // Defer first load until the price board finishes, so we don't overload the proxies
+  var started = false;
+  function startOnce(){ if (started) return; started = true; run(); }
+  window.addEventListener('tph:boardDone', startOnce);
+  setTimeout(startOnce, 10000); // fallback if board never signals
 })();
 </script>
 </body>
