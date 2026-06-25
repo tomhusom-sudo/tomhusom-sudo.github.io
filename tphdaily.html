@@ -4,191 +4,230 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TPH Daily | HonestTom Markets</title>
-  <meta name="description" content="TPH Daily — Tom's daily &amp; weekly market thoughts with a live graph of the Dow, Nasdaq, S&amp;P 500, Gold, Silver, Bitcoin, Oil, VOO and VONG.">
+  <meta name="description" content="TPH Daily — live market prices and Tom's daily brief: Dow, Nasdaq, S&amp;P 500, Gold, Silver, Bitcoin, Oil, VOO and VONG.">
   <meta property="og:title" content="TPH Daily"/>
-  <meta property="og:description" content="Daily &amp; weekly market thoughts with a live multi-asset graph."/>
+  <meta property="og:description" content="Live market prices and Tom's daily brief."/>
   <meta property="og:url" content="https://honesttom.ai/tphdaily.html"/>
-  <meta property="og:type" content="website"/>
   <link rel="canonical" href="https://honesttom.ai/tphdaily.html"/>
   <link rel="apple-touch-icon" href="/lincoln.jpg">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Bangers&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Roboto+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { overflow-x: hidden; }
-    body {
-      min-height: 100vh;
+    :root{
+      --bg:#070b08; --bg2:#0c130d;
+      --panel:rgba(255,255,255,0.035);
+      --line:rgba(143,201,58,0.16);
+      --green:#9fd13f; --green-dim:#6f9a2e; --gold:#e3b341;
+      --up:#23c97a; --down:#ef5454;
+      --text:#e9f0e2; --muted:#8fa37f;
+      --mono:'Roboto Mono',monospace; --head:'Oswald',sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{overflow-x:hidden;}
+    body{
+      min-height:100vh; color:var(--text);
+      font-family:'Inter',system-ui,sans-serif;
       background:
-        linear-gradient(160deg, rgba(46,74,26,0.88) 0%, rgba(18,26,9,0.93) 50%, rgba(8,14,22,0.96) 100%),
-        url('./market.png') center 20% / cover no-repeat fixed;
-      color: #e2eed8;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      overflow-x: hidden;
+        radial-gradient(1200px 600px at 50% -10%, rgba(143,201,58,0.10), transparent 60%),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
+      background-attachment:fixed;
     }
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
-      background-size: 28px 28px;
-      pointer-events: none; z-index: 0;
+    body::before{
+      content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+      background-image:linear-gradient(rgba(143,201,58,0.05) 1px,transparent 1px),
+                       linear-gradient(90deg,rgba(143,201,58,0.05) 1px,transparent 1px);
+      background-size:46px 46px;
+      mask-image:radial-gradient(circle at 50% 0%, #000 0%, transparent 80%);
     }
-    .page { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 44px 22px 72px; }
+    .wrap{position:relative; z-index:1;}
 
-    /* ── HEADER ── */
-    .topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:26px; flex-wrap:wrap; }
-    .back { text-decoration:none; color:#cfe0c0; font-size:0.82rem; font-weight:600; letter-spacing:0.04em;
-      border:1px solid rgba(255,255,255,0.22); padding:7px 16px; border-radius:20px; transition:.15s; white-space:nowrap; }
-    .back:hover { background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.5); }
-    .brand { text-align:center; flex:1 1 auto; }
-    .brand h1 { font-family:'Bangers', cursive; font-size:clamp(2.4rem,7vw,4.1rem); letter-spacing:0.05em;
-      line-height:0.95; color:#f4f7ee; text-shadow:0 2px 18px rgba(0,0,0,0.55); }
-    .brand h1 .tph { color:#b8d96a; }
-    .brand .tagline { font-family:'Rajdhani',sans-serif; font-weight:600; letter-spacing:0.28em; text-transform:uppercase;
-      font-size:0.74rem; color:#9fb487; margin-top:6px; }
-    .datechip { font-size:0.74rem; color:#cbe0b4; opacity:0.85; }
-
-    .panel {
-      background: linear-gradient(150deg, rgba(20,30,14,0.72) 0%, rgba(10,18,24,0.78) 100%);
-      border:1px solid rgba(184,217,106,0.20);
-      border-radius:18px; padding:22px; margin-bottom:24px;
-      box-shadow:0 12px 40px rgba(0,0,0,0.35);
-      backdrop-filter: blur(3px);
+    /* ── TICKER TAPE ── */
+    .tape{
+      position:sticky; top:0; z-index:20;
+      background:linear-gradient(180deg,#0b110c,#080d09);
+      border-bottom:1px solid var(--line);
+      overflow:hidden; white-space:nowrap; height:38px;
     }
-    .panel h2 { font-family:'Rajdhani',sans-serif; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
-      font-size:1.0rem; color:#cfe9a3; margin-bottom:14px; display:flex; align-items:center; gap:9px; }
-    .panel h2 .dot { width:9px; height:9px; border-radius:50%; background:#b8d96a; box-shadow:0 0 10px #b8d96a; }
+    .tape-track{display:inline-flex; align-items:center; height:38px; will-change:transform; animation:scroll 60s linear infinite;}
+    .tape:hover .tape-track{animation-play-state:paused;}
+    @keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+    .tk-item{display:inline-flex; align-items:baseline; gap:7px; padding:0 18px; font-size:0.82rem;
+      border-right:1px solid rgba(255,255,255,0.05);}
+    .tk-item .s{font-family:var(--head); font-weight:600; letter-spacing:0.06em; color:#cfe0b6;}
+    .tk-item .p{font-family:var(--mono); font-weight:600; color:#fff;}
+    .tk-item .c{font-family:var(--mono); font-weight:600; font-size:0.78rem;}
+    .c.up,.up .c{color:var(--up);} .c.down,.down .c{color:var(--down);}
 
-    /* ── THOUGHTS ── */
-    .thoughts-head { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
-    .tabs { display:flex; gap:6px; }
-    .tab { font-size:0.74rem; font-weight:600; letter-spacing:0.05em; color:#a9c089; cursor:pointer;
-      border:1px solid rgba(255,255,255,0.18); background:transparent; padding:6px 14px; border-radius:16px; transition:.15s; }
-    .tab.active { background:rgba(184,217,106,0.18); border-color:rgba(184,217,106,0.5); color:#eaf6cf; }
-    textarea.thoughts {
-      width:100%; min-height:140px; margin-top:14px; resize:vertical;
-      background:rgba(0,0,0,0.28); border:1px solid rgba(255,255,255,0.14); border-radius:12px;
-      color:#eef5e4; font-family:'Inter',sans-serif; font-size:0.95rem; line-height:1.55; padding:14px 16px;
-    }
-    textarea.thoughts:focus { outline:none; border-color:rgba(184,217,106,0.55); }
-    .save-row { display:flex; align-items:center; gap:12px; margin-top:10px; }
-    .btn { cursor:pointer; border:none; border-radius:10px; padding:8px 18px; font-weight:700; font-size:0.82rem;
-      letter-spacing:0.03em; background:linear-gradient(135deg,#7fae34,#5c7a3e); color:#0c130a; transition:.15s; }
-    .btn:hover { filter:brightness(1.1); }
-    .save-note { font-size:0.74rem; color:#9fb487; }
+    /* ── MASTHEAD ── */
+    .masthead{max-width:1180px; margin:0 auto; padding:22px 20px 10px; display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+    .brand{display:flex; align-items:baseline; gap:14px;}
+    .brand .logo{font-family:var(--head); font-weight:700; font-size:clamp(2rem,5vw,3rem); letter-spacing:0.02em; line-height:0.9;}
+    .brand .logo .x{color:var(--green);}
+    .brand .tag{font-family:var(--head); font-weight:500; letter-spacing:0.32em; text-transform:uppercase; font-size:0.72rem; color:var(--muted); padding-bottom:5px;}
+    .clockbox{text-align:right; font-family:var(--mono); display:flex; flex-direction:column; align-items:flex-end; gap:4px;}
+    .clockbox .date{font-size:0.78rem; color:var(--muted); letter-spacing:0.02em;}
+    .clockbox .time{font-size:1.05rem; font-weight:700; color:#eef5e6;}
+    .pill{display:inline-flex; align-items:center; gap:6px; font-family:var(--head); font-size:0.7rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; padding:3px 10px; border-radius:4px;}
+    .pill .led{width:7px; height:7px; border-radius:50%;}
+    .pill.open{background:rgba(35,201,122,0.14); color:#7ce0ad; border:1px solid rgba(35,201,122,0.4);}
+    .pill.open .led{background:var(--up); box-shadow:0 0 8px var(--up); animation:blink 1.6s infinite;}
+    .pill.closed{background:rgba(239,84,84,0.12); color:#f0a0a0; border:1px solid rgba(239,84,84,0.35);}
+    .pill.closed .led{background:var(--down);}
+    @keyframes blink{50%{opacity:0.35;}}
 
-    /* ── DAILY BRIEF ── */
-    .brief { border-color: rgba(227,179,65,0.34); }
-    .brief h2 { color:#e9cf86; }
-    .brief h2 .dot { background:#e3b341; box-shadow:0 0 10px #e3b341; }
-    .brief .kicker { font-family:'Rajdhani',sans-serif; font-weight:600; letter-spacing:0.18em; text-transform:uppercase;
-      font-size:0.66rem; color:#caa64a; margin-left:8px; }
-    .brief-body { font-size:0.98rem; line-height:1.62; color:#eef5e4; outline:none; }
-    .brief-body p { margin-bottom:12px; }
-    .brief-body .lead { font-size:1.08rem; font-weight:600; color:#f6efd9; }
-    .brief-body ul { list-style:none; margin:8px 0 14px; padding:0; }
-    .brief-body li { position:relative; padding-left:20px; margin-bottom:8px; }
-    .brief-body li::before { content:'▸'; position:absolute; left:0; color:#e3b341; }
-    .brief-body li b, .brief-body p b { color:#f6efd9; }
-    .tk { display:inline-block; font-family:'Rajdhani',sans-serif; font-weight:700; letter-spacing:0.04em;
-      font-size:0.82rem; color:#0c130a; background:linear-gradient(135deg,#e3c155,#cfa23a);
-      padding:1px 8px; border-radius:6px; margin:0 1px; }
-    .brief-body[contenteditable="true"] { border:1px dashed rgba(227,179,65,0.5); border-radius:10px; padding:12px; }
+    .accentbar{max-width:1180px; margin:6px auto 0; padding:0 20px;}
+    .accentbar .line{height:3px; background:linear-gradient(90deg,var(--green),var(--gold) 60%,transparent); border-radius:2px;}
 
-    /* ── CHART CONTROLS ── */
-    .chart-controls { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
-    .ranges { display:flex; gap:5px; flex-wrap:wrap; }
-    .range { font-size:0.74rem; font-weight:600; color:#a9c089; cursor:pointer; background:transparent;
-      border:1px solid rgba(255,255,255,0.18); padding:5px 12px; border-radius:14px; transition:.15s; }
-    .range.active { background:rgba(184,217,106,0.20); border-color:rgba(184,217,106,0.55); color:#eaf6cf; }
-    .chart-wrap { position:relative; height:430px; }
-    @media(max-width:600px){ .chart-wrap{ height:340px; } }
+    .container{max-width:1180px; margin:0 auto; padding:22px 20px 70px;}
+    .sec-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin:30px 0 14px;}
+    .sec-head:first-child{margin-top:8px;}
+    .sec-head h2{font-family:var(--head); font-weight:600; letter-spacing:0.05em; text-transform:uppercase; font-size:1.05rem; color:#dcebc6; display:flex; align-items:center; gap:10px;}
+    .sec-head h2::before{content:''; width:4px; height:20px; background:var(--green); border-radius:2px;}
+    .updated{font-family:var(--mono); font-size:0.72rem; color:var(--muted);}
+    .mini-btn{font-family:var(--head); font-size:0.72rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; color:#cfe0b6; background:transparent; border:1px solid var(--line); padding:5px 12px; border-radius:5px; transition:.15s;}
+    .mini-btn:hover{background:rgba(143,201,58,0.1); border-color:var(--green-dim);}
 
-    .legend { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
-    .lg { display:inline-flex; align-items:center; gap:7px; cursor:pointer; user-select:none;
-      font-size:0.78rem; font-weight:600; padding:6px 12px; border-radius:14px;
-      border:1px solid rgba(255,255,255,0.14); background:rgba(0,0,0,0.22); transition:.15s; }
-    .lg .sw { width:12px; height:12px; border-radius:3px; }
-    .lg.off { opacity:0.35; text-decoration:line-through; }
-    .lg .pct { font-weight:700; margin-left:2px; }
-    .pct.up { color:#7fe08a; } .pct.down { color:#f08a8a; }
+    /* ── QUOTE BOARD ── */
+    .board{display:grid; grid-template-columns:repeat(auto-fill,minmax(212px,1fr)); gap:12px;}
+    .tile{position:relative; background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--muted);
+      border-radius:8px; padding:14px 15px; overflow:hidden; transition:.15s; backdrop-filter:blur(2px);}
+    .tile:hover{border-color:rgba(143,201,58,0.4); transform:translateY(-2px);}
+    .tile.up{border-left-color:var(--up);}
+    .tile.down{border-left-color:var(--down);}
+    .tile .row1{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+    .tile .sym{font-family:var(--head); font-weight:600; letter-spacing:0.05em; font-size:0.92rem; color:#eef5e6;}
+    .tile .name{font-size:0.68rem; color:var(--muted); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    .tile .arw{font-size:0.9rem; font-weight:700;}
+    .tile.up .arw,.tile.up .chg{color:var(--up);} .tile.down .arw,.tile.down .chg{color:var(--down);}
+    .tile .price{font-family:var(--mono); font-weight:700; font-size:1.55rem; color:#fff; margin:8px 0 2px; letter-spacing:-0.01em;}
+    .tile .chg{font-family:var(--mono); font-weight:600; font-size:0.82rem;}
+    .tile .range{margin-top:11px;}
+    .tile .range-track{height:4px; border-radius:3px; background:rgba(255,255,255,0.08); position:relative;}
+    .tile .range-fill{position:absolute; top:0; bottom:0; left:0; border-radius:3px; background:linear-gradient(90deg,var(--green-dim),var(--green));}
+    .tile .range-dot{position:absolute; top:50%; width:9px; height:9px; border-radius:50%; background:#fff; border:2px solid var(--bg2); transform:translate(-50%,-50%); box-shadow:0 0 6px rgba(0,0,0,.6);}
+    .tile .range-lbl{display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.64rem; color:var(--muted); margin-top:4px;}
+    .tile.loading .price{color:var(--muted); opacity:.5;}
+    .tile .badge{position:absolute; top:10px; right:12px; font-family:var(--head); font-size:0.56rem; font-weight:600; letter-spacing:0.1em; color:var(--gold); opacity:.8;}
 
-    .status { font-size:0.78rem; color:#9fb487; margin-top:12px; text-align:center; min-height:18px; }
-    .foot { text-align:center; font-size:0.72rem; color:#8aa074; margin-top:30px; line-height:1.6; }
-    .foot a { color:#b8d96a; text-decoration:none; }
+    /* ── PANELS (brief + notes) ── */
+    .cols{display:grid; grid-template-columns:1.25fr 1fr; gap:18px; align-items:start;}
+    @media(max-width:880px){.cols{grid-template-columns:1fr;}}
+    .panel{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:20px;}
+    .panel .phead{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px;}
+    .panel .phead h3{font-family:var(--head); font-weight:600; letter-spacing:0.05em; text-transform:uppercase; font-size:0.98rem; display:flex; align-items:center; gap:9px;}
+    .panel .phead h3 .dot{width:8px; height:8px; border-radius:50%;}
+    .brief .phead h3{color:#ecd99a;} .brief .phead h3 .dot{background:var(--gold); box-shadow:0 0 8px var(--gold);}
+    .brief{border-color:rgba(227,179,65,0.3);}
+    .notes .phead h3{color:#cfe7a3;} .notes .phead h3 .dot{background:var(--green); box-shadow:0 0 8px var(--green);}
+    .kicker{font-family:var(--head); font-weight:500; letter-spacing:0.18em; text-transform:uppercase; font-size:0.62rem; color:var(--muted);}
+
+    .brief-body{font-size:0.96rem; line-height:1.62; color:#eef5e4; outline:none;}
+    .brief-body p{margin-bottom:11px;}
+    .brief-body .lead{font-size:1.05rem; font-weight:600; color:#f6efd9;}
+    .brief-body ul{list-style:none; margin:6px 0 12px; padding:0;}
+    .brief-body li{position:relative; padding-left:20px; margin-bottom:7px;}
+    .brief-body li::before{content:'▸'; position:absolute; left:0; color:var(--gold);}
+    .brief-body b{color:#f6efd9;}
+    .tk{display:inline-block; font-family:var(--mono); font-weight:700; font-size:0.8rem; color:#0c130a; background:linear-gradient(135deg,#e3c155,#cfa23a); padding:1px 7px; border-radius:5px; margin:0 1px;}
+    .brief-body[contenteditable="true"]{border:1px dashed rgba(227,179,65,0.5); border-radius:8px; padding:12px;}
+
+    .tabs{display:flex; gap:6px;}
+    .tab{font-family:var(--head); font-size:0.72rem; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#a9c089; cursor:pointer; border:1px solid var(--line); background:transparent; padding:5px 13px; border-radius:5px; transition:.15s;}
+    .tab.active{background:rgba(143,201,58,0.16); border-color:rgba(143,201,58,0.5); color:#eaf6cf;}
+    textarea.notes-area{width:100%; min-height:200px; resize:vertical; background:rgba(0,0,0,0.28); border:1px solid var(--line); border-radius:8px; color:#eef5e4; font-family:'Inter',sans-serif; font-size:0.95rem; line-height:1.55; padding:13px 15px;}
+    textarea.notes-area:focus{outline:none; border-color:rgba(143,201,58,0.55);}
+    .save-row{display:flex; align-items:center; gap:12px; margin-top:11px;}
+    .btn{cursor:pointer; border:none; border-radius:6px; padding:8px 18px; font-family:var(--head); font-weight:600; letter-spacing:0.04em; text-transform:uppercase; font-size:0.78rem; background:linear-gradient(135deg,var(--green),var(--green-dim)); color:#0c130a; transition:.15s;}
+    .btn:hover{filter:brightness(1.1);}
+    .save-note{font-family:var(--mono); font-size:0.72rem; color:var(--muted);}
+
+    .back{position:absolute; }
+    .topnav{max-width:1180px; margin:0 auto; padding:12px 20px 0;}
+    .topnav a{font-family:var(--head); text-decoration:none; color:#cfe0b6; font-size:0.74rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; border:1px solid var(--line); padding:6px 14px; border-radius:5px; transition:.15s;}
+    .topnav a:hover{background:rgba(143,201,58,0.1); border-color:var(--green-dim);}
+
+    .foot{text-align:center; font-family:var(--mono); font-size:0.7rem; color:var(--muted); margin-top:34px; line-height:1.7;}
+    .foot a{color:var(--green);}
   </style>
 </head>
 <body>
-  <div class="page">
+  <div class="wrap">
 
-    <div class="topbar">
-      <a class="back" href="./dashboard.html">&larr; HonestTom</a>
+    <!-- TICKER TAPE -->
+    <div class="tape"><div class="tape-track" id="tape">Loading market data…</div></div>
+
+    <div class="topnav"><a href="./dashboard.html">&larr; HonestTom</a></div>
+
+    <!-- MASTHEAD -->
+    <div class="masthead">
       <div class="brand">
-        <h1><span class="tph">TPH</span> Daily</h1>
-        <div class="tagline">Tom&rsquo;s Market Journal</div>
+        <div class="logo">TP<span class="x">H</span> Daily</div>
+        <div class="tag">Markets</div>
       </div>
-      <div class="datechip" id="todayChip"></div>
-    </div>
-
-    <!-- DAILY BRIEF -->
-    <div class="panel brief" id="brief">
-      <div class="thoughts-head">
-        <h2><span class="dot"></span> The Daily Brief <span class="kicker">Tom&rsquo;s Tips</span></h2>
-        <button class="tab" id="briefEditBtn">Edit</button>
-      </div>
-      <div class="brief-body" id="briefBody" contenteditable="false">
-        <p class="lead">India&rsquo;s real GDP is set to grow at a robust <b>6.5%&ndash;6.9%</b> range &mdash; making it the fastest-growing major economy on the planet.</p>
-        <p>While much of the developed world (and China) is facing an aging population, India has the opposite &ldquo;problem.&rdquo;</p>
-        <ul>
-          <li><b>The Youth Wave:</b> the median age in India is roughly 28 years old.</li>
-          <li><b>Workforce Expansion:</b> millions of ambitious, educated young people enter the workforce every single year, hitting their peak earning and spending years.</li>
-        </ul>
-        <p><b>The play:</b> <span class="tk">INDA</span> or <span class="tk">EPI</span> ETFs &mdash; or find the big one that&rsquo;ll give us huge profits.</p>
-        <p>If I had the capital I&rsquo;d add <span class="tk">CBRS</span> (Cerebras Systems), <span class="tk">IREN</span> (Iris Energy Limited) and <span class="tk">NBIS</span> (Nebius Group N.V.) to the TPH fund.</p>
-      </div>
-      <div class="save-row" id="briefSaveRow" style="display:none;">
-        <button class="btn" id="briefSaveBtn">Save Brief</button>
-        <span class="save-note" id="briefNote"></span>
+      <div class="clockbox">
+        <span class="pill closed" id="statusPill"><span class="led"></span><span id="statusTxt">—</span></span>
+        <span class="date" id="dateEl">—</span>
+        <span class="time" id="timeEl">—</span>
       </div>
     </div>
+    <div class="accentbar"><div class="line"></div></div>
 
-    <!-- THOUGHTS -->
-    <div class="panel">
-      <div class="thoughts-head">
-        <h2><span class="dot"></span> Thoughts of the <span id="periodWord" style="margin-left:4px;color:#eaf6cf;">Day</span></h2>
-        <div class="tabs">
-          <button class="tab active" data-period="day">Day</button>
-          <button class="tab" data-period="week">Week</button>
+    <div class="container">
+
+      <!-- QUOTE BOARD -->
+      <div class="sec-head">
+        <h2>The Board</h2>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span class="updated" id="updated">Loading…</span>
+          <button class="mini-btn" id="refreshBtn">&#x21bb; Refresh</button>
         </div>
       </div>
-      <textarea class="thoughts" id="thoughts" placeholder="What are you watching today? Jot down the market thoughts, plays, and gut calls&hellip;"></textarea>
-      <div class="save-row">
-        <button class="btn" id="saveBtn">Save</button>
-        <span class="save-note" id="saveNote"></span>
-      </div>
-    </div>
+      <div class="board" id="board"></div>
 
-    <!-- CHART -->
-    <div class="panel">
-      <h2><span class="dot"></span> The Tape &mdash; Normalized % Move</h2>
-      <div class="chart-controls">
-        <div class="ranges" id="ranges">
-          <button class="range" data-range="5d" data-interval="15m">5D</button>
-          <button class="range active" data-range="1mo" data-interval="1d">1M</button>
-          <button class="range" data-range="3mo" data-interval="1d">3M</button>
-          <button class="range" data-range="6mo" data-interval="1d">6M</button>
-          <button class="range" data-range="1y" data-interval="1d">1Y</button>
-          <button class="range" data-range="5y" data-interval="1wk">5Y</button>
+      <!-- BRIEF + NOTES -->
+      <div class="cols" style="margin-top:34px;">
+
+        <div class="panel brief" id="brief">
+          <div class="phead">
+            <h3><span class="dot"></span> The Daily Brief <span class="kicker" style="margin-left:6px;">Tom&rsquo;s Tips</span></h3>
+            <button class="tab" id="briefEditBtn">Edit</button>
+          </div>
+          <div class="brief-body" id="briefBody" contenteditable="false">
+            <p class="lead">India&rsquo;s real GDP is set to grow at a robust <b>6.5%&ndash;6.9%</b> range &mdash; making it the fastest-growing major economy on the planet.</p>
+            <p>While much of the developed world (and China) is facing an aging population, India has the opposite &ldquo;problem.&rdquo;</p>
+            <ul>
+              <li><b>The Youth Wave:</b> the median age in India is roughly 28 years old.</li>
+              <li><b>Workforce Expansion:</b> millions of ambitious, educated young people enter the workforce every single year, hitting their peak earning and spending years.</li>
+            </ul>
+            <p><b>The play:</b> <span class="tk">INDA</span> or <span class="tk">EPI</span> ETFs &mdash; or find the big one that&rsquo;ll give us huge profits.</p>
+            <p>If I had the capital I&rsquo;d add <span class="tk">CBRS</span> (Cerebras Systems), <span class="tk">IREN</span> (Iris Energy) and <span class="tk">NBIS</span> (Nebius Group) to the TPH fund.</p>
+          </div>
+          <div class="save-row" id="briefSaveRow" style="display:none;">
+            <button class="btn" id="briefSaveBtn">Save Brief</button>
+            <span class="save-note" id="briefNote"></span>
+          </div>
         </div>
-        <button class="range" id="refreshBtn">&#x21bb; Refresh</button>
-      </div>
-      <div class="chart-wrap"><canvas id="chart"></canvas></div>
-      <div class="legend" id="legend"></div>
-      <div class="status" id="status">Loading markets&hellip;</div>
-    </div>
 
-    <div class="foot">
-      Prices via Yahoo Finance, delayed &amp; for entertainment only &mdash; not investment advice.<br>
-      Part of <a href="./dashboard.html">honesttom.ai</a> &middot; built with Claude Code.
+        <div class="panel notes">
+          <div class="phead">
+            <h3><span class="dot"></span> Tom&rsquo;s Notes</h3>
+            <div class="tabs">
+              <button class="tab active" data-period="day">Day</button>
+              <button class="tab" data-period="week">Week</button>
+            </div>
+          </div>
+          <textarea class="notes-area" id="notes" placeholder="Scratchpad — what are you watching, plays, gut calls, levels to hit…"></textarea>
+          <div class="save-row">
+            <button class="btn" id="saveBtn">Save</button>
+            <span class="save-note" id="saveNote"></span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="foot">
+        Prices via Yahoo Finance &middot; delayed &amp; for entertainment only &mdash; not investment advice.<br>
+        Part of <a href="./dashboard.html">honesttom.ai</a> &middot; auto-refreshes every 60s.
+      </div>
     </div>
   </div>
 
@@ -196,84 +235,41 @@
 (function(){
   "use strict";
 
-  // ── Asset universe ──
   var ASSETS = [
-    { key:'DOW',     sym:'^DJI',     label:'Dow',      color:'#5b9bd5' },
-    { key:'NASDAQ',  sym:'^IXIC',    label:'Nasdaq',   color:'#8e6fd5' },
-    { key:'SP500',   sym:'^GSPC',    label:'S&P 500',  color:'#4ec9a8' },
-    { key:'GOLD',    sym:'GC=F',     label:'Gold',     color:'#e3b341' },
-    { key:'SILVER',  sym:'SI=F',     label:'Silver',   color:'#c7ccd1' },
-    { key:'BTC',     sym:'BTC-USD',  label:'Bitcoin',  color:'#f7931a' },
-    { key:'OIL',     sym:'CL=F',     label:'Oil (WTI)',color:'#9aa37a' },
-    { key:'VOO',     sym:'VOO',      label:'VOO',      color:'#6fcf97' },
-    { key:'VONG',    sym:'VONG',     label:'VONG',     color:'#eb6f9e' }
+    { key:'DOW',    sym:'^DJI',    label:'Dow Jones',   tape:'DOW',    dec:2 },
+    { key:'NASDAQ', sym:'^IXIC',   label:'Nasdaq Comp', tape:'NASDAQ', dec:2 },
+    { key:'SP500',  sym:'^GSPC',   label:'S&P 500',     tape:'S&P 500',dec:2 },
+    { key:'GOLD',   sym:'GC=F',    label:'Gold (oz)',   tape:'GOLD',   dec:1, badge:'COMEX' },
+    { key:'SILVER', sym:'SI=F',    label:'Silver (oz)', tape:'SILVER', dec:2, badge:'COMEX' },
+    { key:'BTC',    sym:'BTC-USD', label:'Bitcoin',     tape:'BTC',    dec:0, badge:'24/7' },
+    { key:'OIL',    sym:'CL=F',    label:'Crude WTI',   tape:'OIL',    dec:2, badge:'NYMEX' },
+    { key:'VOO',    sym:'VOO',     label:'Vanguard S&P',tape:'VOO',    dec:2, badge:'ETF' },
+    { key:'VONG',   sym:'VONG',    label:'Russ 1000 Gr',tape:'VONG',   dec:2, badge:'ETF' }
   ];
 
-  var hidden = {};            // key -> true if toggled off
-  var curRange = '1mo', curInterval = '1d';
-  var chart = null;
-
-  // ── Thoughts (localStorage) ──
-  var period = 'day';
-  function tKey(p){ return 'tph_thoughts_' + p; }
-  var thoughtsEl = document.getElementById('thoughts');
-  var saveNote = document.getElementById('saveNote');
-
-  function loadThoughts(){
-    thoughtsEl.value = localStorage.getItem(tKey(period)) || '';
-    var ts = localStorage.getItem(tKey(period) + '_ts');
-    saveNote.textContent = ts ? ('Last saved ' + ts) : '';
-    document.getElementById('periodWord').textContent = period === 'day' ? 'Day' : 'Week';
+  function fmt(n, dec){
+    if (n == null || isNaN(n)) return '—';
+    return Number(n).toLocaleString('en-US',{minimumFractionDigits:dec, maximumFractionDigits:dec});
   }
-  document.getElementById('saveBtn').addEventListener('click', function(){
-    localStorage.setItem(tKey(period), thoughtsEl.value);
-    var now = new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
-    localStorage.setItem(tKey(period) + '_ts', now);
-    saveNote.textContent = 'Saved ' + now;
-  });
-  Array.prototype.forEach.call(document.querySelectorAll('.tab'), function(tab){
-    tab.addEventListener('click', function(){
-      document.querySelector('.tab.active').classList.remove('active');
-      tab.classList.add('active');
-      period = tab.getAttribute('data-period');
-      loadThoughts();
-    });
+
+  // ── Build empty tiles immediately (fast paint) ──
+  var board = document.getElementById('board');
+  ASSETS.forEach(function(a){
+    var t = document.createElement('div');
+    t.className = 'tile loading';
+    t.id = 'tile-' + a.key;
+    t.innerHTML =
+      (a.badge ? '<span class="badge">'+a.badge+'</span>' : '') +
+      '<div class="row1"><div><div class="sym">'+a.tape+'</div><div class="name">'+a.label+'</div></div><div class="arw"></div></div>'+
+      '<div class="price">—</div>'+
+      '<div class="chg">Loading…</div>'+
+      '<div class="range" style="visibility:hidden;"><div class="range-track"><div class="range-fill"></div><div class="range-dot"></div></div><div class="range-lbl"><span class="lo"></span><span class="hi"></span></div></div>';
+    board.appendChild(t);
   });
 
-  // ── Daily Brief (editable, localStorage) ──
-  var briefBody = document.getElementById('briefBody');
-  var briefSaveRow = document.getElementById('briefSaveRow');
-  var briefEditBtn = document.getElementById('briefEditBtn');
-  var briefNote = document.getElementById('briefNote');
-  var savedBrief = localStorage.getItem('tph_brief');
-  if (savedBrief) briefBody.innerHTML = savedBrief;
-  var savedBriefTs = localStorage.getItem('tph_brief_ts');
-  if (savedBriefTs) briefNote.textContent = 'Last saved ' + savedBriefTs;
-  briefEditBtn.addEventListener('click', function(){
-    briefBody.setAttribute('contenteditable','true');
-    briefBody.focus();
-    briefSaveRow.style.display = 'flex';
-    briefEditBtn.style.display = 'none';
-  });
-  document.getElementById('briefSaveBtn').addEventListener('click', function(){
-    briefBody.setAttribute('contenteditable','false');
-    localStorage.setItem('tph_brief', briefBody.innerHTML);
-    var now = new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
-    localStorage.setItem('tph_brief_ts', now);
-    briefNote.textContent = 'Saved ' + now;
-    briefSaveRow.style.display = 'none';
-    briefEditBtn.style.display = '';
-  });
-
-  // ── Date chip ──
-  document.getElementById('todayChip').textContent =
-    new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric',year:'numeric'});
-
-  // ── Fetch one Yahoo series via proxy chain ──
-  function fetchSeries(sym){
-    var url = 'https://query1.finance.yahoo.com/v8/finance/chart/'
-            + encodeURIComponent(sym)
-            + '?interval=' + curInterval + '&range=' + curRange;
+  // ── Yahoo fetch via proxy chain ──
+  function fetchQuote(a){
+    var url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(a.sym) + '?interval=5m&range=1d';
     var proxies = [
       'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
       'https://corsproxy.io/?' + encodeURIComponent(url),
@@ -281,131 +277,145 @@
     ];
     return new Promise(function(resolve){
       var i = 0;
-      function attempt(){
+      function go(){
         if (i >= proxies.length){ resolve(null); return; }
         var ctrl = new AbortController();
-        var timer = setTimeout(function(){ ctrl.abort(); }, 9000);
+        var timer = setTimeout(function(){ ctrl.abort(); }, 8000);
         fetch(proxies[i], { signal: ctrl.signal })
           .then(function(r){ return r.json(); })
-          .then(function(data){
+          .then(function(d){
             clearTimeout(timer);
-            var res = data && data.chart && data.chart.result && data.chart.result[0];
-            if (!res || !res.timestamp) throw new Error('no data');
-            var ts = res.timestamp;
-            var q = res.indicators.quote[0].close;
-            var pts = [];
-            for (var k=0;k<ts.length;k++){
-              if (q[k] == null) continue;
-              pts.push({ t: ts[k]*1000, v: q[k] });
-            }
-            resolve(pts.length ? pts : null);
+            var res = d && d.chart && d.chart.result && d.chart.result[0];
+            var m = res && res.meta;
+            if (!m || m.regularMarketPrice == null) throw 0;
+            var prev = m.chartPreviousClose != null ? m.chartPreviousClose : m.previousClose;
+            resolve({
+              price: m.regularMarketPrice,
+              prev:  prev,
+              hi:    m.regularMarketDayHigh,
+              lo:    m.regularMarketDayLow
+            });
           })
-          .catch(function(){ clearTimeout(timer); i++; attempt(); });
+          .catch(function(){ clearTimeout(timer); i++; go(); });
       }
-      attempt();
+      go();
     });
   }
 
-  function normalize(pts){
-    var base = pts[0].v;
-    return pts.map(function(p){ return { x: p.t, y: ((p.v - base)/base)*100 }; });
+  function paintTile(a, q){
+    var t = document.getElementById('tile-' + a.key);
+    t.classList.remove('loading','up','down');
+    if (!q){ t.querySelector('.chg').textContent = 'unavailable'; return; }
+    var chg = q.price - q.prev;
+    var pct = q.prev ? (chg / q.prev * 100) : 0;
+    var dir = chg >= 0 ? 'up' : 'down';
+    t.classList.add(dir);
+    t.querySelector('.arw').textContent = chg >= 0 ? '▲' : '▼';
+    t.querySelector('.price').textContent = fmt(q.price, a.dec);
+    t.querySelector('.chg').textContent = (chg>=0?'+':'') + fmt(chg, a.dec) + '  (' + (chg>=0?'+':'') + pct.toFixed(2) + '%)';
+    // day range bar
+    if (q.hi != null && q.lo != null && q.hi > q.lo){
+      var rng = t.querySelector('.range');
+      var pos = Math.max(0, Math.min(100, (q.price - q.lo) / (q.hi - q.lo) * 100));
+      rng.querySelector('.range-fill').style.width = pos + '%';
+      rng.querySelector('.range-dot').style.left = pos + '%';
+      rng.querySelector('.lo').textContent = fmt(q.lo, a.dec);
+      rng.querySelector('.hi').textContent = fmt(q.hi, a.dec);
+      rng.style.visibility = 'visible';
+    }
+    return { pct: pct, price: q.price, dir: dir };
   }
 
-  function buildLegend(series){
-    var lg = document.getElementById('legend');
-    lg.innerHTML = '';
-    ASSETS.forEach(function(a){
-      var data = series[a.key];
-      var pct = (data && data.length) ? data[data.length-1].y : null;
-      var el = document.createElement('div');
-      el.className = 'lg' + (hidden[a.key] ? ' off' : '');
-      var pctTxt = (pct==null) ? '&mdash;'
-        : '<span class="pct ' + (pct>=0?'up':'down') + '">' + (pct>=0?'+':'') + pct.toFixed(2) + '%</span>';
-      el.innerHTML = '<span class="sw" style="background:'+a.color+'"></span>' + a.label + ' ' + pctTxt;
-      el.addEventListener('click', function(){
-        hidden[a.key] = !hidden[a.key];
-        el.classList.toggle('off');
-        var ds = chart.data.datasets.filter(function(d){ return d._key===a.key; })[0];
-        if (ds){ ds.hidden = hidden[a.key]; chart.update(); }
-      });
-      lg.appendChild(el);
-    });
-  }
-
-  function render(series){
-    var datasets = ASSETS.filter(function(a){ return series[a.key]; }).map(function(a){
-      return {
-        _key: a.key, label: a.label, data: series[a.key],
-        borderColor: a.color, backgroundColor: a.color,
-        borderWidth: a.key==='BTC' ? 2.4 : 1.8,
-        pointRadius: 0, pointHoverRadius: 4, tension: 0.18,
-        hidden: !!hidden[a.key]
-      };
-    });
-    if (chart) chart.destroy();
-    var ctx = document.getElementById('chart').getContext('2d');
-    chart = new Chart(ctx, {
-      type: 'line',
-      data: { datasets: datasets },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        interaction: { mode:'index', intersect:false },
-        plugins: {
-          legend: { display:false },
-          tooltip: {
-            backgroundColor:'rgba(10,16,8,0.94)', borderColor:'rgba(184,217,106,0.4)', borderWidth:1,
-            callbacks: {
-              label: function(c){ return c.dataset.label + ': ' + (c.parsed.y>=0?'+':'') + c.parsed.y.toFixed(2) + '%'; }
-            }
-          }
-        },
-        scales: {
-          x: { type:'time', time:{ unit: (curRange==='5d'?'day':(curRange==='1y'||curRange==='5y'?'month':'day')) },
-               grid:{ color:'rgba(255,255,255,0.05)' }, ticks:{ color:'#9fb487', maxTicksLimit:8, font:{size:10} } },
-          y: { grid:{ color:'rgba(255,255,255,0.06)' },
-               ticks:{ color:'#9fb487', font:{size:10}, callback:function(v){ return (v>=0?'+':'')+v+'%'; } } }
-        }
-      }
-    });
+  function buildTape(quotes){
+    var inner = ASSETS.map(function(a){
+      var q = quotes[a.key];
+      if (!q) return '<span class="tk-item"><span class="s">'+a.tape+'</span><span class="p">—</span></span>';
+      var cls = q.pct >= 0 ? 'up' : 'down';
+      return '<span class="tk-item '+cls+'"><span class="s">'+a.tape+'</span><span class="p">'+fmt(q.price,a.dec)+
+             '</span><span class="c '+cls+'">'+(q.pct>=0?'▲ +':'▼ ')+q.pct.toFixed(2)+'%</span></span>';
+    }).join('');
+    document.getElementById('tape').innerHTML = inner + inner; // duplicate for seamless loop
   }
 
   function load(){
-    var status = document.getElementById('status');
-    status.textContent = 'Loading markets…';
-    var series = {};
+    document.getElementById('updated').textContent = 'Updating…';
+    var quotes = {};
     Promise.all(ASSETS.map(function(a){
-      return fetchSeries(a.sym).then(function(pts){
-        if (pts) series[a.key] = normalize(pts);
-      });
+      return fetchQuote(a).then(function(q){ quotes[a.key] = paintTile(a, q); });
     })).then(function(){
-      var got = Object.keys(series).length;
-      if (!got){ status.textContent = '⚠ Could not reach market data — try Refresh in a moment.'; return; }
-      render(series);
-      buildLegend(series);
-      status.textContent = 'Updated ' + new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})
-                         + (got < ASSETS.length ? '  ·  ' + got + '/' + ASSETS.length + ' tickers loaded' : '');
+      var got = ASSETS.filter(function(a){ return quotes[a.key]; }).length;
+      buildTape(quotes);
+      var now = new Date();
+      document.getElementById('updated').textContent =
+        (got ? 'As of ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit'}) : '⚠ Market data unavailable — retry') +
+        (got && got < ASSETS.length ? '  ·  ' + got + '/' + ASSETS.length : '');
     });
   }
 
-  // ── Range buttons ──
-  Array.prototype.forEach.call(document.querySelectorAll('#ranges .range'), function(btn){
-    btn.addEventListener('click', function(){
-      document.querySelector('#ranges .range.active').classList.remove('active');
-      btn.classList.add('active');
-      curRange = btn.getAttribute('data-range');
-      curInterval = btn.getAttribute('data-interval');
-      load();
+  // ── Clock + market status ──
+  function tick(){
+    var now = new Date();
+    document.getElementById('dateEl').textContent = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+    document.getElementById('timeEl').textContent = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit'});
+    var et = new Date(now.toLocaleString('en-US',{timeZone:'America/New_York'}));
+    var day = et.getDay(), mins = et.getHours()*60 + et.getMinutes();
+    var open = day>=1 && day<=5 && mins>=570 && mins<960;
+    var pill = document.getElementById('statusPill');
+    pill.className = 'pill ' + (open ? 'open' : 'closed');
+    document.getElementById('statusTxt').textContent = open ? 'Markets Open' : 'Markets Closed';
+  }
+  tick(); setInterval(tick, 1000);
+
+  // ── Brief (editable) ──
+  var briefBody = document.getElementById('briefBody');
+  var briefSaveRow = document.getElementById('briefSaveRow');
+  var briefEditBtn = document.getElementById('briefEditBtn');
+  var briefNote = document.getElementById('briefNote');
+  var sb = localStorage.getItem('tph_brief'); if (sb) briefBody.innerHTML = sb;
+  var sbt = localStorage.getItem('tph_brief_ts'); if (sbt) briefNote.textContent = 'Saved ' + sbt;
+  briefEditBtn.addEventListener('click', function(){
+    briefBody.setAttribute('contenteditable','true'); briefBody.focus();
+    briefSaveRow.style.display='flex'; briefEditBtn.style.display='none';
+  });
+  document.getElementById('briefSaveBtn').addEventListener('click', function(){
+    briefBody.setAttribute('contenteditable','false');
+    localStorage.setItem('tph_brief', briefBody.innerHTML);
+    var nowS = new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    localStorage.setItem('tph_brief_ts', nowS);
+    briefNote.textContent = 'Saved ' + nowS;
+    briefSaveRow.style.display='none'; briefEditBtn.style.display='';
+  });
+
+  // ── Notes (Day/Week, editable) ──
+  var period = 'day';
+  var notesEl = document.getElementById('notes');
+  var saveNote = document.getElementById('saveNote');
+  function nKey(p){ return 'tph_notes_' + p; }
+  function loadNotes(){
+    notesEl.value = localStorage.getItem(nKey(period)) || '';
+    var ts = localStorage.getItem(nKey(period)+'_ts');
+    saveNote.textContent = ts ? 'Saved ' + ts : '';
+  }
+  document.getElementById('saveBtn').addEventListener('click', function(){
+    localStorage.setItem(nKey(period), notesEl.value);
+    var nowS = new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    localStorage.setItem(nKey(period)+'_ts', nowS);
+    saveNote.textContent = 'Saved ' + nowS;
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.notes .tab'), function(tab){
+    tab.addEventListener('click', function(){
+      document.querySelector('.notes .tab.active').classList.remove('active');
+      tab.classList.add('active');
+      period = tab.getAttribute('data-period');
+      loadNotes();
     });
   });
-  document.getElementById('refreshBtn').addEventListener('click', load);
+  loadNotes();
 
-  // ── Chart.js date adapter (lightweight) ──
-  // Chart.js time scale needs an adapter; load date-fns adapter, then start.
-  var s = document.createElement('script');
-  s.src = 'https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js';
-  s.onload = function(){ loadThoughts(); load(); };
-  s.onerror = function(){ loadThoughts(); load(); };
-  document.head.appendChild(s);
+  // ── Go ──
+  document.getElementById('refreshBtn').addEventListener('click', load);
+  load();
+  setInterval(load, 60000);
 
 })();
 </script>
