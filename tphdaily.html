@@ -154,35 +154,6 @@
     .foot{text-align:center; font-family:var(--mono); font-size:0.7rem; color:var(--muted); margin-top:34px; line-height:1.7;}
     .foot a{color:var(--green);}
 
-    /* ── MY POSITION RAIL (thermometer meters) ── */
-    .rail{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 16px 14px;
-      margin:0 0 22px; display:flex; flex-direction:column; gap:6px;}
-    .rail-head{font-family:var(--head); font-weight:600; letter-spacing:0.05em; text-transform:uppercase; font-size:0.92rem;
-      color:#cfe7a3; display:flex; align-items:center; gap:9px; margin-bottom:6px;}
-    .rail-head::before{content:''; width:4px; height:18px; background:var(--green); border-radius:2px;}
-    .meters{display:flex; gap:14px;}
-    .meter{flex:1; display:flex; gap:12px; align-items:stretch; background:rgba(0,0,0,0.22);
-      border:1px solid var(--line); border-radius:10px; padding:12px;}
-    .thermo{width:46px; flex:none;}
-    .m-readout{display:flex; flex-direction:column; justify-content:center; min-width:0;}
-    .m-sym{font-family:var(--head); font-weight:700; font-size:1.05rem; color:#eef5e6; letter-spacing:0.04em;}
-    .m-sh{font-family:var(--mono); font-size:0.68rem; color:var(--muted); margin-bottom:6px;}
-    .m-val{font-family:var(--mono); font-weight:700; font-size:1.35rem; color:#fff; line-height:1.05;}
-    .m-chg{font-family:var(--mono); font-weight:600; font-size:0.74rem; margin-top:3px;}
-    .m-chg.up{color:var(--up);} .m-chg.down{color:var(--down);}
-    .m-px{font-family:var(--mono); font-size:0.66rem; color:var(--muted); margin-top:4px;}
-    .rail-total{display:flex; align-items:baseline; justify-content:space-between; margin-top:10px; padding-top:10px;
-      border-top:1px solid var(--line); font-family:var(--head); text-transform:uppercase; letter-spacing:0.05em;
-      font-size:0.78rem; color:var(--muted);}
-    .rail-total b{font-family:var(--mono); font-size:1.15rem; color:#eef5e6; letter-spacing:0;}
-    /* Float it to the side on wide screens (won't overlap the 1180px column) */
-    @media(min-width:1500px){
-      .rail{position:fixed; top:96px; right:24px; width:226px; z-index:15; margin:0;
-        box-shadow:0 16px 44px rgba(0,0,0,0.45);}
-      .meters{flex-direction:column;}
-    }
-    @media(max-width:560px){ .meters{flex-direction:column;} }
-
     /* ── HEY TIMMY BANNER ── */
     .hey-wrap{max-width:1180px; margin:16px auto 0; padding:0 20px;}
     .hey{position:relative; display:flex; align-items:center; gap:16px; padding:16px 70px 16px 22px; border-radius:10px;
@@ -277,43 +248,6 @@
         </div>
       </div>
       <div class="board" id="board"></div>
-
-      <!-- MY POSITION (thermometer meters) -->
-      <aside class="rail" id="rail">
-        <div class="meters">
-          <div class="meter" id="meter-VONG">
-            <svg class="thermo" viewBox="0 0 60 210" xmlns="http://www.w3.org/2000/svg">
-              <rect x="23" y="8" width="14" height="150" rx="7" fill="rgba(255,255,255,0.08)"/>
-              <rect class="thermo-fill" x="23" y="158" width="14" height="0" rx="7" fill="#23c97a"/>
-              <circle class="thermo-bulb" cx="30" cy="176" r="18" fill="#23c97a"/>
-              <circle cx="30" cy="176" r="9" fill="rgba(255,255,255,0.25)"/>
-            </svg>
-            <div class="m-readout">
-              <span class="m-sym">VONG</span>
-              <span class="m-sh">813 shares</span>
-              <div class="m-val">$—</div>
-              <div class="m-chg">—</div>
-              <div class="m-px">@ —</div>
-            </div>
-          </div>
-          <div class="meter" id="meter-VOO">
-            <svg class="thermo" viewBox="0 0 60 210" xmlns="http://www.w3.org/2000/svg">
-              <rect x="23" y="8" width="14" height="150" rx="7" fill="rgba(255,255,255,0.08)"/>
-              <rect class="thermo-fill" x="23" y="158" width="14" height="0" rx="7" fill="#23c97a"/>
-              <circle class="thermo-bulb" cx="30" cy="176" r="18" fill="#23c97a"/>
-              <circle cx="30" cy="176" r="9" fill="rgba(255,255,255,0.25)"/>
-            </svg>
-            <div class="m-readout">
-              <span class="m-sym">VOO</span>
-              <span class="m-sh">432 shares</span>
-              <div class="m-val">$—</div>
-              <div class="m-chg">—</div>
-              <div class="m-px">@ —</div>
-            </div>
-          </div>
-        </div>
-        <div class="rail-total">Total <b id="posTotal">$—</b></div>
-      </aside>
 
       <!-- COMPARISON CHART -->
       <div class="sec-head">
@@ -551,7 +485,6 @@
         });
       }
     }).then(function(){
-      updateMeters(rawBySym);
       var got = Object.keys(quotes).length;
       buildTape(quotes);
       var now = new Date();
