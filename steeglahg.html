@@ -197,7 +197,11 @@
       font-size: clamp(2rem, 5vw, 3.7rem);
     }
 
-    .sublevel-record figure { margin: 0; }
+    .sublevel-record figure {
+      width: min(25%, 300px);
+      min-width: 215px;
+      margin: 0 auto;
+    }
 
     .sublevel-record img {
       display: block;
@@ -228,12 +232,14 @@
 
     .property-logo {
       display: block;
-      width: 120px;
-      height: 30px;
-      object-fit: cover;
-      object-position: center 52%;
-      filter: contrast(1.25) grayscale(1);
-      opacity: .78;
+      width: 127px;
+      height: 45px;
+      object-fit: contain;
+      opacity: .9;
+    }
+
+    @media (max-width: 640px) {
+      .sublevel-record figure { width: min(78%, 300px); }
     }
 
     .coming {
@@ -306,7 +312,7 @@
   <footer>
     <div class="coming">The story of SteegLahg will continue.</div>
     <div class="property">
-      <img class="property-logo" src="./honest-toms-seagull-logo.jpeg" alt="Honest Tom's seagull logo">
+      <img class="property-logo" src="./honest-toms-sublevel-logo.png" alt="Honest Tom's seagull logo">
       <span>Property of Honest Tom's Corporation</span>
     </div>
   </footer>
