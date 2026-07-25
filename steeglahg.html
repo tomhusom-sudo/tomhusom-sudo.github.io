@@ -198,8 +198,8 @@
     }
 
     .sublevel-record figure {
-      width: min(25%, 300px);
-      min-width: 215px;
+      width: min(48%, 560px);
+      min-width: 300px;
       margin: 0 auto;
     }
 
@@ -224,22 +224,40 @@
       padding: 20px;
       color: #c8c5b8;
       background: #080a08;
-      font: 700 .69rem/1.4 Arial, sans-serif;
-      letter-spacing: .14em;
+      font-family: Arial, sans-serif;
       text-align: center;
       text-transform: uppercase;
     }
 
     .property-logo {
       display: block;
-      width: 127px;
-      height: 45px;
+      width: 104px;
+      height: 70px;
       object-fit: contain;
-      opacity: .9;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,.7));
+    }
+
+    .property-brand {
+      display: grid;
+      gap: 2px;
+      text-align: left;
+    }
+
+    .property-brand strong {
+      color: #e1dfd4;
+      font-size: .76rem;
+      letter-spacing: .18em;
+    }
+
+    .property-brand small {
+      color: #aaa99f;
+      font-size: .61rem;
+      font-weight: 700;
+      letter-spacing: .12em;
     }
 
     @media (max-width: 640px) {
-      .sublevel-record figure { width: min(78%, 300px); }
+      .sublevel-record figure { width: min(90%, 560px); }
     }
 
     .coming {
@@ -312,8 +330,8 @@
   <footer>
     <div class="coming">The story of SteegLahg will continue.</div>
     <div class="property">
-      <img class="property-logo" src="./honest-toms-sublevel-logo.png" alt="Honest Tom's seagull logo">
-      <span>Property of Honest Tom's Corporation</span>
+      <img class="property-logo" src="./honest-toms-hood-ornament.png" alt="Honest Tom's seagull hood ornament">
+      <span class="property-brand"><strong>Honest Tom's</strong><small>Property of Honest Tom's Corporation</small></span>
     </div>
   </footer>
 </body>
