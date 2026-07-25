@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The story of SteegLahg of the Staglights, from Honest Tom's Corporation.">
+  <meta name="theme-color" content="#121b13">
+  <title>SteegLahg of the Staglights | Honest Tom's</title>
+  <style>
+    :root {
+      --forest: #101a12;
+      --forest-soft: #1b2a1c;
+      --paper: #e5d4ad;
+      --paper-deep: #c9ad74;
+      --ink: #2d241a;
+      --silver: #c7cbd0;
+      --gold: #b99552;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: #f5ecd9;
+      background: var(--forest);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    a { color: inherit; }
+
+    .hero {
+      min-height: 92vh;
+      display: grid;
+      align-items: end;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(4,8,5,.08) 0%, rgba(7,12,8,.18) 42%, rgba(8,14,9,.92) 100%),
+        url("./steeglahg-forest-workshop.jpg") center/cover no-repeat;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      box-shadow: inset 0 0 150px rgba(0,0,0,.5);
+    }
+
+    .topbar {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px clamp(20px, 5vw, 72px);
+      font-family: Arial, sans-serif;
+      font-size: .76rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      opacity: .86;
+    }
+
+    .back:hover { opacity: 1; }
+    .corporation { color: var(--silver); opacity: .75; }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+      width: min(1100px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 30vh 0 70px;
+    }
+
+    .eyebrow {
+      margin: 0 0 13px;
+      color: #d5b978;
+      font: 700 .74rem/1.4 Arial, sans-serif;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 820px;
+      margin: 0;
+      font-size: clamp(3.25rem, 9vw, 7.5rem);
+      font-weight: 500;
+      letter-spacing: -.045em;
+      line-height: .88;
+      text-shadow: 0 4px 24px rgba(0,0,0,.75);
+    }
+
+    .subtitle {
+      max-width: 630px;
+      margin: 24px 0 0;
+      color: #e5d9c1;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-style: italic;
+      line-height: 1.6;
+      text-shadow: 0 2px 12px rgba(0,0,0,.9);
+    }
+
+    .story-wrap {
+      position: relative;
+      padding: clamp(45px, 9vw, 110px) 20px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 20% 8%, rgba(255,255,255,.19), transparent 25%),
+        linear-gradient(135deg, var(--paper), var(--paper-deep));
+    }
+
+    .story-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .2;
+      background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(75,48,24,.07) 3px 4px);
+    }
+
+    article {
+      position: relative;
+      width: min(740px, 100%);
+      margin: 0 auto;
+      font-size: clamp(1.08rem, 2vw, 1.25rem);
+      line-height: 1.82;
+    }
+
+    .chapter-no {
+      margin: 0 0 9px;
+      color: #6e522b;
+      font: 700 .73rem/1.4 Arial, sans-serif;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0 0 42px;
+      color: #251b12;
+      font-size: clamp(2.25rem, 6vw, 4.2rem);
+      font-weight: 500;
+      letter-spacing: -.035em;
+      line-height: 1;
+    }
+
+    article p { margin: 0 0 1.25em; }
+    article p:first-of-type::first-letter {
+      float: left;
+      margin: .1em .12em 0 0;
+      color: #5f492a;
+      font-size: 4.2em;
+      line-height: .72;
+    }
+
+    .endmark {
+      margin: 45px 0 0;
+      color: #6e522b;
+      text-align: center;
+      letter-spacing: .7em;
+    }
+
+    .coming {
+      padding: 28px 20px;
+      color: #b8bcae;
+      background: #0c120d;
+      font: .76rem/1.5 Arial, sans-serif;
+      letter-spacing: .11em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 640px) {
+      .hero { min-height: 78vh; background-position: 57% center; }
+      .corporation { display: none; }
+      .hero-copy { padding-bottom: 45px; }
+      article { line-height: 1.68; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <nav class="topbar" aria-label="Site navigation">
+      <a class="back" href="./dashboard.html"><span aria-hidden="true">←</span> Honest Tom's Dashboard</a>
+      <span class="corporation">Maintenance Department Archives</span>
+    </nav>
+    <div class="hero-copy">
+      <p class="eyebrow">A Story From Another Realm</p>
+      <h1>SteegLahg of the Staglights</h1>
+      <p class="subtitle">Before the basement. Before Honest Tom. Before the contract, there was the forest.</p>
+    </div>
+  </header>
+
+  <main class="story-wrap">
+    <article>
+      <p class="chapter-no">Chapter One</p>
+      <h2>Band of the Staglights</h2>
+
+      <p>SteegLahg of the Staglights came from another realm.</p>
+
+      <p>His story is long in the tooth—and a gnarly snaggle of a tooth it is.</p>
+
+      <p>Black-toothed, but otherwise possessing a healthy set of teeth, SteegLahg was born in the Forest of the Staglights. The Staglights were a band of tree-and-bush dwellers from the southern reaches of the realm, known for their cunning tricks and their ability to move with remarkable stealth. These talents made them excellent thieves.</p>
+
+      <p>They were also known for crafting fine furniture from the forest's trees, though they seemed to loathe the entire process. The Staglights preferred to use trees themselves as furniture and considered the chairs, tables, and cabinets of the Humanis profoundly silly.</p>
+
+      <p>Silly, however, was profitable.</p>
+
+      <p>Furniture provided the band with a living they could not otherwise attain—at least not legally.</p>
+
+      <div class="endmark" aria-hidden="true">— ✦ —</div>
+    </article>
+  </main>
+
+  <footer class="coming">The story of SteegLahg will continue.</footer>
+</body>
+</html>
