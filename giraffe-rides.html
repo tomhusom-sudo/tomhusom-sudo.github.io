@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Honest Tom's Giraffe Rides, proudly featuring the HT-GR-01 Giraffe Ride Saddle.">
+  <title>Honest Tom's Giraffe Rides</title>
+  <style>
+    :root { --ink:#2c2923; --red:#86291e; --cream:#f4eee2; --gold:#be8a3e; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:#25221d; font-family:Georgia,"Times New Roman",serif; }
+    .hero { min-height:100vh; display:grid; align-items:end; position:relative; overflow:hidden; background:linear-gradient(90deg,rgba(244,238,226,.93) 0%,rgba(244,238,226,.76) 40%,rgba(244,238,226,.12) 73%),url('./honest-toms-giraffe-ride-saddle.jpg') 72% center/cover no-repeat; }
+    .hero::after { content:""; position:absolute; inset:0; pointer-events:none; box-shadow:inset 0 0 80px rgba(55,42,27,.18); }
+    nav { position:absolute; z-index:1; top:0; left:0; right:0; display:flex; justify-content:space-between; padding:22px clamp(20px,5vw,72px); color:#3d352a; font:700 .74rem/1.4 Arial,sans-serif; letter-spacing:.12em; text-transform:uppercase; }
+    nav a { color:inherit; text-decoration:none; }
+    .hero-copy { position:relative; z-index:1; width:min(700px,calc(100% - 40px)); margin:0 auto 0 clamp(20px,8vw,130px); padding:160px 0 88px; }
+    .eyebrow { margin:0 0 15px; color:var(--red); font:700 .75rem/1.4 Arial,sans-serif; letter-spacing:.18em; text-transform:uppercase; }
+    h1 { max-width:620px; margin:0; font-size:clamp(3.35rem,8vw,7.2rem); font-weight:500; letter-spacing:-.055em; line-height:.86; }
+    .tagline { max-width:480px; margin:25px 0 0; font-size:clamp(1.05rem,2vw,1.35rem); font-style:italic; line-height:1.55; }
+    .model { display:inline-block; margin-top:28px; padding:9px 12px; border:1px solid rgba(134,41,30,.45); color:var(--red); font:700 .78rem/1 Arial,sans-serif; letter-spacing:.14em; }
+    main { padding:clamp(55px,9vw,110px) 20px; background:var(--cream); }
+    .intro { width:min(1040px,100%); margin:auto; display:grid; grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr); gap:clamp(35px,8vw,105px); align-items:start; }
+    h2 { margin:0 0 22px; color:var(--red); font-size:clamp(2.15rem,4vw,3.6rem); font-weight:500; letter-spacing:-.04em; line-height:1; }
+    p { font-size:1.13rem; line-height:1.75; }
+    .features { margin:0; padding:25px; list-style:none; border:1px solid rgba(134,41,30,.25); background:rgba(255,255,255,.35); }
+    .features li { padding:13px 0; border-bottom:1px solid rgba(134,41,30,.17); font-family:Arial,sans-serif; font-size:.9rem; line-height:1.4; }
+    .features li:last-child { border:0; }
+    .features strong { display:block; color:var(--red); font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; }
+    .seal { margin-top:56px; padding:30px; color:#f9f0df; text-align:center; background:var(--red); font:700 .85rem/1.5 Arial,sans-serif; letter-spacing:.14em; text-transform:uppercase; }
+    .seal span { display:block; margin-top:7px; color:#f4d89f; font-size:.7rem; }
+    @media (max-width:700px) { .hero { min-height:790px; align-items:end; background:linear-gradient(180deg,rgba(244,238,226,.7) 0%,rgba(244,238,226,.91) 65%,rgba(244,238,226,.98) 100%),url('./honest-toms-giraffe-ride-saddle.jpg') 64% 18%/auto 95% no-repeat; } .hero-copy { margin:0 20px; padding:370px 0 54px; width:auto; } nav span { display:none; } .intro { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <nav><a href="./dashboard.html">← Honest Tom's Dashboard</a><span>Adventure Zone Division</span></nav>
+    <div class="hero-copy">
+      <p class="eyebrow">Honest Tom's Corporation</p>
+      <h1>Giraffe Rides</h1>
+      <p class="tagline">A higher standard of adventure, designed for the comfort of giraffe and rider.</p>
+      <span class="model">Model HT-GR-01</span>
+    </div>
+  </header>
+  <main>
+    <section class="intro">
+      <div>
+        <h2>The Giraffe Ride Saddle</h2>
+        <p>Some animals were not built for ordinary saddles. Honest Tom's Giraffe Rides has solved that very specific problem with a properly considered, field-tested-looking solution.</p>
+        <p>The HT-GR-01 combines a padded non-slip seat, a safety handle, and an easy-mount climbing step into one handsome piece of adventure equipment. It is intended for the rider who has looked up at a giraffe and thought, <em>there must be a better way.</em></p>
+      </div>
+      <ul class="features" aria-label="HT-GR-01 features">
+        <li><strong>Comfort first</strong> Designed for giraffe and rider.</li>
+        <li><strong>Long-neck balance</strong> Extra securing strap for the unusual geometry involved.</li>
+        <li><strong>Easy mounting</strong> Integrated climbing step, because that part matters.</li>
+        <li><strong>All-weather build</strong> Materials selected for outdoor adventure conditions.</li>
+      </ul>
+    </section>
+    <div class="seal">Adventure Zone Approved<span>Honest Tom's Corporation</span></div>
+  </main>
+</body>
+</html>
