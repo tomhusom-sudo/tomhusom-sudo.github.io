@@ -171,6 +171,47 @@
       letter-spacing: .7em;
     }
 
+    .chapter-preview {
+      display: inline-flex;
+      align-items: center;
+      gap: 13px;
+      margin-top: 10px;
+      padding: 10px 0;
+      color: #4d371e;
+      font: 700 .78rem/1.3 Arial, sans-serif;
+      letter-spacing: .14em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .chapter-preview::after {
+      content: "\2192";
+      font: 2.3rem/.7 Georgia, "Times New Roman", serif;
+      transition: transform .2s ease;
+    }
+
+    .chapter-preview:hover::after { transform: translateX(7px); }
+
+    .chapter-twelve {
+      position: relative;
+      padding: clamp(55px, 9vw, 105px) 20px;
+      color: #eee4cf;
+      background:
+        linear-gradient(180deg, rgba(7,12,8,.30), rgba(7,12,8,.88)),
+        url("./steeglahg-ch12-marked-oak.png") center/cover no-repeat;
+    }
+
+    .chapter-twelve article {
+      padding: clamp(28px, 5vw, 54px);
+      background: rgba(10, 17, 11, .74);
+      border: 1px solid rgba(210, 185, 120, .28);
+      box-shadow: 0 20px 50px rgba(0,0,0,.35);
+    }
+
+    .chapter-twelve .chapter-no { color: #d5b978; }
+    .chapter-twelve h2 { color: #f1e6cd; margin-bottom: 34px; }
+    .chapter-twelve .endmark { color: #d5b978; }
+
     .sublevel-record {
       position: relative;
       padding: clamp(55px, 10vw, 115px) 20px;
@@ -313,8 +354,38 @@
       <p>Furniture provided the band with a living they could not otherwise attain—at least not legally.</p>
 
       <div class="endmark" aria-hidden="true">— ✦ —</div>
+      <a class="chapter-preview" href="#chapter-twelve">Preview Chapter Twelve</a>
     </article>
   </main>
+
+  <section class="chapter-twelve" id="chapter-twelve" aria-labelledby="chapter-twelve-title">
+    <article>
+      <p class="chapter-no">Preview &mdash; Chapter Twelve</p>
+      <h2 id="chapter-twelve-title">The Corporation</h2>
+
+      <p>Steegs had become skilled with his Leatherman and belt tools. His apprenticeship had blossomed into full-time work.</p>
+
+      <p>SteegLahg was gathering unique pieces of wood for Wilson&rsquo;s new daughter&rsquo;s room. Wilson was one of the few Humanis Steegs tolerated contact with. His property sat well south of the Staglights quadrant, though not south enough for most of the band.</p>
+
+      <p>Along the property line, just east of Staglight land, SteegLahg noticed etchings in the trunks of the pines. A seagull. The initials HT.</p>
+
+      <p>This land had been up for auction many years ago and purchased by an unknown. The Staglights had been in no place to offer any price during the lean, dry years.</p>
+
+      <p>Then there it was: straight as an arrow, not a knot in sight. A beauty, for sure. Oak was wonderful for furniture. Its strength, durability, and striking grain patterns were what Steegs called <em>baklahzee.</em></p>
+
+      <p>The shit.</p>
+
+      <p>Steegs whipped out his handmade axe and quickly struck the bottom of the tree, marking an S-shaped pattern. He stepped back.</p>
+
+      <p>Then he noticed it.</p>
+
+      <p>&ldquo;Fuck me,&rdquo; Steegs said aloud.</p>
+
+      <p>He was standing at the very edge of Staglight land. On the far side of his S marking, at the base of the tree, was a seagull.</p>
+
+      <div class="endmark" aria-hidden="true">&mdash; &#10022; &mdash;</div>
+    </article>
+  </section>
 
   <section class="sublevel-record" aria-labelledby="sublevel-title">
     <div class="sublevel-inner">
