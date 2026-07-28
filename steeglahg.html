@@ -263,6 +263,40 @@
       .glossary dd { padding-top: 5px; }
     }
 
+    .otis-record {
+      padding: clamp(50px, 8vw, 92px) 20px;
+      color: #e9dfcb;
+      background: #10170f;
+    }
+
+    .otis-record figure {
+      width: min(640px, 100%);
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .otis-record img {
+      display: block;
+      width: 100%;
+      border: 1px solid rgba(201, 171, 101, .4);
+      box-shadow: 0 20px 60px rgba(0,0,0,.55);
+    }
+
+    .otis-record figcaption { padding-top: 20px; }
+
+    .otis-record h2 {
+      margin: 0;
+      color: #f0e7d3;
+      font-size: clamp(2rem, 5vw, 3.7rem);
+      font-weight: 500;
+    }
+
+    .otis-record p {
+      margin: 7px 0 0;
+      color: #bcb5a2;
+      font-style: italic;
+    }
+
     .sublevel-record {
       position: relative;
       padding: clamp(55px, 10vw, 115px) 20px;
@@ -477,6 +511,16 @@
         <dd>Enjoyment: a tickle, a drink of port, a good puff, or a good shit in the woods.</dd>
       </dl>
     </div>
+  </section>
+
+  <section class="otis-record" aria-labelledby="otis-title">
+    <figure>
+      <img src="./otis-the-barkmole.png" alt="Otis the BarkMole, SteegLahg's stout and sweet forest companion with a small permanent sneer.">
+      <figcaption>
+        <h2 id="otis-title">Otis the BarkMole</h2>
+        <p>SteegLahg&rsquo;s sweet, watchful companion.</p>
+      </figcaption>
+    </figure>
   </section>
 
   <footer>
