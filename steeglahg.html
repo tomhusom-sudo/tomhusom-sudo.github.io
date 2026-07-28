@@ -212,6 +212,57 @@
     .chapter-twelve h2 { color: #f1e6cd; margin-bottom: 34px; }
     .chapter-twelve .endmark { color: #d5b978; }
 
+    .glossary {
+      padding: clamp(50px, 8vw, 90px) 20px;
+      color: #30261b;
+      background:
+        radial-gradient(circle at 77% 15%, rgba(255,255,255,.18), transparent 24%),
+        linear-gradient(135deg, #dfc995, #b9915d);
+    }
+
+    .glossary-inner {
+      width: min(880px, 100%);
+      margin: 0 auto;
+    }
+
+    .glossary h2 {
+      margin-bottom: 10px;
+      color: #251b12;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+    }
+
+    .glossary-intro {
+      margin: 0 0 28px;
+      color: #624a2d;
+      font-style: italic;
+    }
+
+    .glossary dl {
+      display: grid;
+      grid-template-columns: minmax(135px, .6fr) minmax(0, 2fr);
+      margin: 0;
+      border-top: 1px solid rgba(72,48,25,.35);
+    }
+
+    .glossary dt,
+    .glossary dd {
+      margin: 0;
+      padding: 16px 12px;
+      border-bottom: 1px solid rgba(72,48,25,.28);
+    }
+
+    .glossary dt {
+      color: #513617;
+      font-weight: 700;
+      letter-spacing: .03em;
+    }
+
+    @media (max-width: 520px) {
+      .glossary dl { grid-template-columns: 1fr; }
+      .glossary dt { padding-bottom: 3px; border-bottom: 0; }
+      .glossary dd { padding-top: 5px; }
+    }
+
     .sublevel-record {
       position: relative;
       padding: clamp(55px, 10vw, 115px) 20px;
@@ -395,6 +446,36 @@
         <img src="./steeglahg-sublevel-b-honest-toms.png" alt="An older SteegLahg, seen from behind, preparing an Honest Tom's Backyard Bug Control prototype in the Maintenance Department of Sublevel B.">
         <figcaption>Somewhere beneath Honest Tom's, the work continues.</figcaption>
       </figure>
+    </div>
+  </section>
+
+  <section class="glossary" aria-labelledby="glossary-title">
+    <div class="glossary-inner">
+      <p class="chapter-no">Staglight Reference</p>
+      <h2 id="glossary-title">Staglight Glossary</h2>
+      <p class="glossary-intro">A few words from the Staglights.</p>
+      <dl>
+        <dt>Humanis</dt>
+        <dd>Human species, albeit 200 million years ago.</dd>
+
+        <dt>Blaklahzee</dt>
+        <dd>Amazing or awesome &mdash; the shit.</dd>
+
+        <dt>Staglights</dt>
+        <dd>The Staglight species.</dd>
+
+        <dt>Haukflaw</dt>
+        <dd>Keep it moving &mdash; or, &ldquo;C&rsquo;mon already!&rdquo;</dd>
+
+        <dt>Staflaross</dt>
+        <dd>Pissed off, moving in anger, or acting in anger.</dd>
+
+        <dt>Heegflaag</dt>
+        <dd>Mine.</dd>
+
+        <dt>LakaLaka</dt>
+        <dd>Enjoyment: a tickle, a drink of port, a good puff, or a good shit in the woods.</dd>
+      </dl>
     </div>
   </section>
 
