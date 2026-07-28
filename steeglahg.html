@@ -201,6 +201,10 @@
         url("./steeglahg-ch12-marked-oak.png") center/cover no-repeat;
     }
 
+    .chapter-twelve-art {
+      display: none;
+    }
+
     .chapter-twelve article {
       padding: clamp(28px, 5vw, 54px);
       background: rgba(10, 17, 11, .74);
@@ -401,7 +405,19 @@
       .corporation { display: none; }
       .hero-copy { padding-bottom: 45px; }
       article { line-height: 1.68; }
-      .chapter-twelve { background-position: 62% center; }
+      .chapter-twelve {
+        padding: 0 20px 55px;
+        background: #0b100b;
+      }
+      .chapter-twelve-art {
+        display: block;
+        width: calc(100% + 40px);
+        max-width: none;
+        height: auto;
+        margin: 0 -20px 28px;
+        border-bottom: 1px solid rgba(210, 185, 120, .35);
+        box-shadow: 0 16px 38px rgba(0,0,0,.45);
+      }
       .chapter-twelve article { background: rgba(10, 17, 11, .64); }
     }
 
@@ -446,6 +462,7 @@
   </main>
 
   <section class="chapter-twelve" id="chapter-twelve" aria-labelledby="chapter-twelve-title">
+    <img class="chapter-twelve-art" src="./steeglahg-ch12-marked-oak.png" alt="SteegLahg, seen from behind in the Staglights forest, beside the freshly cut oak marked with an HT seagull emblem.">
     <article>
       <p class="chapter-no">Preview &mdash; Chapter Twelve</p>
       <h2 id="chapter-twelve-title">The Corporation</h2>
