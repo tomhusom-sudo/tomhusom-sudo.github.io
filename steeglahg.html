@@ -652,12 +652,17 @@
         'They Ski', 'We Run', 'He Jogs', 'She Sings', 'It Dances',
         'You Swim', 'They Hike', 'We Fish', 'He Cooks', 'She Reads',
         'I Paint', 'You Drive', 'They Build', 'We Laugh', 'He Sleeps',
-        'She Folds', 'It Rolls', 'You Dig', 'They Garden', 'We Paddle'
+        'She Folds', 'It Rolls', 'You Dig', 'They Garden', 'We Paddle',
+        'I Whistle', 'You Hammer', 'They Wander', 'We Climb', 'He Sweeps',
+        'She Sews', 'It Hops', 'You Carve', 'They Roast', 'We Row',
+        'I Bake', 'You Chase', 'They Whisper', 'We Dance', 'He Sips',
+        'She Rakes', 'It Burrows', 'You Sketch', 'They Tinker', 'We Nap'
       ];
       const ball = document.getElementById('eight-ball');
       const answer = document.getElementById('oracle-answer');
       const button = document.getElementById('oracle-button');
       let timer;
+      let previousAnswer = '';
 
       button.addEventListener('click', () => {
         window.clearTimeout(timer);
@@ -667,7 +672,9 @@
         ball.classList.add('shaking');
         button.disabled = true;
         timer = window.setTimeout(() => {
-          answer.textContent = answers[Math.floor(Math.random() * answers.length)];
+          const choices = answers.filter((item) => item !== previousAnswer);
+          previousAnswer = choices[Math.floor(Math.random() * choices.length)];
+          answer.textContent = previousAnswer;
           ball.classList.remove('shaking');
           button.disabled = false;
         }, 620);
