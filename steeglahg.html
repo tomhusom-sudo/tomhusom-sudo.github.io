@@ -301,6 +301,88 @@
       font-style: italic;
     }
 
+    .contract-oracle {
+      padding: clamp(55px, 9vw, 105px) 20px;
+      color: #eee4cf;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(87, 104, 130, .28), transparent 34%),
+        linear-gradient(145deg, #080d16, #151b26 52%, #080b10);
+      text-align: center;
+    }
+
+    .contract-oracle-inner {
+      width: min(680px, 100%);
+      margin: 0 auto;
+    }
+
+    .contract-oracle .chapter-no { color: #bfc6d2; }
+    .contract-oracle h2 { margin-bottom: 13px; color: #f0e8d8; font-size: clamp(2rem, 5vw, 3.8rem); }
+    .oracle-intro { margin: 0 auto 32px; color: #c2c4c6; font-style: italic; line-height: 1.65; }
+
+    .eight-ball {
+      display: grid;
+      place-items: center;
+      width: min(300px, 78vw);
+      aspect-ratio: 1;
+      margin: 0 auto 26px;
+      padding: 22px;
+      color: #cfe4ff;
+      background:
+        radial-gradient(circle at 35% 25%, rgba(255,255,255,.2), transparent 10%),
+        radial-gradient(circle at 50% 55%, #35527c 0 14%, #10223f 15% 30%, #020407 31% 66%, #000 67%);
+      border: 2px solid rgba(219, 225, 238, .18);
+      border-radius: 50%;
+      box-shadow: inset -20px -30px 45px rgba(0,0,0,.7), inset 14px 10px 28px rgba(255,255,255,.08), 0 24px 54px rgba(0,0,0,.55);
+      transform: rotate(-5deg);
+    }
+
+    .eight-ball.shaking { animation: oracle-shake .65s ease-in-out; }
+
+    .oracle-window {
+      display: grid;
+      place-items: center;
+      width: 48%;
+      aspect-ratio: 1;
+      padding: 15px;
+      background: #122a55;
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+      text-shadow: 0 0 10px rgba(177,220,255,.8);
+    }
+
+    .oracle-answer {
+      max-width: 130px;
+      margin-top: 19px;
+      color: #d9edff;
+      font: 700 clamp(.67rem, 2.2vw, .9rem)/1.25 Arial, sans-serif;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .oracle-button {
+      padding: 14px 24px;
+      color: #f3eadb;
+      background: #6e522b;
+      border: 1px solid #b99552;
+      border-radius: 4px;
+      box-shadow: 0 5px 18px rgba(0,0,0,.35);
+      cursor: pointer;
+      font: 700 .78rem/1 Arial, sans-serif;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .oracle-button:hover { background: #85663b; }
+    .oracle-button:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+    .oracle-clue { margin: 22px 0 0; color: #a7acb1; font: .76rem/1.55 Arial, sans-serif; letter-spacing: .06em; }
+
+    @keyframes oracle-shake {
+      0%, 100% { transform: rotate(-5deg) translate(0); }
+      18% { transform: rotate(7deg) translate(-10px, 2px); }
+      38% { transform: rotate(-9deg) translate(11px, -3px); }
+      58% { transform: rotate(6deg) translate(-7px, 4px); }
+      78% { transform: rotate(-6deg) translate(5px, -2px); }
+    }
+
     .sublevel-record {
       position: relative;
       padding: clamp(55px, 10vw, 115px) 20px;
@@ -542,6 +624,21 @@
     </figure>
   </section>
 
+  <section class="contract-oracle" aria-labelledby="oracle-title">
+    <div class="contract-oracle-inner">
+      <p class="chapter-no">Maintenance Department Oracle</p>
+      <h2 id="oracle-title">Name the Unnameable</h2>
+      <p class="oracle-intro">The first half is a pronoun. The second is a thing people do. Shake wisely: three angry utterances may dissolve a contract.</p>
+
+      <div class="eight-ball" id="eight-ball" aria-live="polite">
+        <div class="oracle-window"><span class="oracle-answer" id="oracle-answer">Ask the Ball</span></div>
+      </div>
+
+      <button class="oracle-button" id="oracle-button" type="button">Shake the Eight Ball</button>
+      <p class="oracle-clue">The Corporation does not recognize this activity as legally binding.</p>
+    </div>
+  </section>
+
   <footer>
     <div class="coming">The story of SteegLahg will continue.</div>
     <div class="property">
@@ -549,5 +646,33 @@
       <span class="property-brand"><strong>Honest Tom's</strong><small>Property of Honest Tom's Corporation</small></span>
     </div>
   </footer>
+  <script>
+    (() => {
+      const answers = [
+        'They Ski', 'We Run', 'He Jogs', 'She Sings', 'It Dances',
+        'You Swim', 'They Hike', 'We Fish', 'He Cooks', 'She Reads',
+        'I Paint', 'You Drive', 'They Build', 'We Laugh', 'He Sleeps',
+        'She Folds', 'It Rolls', 'You Dig', 'They Garden', 'We Paddle'
+      ];
+      const ball = document.getElementById('eight-ball');
+      const answer = document.getElementById('oracle-answer');
+      const button = document.getElementById('oracle-button');
+      let timer;
+
+      button.addEventListener('click', () => {
+        window.clearTimeout(timer);
+        ball.classList.remove('shaking');
+        void ball.offsetWidth;
+        answer.textContent = '...';
+        ball.classList.add('shaking');
+        button.disabled = true;
+        timer = window.setTimeout(() => {
+          answer.textContent = answers[Math.floor(Math.random() * answers.length)];
+          ball.classList.remove('shaking');
+          button.disabled = false;
+        }, 620);
+      });
+    })();
+  </script>
 </body>
 </html>
