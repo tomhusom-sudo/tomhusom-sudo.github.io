@@ -674,8 +674,12 @@
         ball.classList.add('shaking');
         button.disabled = true;
         timer = window.setTimeout(() => {
-          const choices = answers.filter((item) => item !== previousAnswer);
-          previousAnswer = choices[Math.floor(Math.random() * choices.length)];
+          if (Math.random() < 0.02 && previousAnswer !== 'She Tar') {
+            previousAnswer = 'She Tar';
+          } else {
+            const choices = answers.filter((item) => item !== previousAnswer);
+            previousAnswer = choices[Math.floor(Math.random() * choices.length)];
+          }
           answer.textContent = previousAnswer;
           ball.classList.remove('shaking');
           button.disabled = false;
