@@ -66,7 +66,10 @@
     .submit { justify-self:start; padding:14px 20px; background:var(--orange); border:1px solid var(--orange); border-radius:4px; color:#241914; cursor:pointer; font:800 .82rem Manrope,Arial,sans-serif; }
     .submit:hover { background:#ed6848; }
     .submit:disabled { opacity:.6; cursor:wait; }
-    .message { align-self:center; color:#284235; font-size:.82rem; }
+    .message { display:none; grid-column:1 / -1; padding:18px 20px; border-radius:5px; font-size:.9rem; font-weight:700; line-height:1.55; }
+    .message.success { display:block; background:#173f31; color:#f7f4dd; border:2px solid #173f31; box-shadow:5px 5px 0 var(--orange); }
+    .message.error { display:block; background:#fff4ee; color:#8b301d; border:1px solid #d67b63; }
+    .message strong { display:block; margin-bottom:3px; font-size:1.14rem; letter-spacing:-.03em; }
     footer { padding:0 0 38px; color:#64706c; font:400 .7rem 'DM Mono',monospace; }
     @media (max-width:760px) { .page { width:min(100% - 28px, 600px); } header { padding:18px 0; } .hero,.section,.form-section { grid-template-columns:1fr; gap:28px; } .hero { padding:52px 0 48px; } .audit-card { min-height:315px; } .facts { grid-template-columns:1fr; margin-bottom:48px; } .fact { min-height:0; } .section { padding:48px 0; } .form-section { margin-bottom:52px; padding:28px 20px; } form { grid-template-columns:1fr; } .full { grid-column:auto; } }
   </style>
@@ -127,7 +130,7 @@
         <label class="full">What is frustrating you right now?<textarea name="frustration" required placeholder="A few sentences is plenty."></textarea></label>
         <p class="form-note full">By submitting, you are asking Tom to review the public website you provided. Your details are used only to reply about this request.</p>
         <button class="submit" type="submit">Request my Truth Test</button>
-        <span class="message" id="form-message" aria-live="polite"></span>
+        <div class="message" id="form-message" aria-live="polite"></div>
       </form>
     </section>
 
@@ -141,12 +144,12 @@
         var website=form.elements.website;
         website.value=website.value.trim();
         if(!/^https?:\/\//i.test(website.value)) website.value='https://'+website.value;
-        button.disabled=true; button.textContent='Sending request…'; message.textContent='';
+        button.disabled=true; button.textContent='Sending request…'; message.textContent=''; message.className='message';
         try {
           var response=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{Accept:'application/json'}});
           if(!response.ok) throw new Error('Request could not be sent');
-          form.reset(); message.textContent='Got it. Tom will review your request and get back to you.';
-        } catch(error) { message.textContent='That did not go through. Please try again in a moment.'; }
+          form.reset(); message.className='message success'; message.innerHTML='<strong>✓ Your Truth Test request is sent.</strong>Tom will review it personally and reply to the email address you provided.';
+        } catch(error) { message.className='message error'; message.textContent='That did not go through. Please try again in a moment.'; }
         finally { button.disabled=false; button.textContent='Request my Truth Test'; }
       });
     }());
