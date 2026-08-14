@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Get an honest, practical review of your small-business website and one AI workflow worth considering.">
+  <meta property="og:title" content="Truth Test | Honest Tom">
+  <meta property="og:description" content="An honest look at your small-business website and one AI workflow worth considering.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://honesttom.ai/truth-test.html">
+  <meta property="og:image" content="https://honesttom.ai/truth-test-og.png">
+  <title>Truth Test | Honest Tom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#142020; --paper:#f5f0e8; --card:#fffdf8; --lime:#c8ef69; --orange:#fb7855; --line:#d6d0c5; --soft:#64706c; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:Manrope,Arial,sans-serif; }
+    .page { width:min(1180px, calc(100% - 36px)); margin:0 auto; }
+    header { display:flex; justify-content:space-between; align-items:center; padding:25px 0; border-bottom:1px solid var(--line); }
+    .brand { color:var(--ink); text-decoration:none; font-size:.94rem; font-weight:800; letter-spacing:-.03em; }
+    .brand-mark { display:inline-grid; place-items:center; width:25px; height:25px; margin-right:7px; border:2px solid var(--ink); border-radius:50%; font:700 .72rem 'DM Mono',monospace; }
+    .back { color:var(--ink); font:500 .74rem 'DM Mono',monospace; text-decoration:none; letter-spacing:.02em; }
+    .back:hover { text-decoration:underline; }
+    .hero { display:grid; grid-template-columns:1.05fr .95fr; gap:50px; padding:75px 0 62px; align-items:center; }
+    .eyebrow { margin:0 0 17px; color:#48534f; font:500 .72rem 'DM Mono',monospace; letter-spacing:.09em; text-transform:uppercase; }
+    h1 { max-width:650px; margin:0; font-size:clamp(3rem,7vw,6.25rem); line-height:.94; letter-spacing:-.075em; }
+    h1 em { color:var(--orange); font-style:normal; }
+    .hero-copy { max-width:570px; margin:26px 0 29px; color:#394541; font-size:1.05rem; line-height:1.7; }
+    .hero-copy strong { color:var(--ink); }
+    .button { display:inline-flex; align-items:center; gap:13px; padding:14px 19px; background:var(--ink); border:1px solid var(--ink); border-radius:4px; color:#fffdf8; text-decoration:none; font-weight:800; font-size:.86rem; }
+    .button:hover { background:#263735; }
+    .arrow { font:400 1.25rem 'DM Mono',monospace; line-height:1; }
+    .audit-card { position:relative; min-height:365px; padding:28px; background:var(--ink); color:#f7f3ea; border-radius:12px; overflow:hidden; box-shadow:10px 10px 0 var(--lime); }
+    .audit-card::before { content:''; position:absolute; width:260px; height:260px; top:-110px; right:-75px; border:1px solid rgba(255,255,255,.27); border-radius:50%; box-shadow:0 0 0 29px rgba(255,255,255,.04),0 0 0 58px rgba(255,255,255,.03); }
+    .card-label { position:relative; display:flex; justify-content:space-between; color:#dce8a9; font:500 .7rem 'DM Mono',monospace; letter-spacing:.08em; text-transform:uppercase; }
+    .score { position:relative; margin:50px 0 15px; font-size:4.8rem; font-weight:800; letter-spacing:-.08em; line-height:.9; }
+    .score small { margin-left:4px; color:#9bab88; font:400 .9rem 'DM Mono',monospace; letter-spacing:0; }
+    .meter { position:relative; height:9px; margin:22px 0; background:#42514b; border-radius:999px; overflow:hidden; }
+    .meter i { display:block; width:67%; height:100%; background:var(--lime); border-radius:inherit; }
+    .audit-note { position:relative; max-width:330px; margin:0; color:#d5ded8; font-size:.9rem; line-height:1.55; }
+    .facts { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin:5px 0 70px; border:1px solid var(--line); background:var(--line); }
+    .fact { min-height:140px; padding:25px; background:var(--card); }
+    .fact b { display:block; margin-bottom:9px; font-size:1.15rem; letter-spacing:-.04em; }
+    .fact p { margin:0; color:var(--soft); font-size:.84rem; line-height:1.55; }
+    .section { display:grid; grid-template-columns:.77fr 1.23fr; gap:64px; padding:72px 0; border-top:1px solid var(--line); }
+    h2 { margin:0; font-size:clamp(1.8rem,3vw,2.8rem); letter-spacing:-.06em; line-height:1; }
+    .section-intro { margin:14px 0 0; color:var(--soft); line-height:1.65; font-size:.94rem; }
+    .steps { display:grid; gap:0; border-top:1px solid var(--line); }
+    .step { display:grid; grid-template-columns:58px 1fr; gap:18px; padding:19px 0; border-bottom:1px solid var(--line); }
+    .step-no { color:var(--orange); font:500 .8rem 'DM Mono',monospace; }
+    .step h3 { margin:0 0 5px; font-size:1rem; letter-spacing:-.025em; }
+    .step p { margin:0; color:var(--soft); font-size:.88rem; line-height:1.55; }
+    .form-section { display:grid; grid-template-columns:.72fr 1.28fr; gap:64px; margin:0 0 80px; padding:48px; background:#dce9c2; border-radius:12px; }
+    .form-section h2 { max-width:315px; }
+    .form-section .section-intro { color:#415044; max-width:320px; }
+    form { display:grid; grid-template-columns:1fr 1fr; gap:14px; align-content:start; }
+    .full { grid-column:1 / -1; }
+    label { display:grid; gap:7px; color:#3d4943; font:500 .7rem 'DM Mono',monospace; letter-spacing:.06em; text-transform:uppercase; }
+    input, textarea, select { width:100%; padding:12px 13px; background:rgba(255,255,255,.72); border:1px solid #adc29b; border-radius:4px; color:var(--ink); font:500 .9rem Manrope,Arial,sans-serif; }
+    input:focus, textarea:focus, select:focus { outline:2px solid var(--orange); outline-offset:1px; border-color:var(--orange); }
+    textarea { min-height:105px; resize:vertical; }
+    .form-note { margin:1px 0 0; color:#4c5d52; font-size:.76rem; line-height:1.5; }
+    .submit { justify-self:start; padding:14px 20px; background:var(--orange); border:1px solid var(--orange); border-radius:4px; color:#241914; cursor:pointer; font:800 .82rem Manrope,Arial,sans-serif; }
+    .submit:hover { background:#ed6848; }
+    .submit:disabled { opacity:.6; cursor:wait; }
+    .message { align-self:center; color:#284235; font-size:.82rem; }
+    footer { padding:0 0 38px; color:#64706c; font:400 .7rem 'DM Mono',monospace; }
+    @media (max-width:760px) { .page { width:min(100% - 28px, 600px); } header { padding:18px 0; } .hero,.section,.form-section { grid-template-columns:1fr; gap:28px; } .hero { padding:52px 0 48px; } .audit-card { min-height:315px; } .facts { grid-template-columns:1fr; margin-bottom:48px; } .fact { min-height:0; } .section { padding:48px 0; } .form-section { margin-bottom:52px; padding:28px 20px; } form { grid-template-columns:1fr; } .full { grid-column:auto; } }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9KFJ9RZ2QS"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-9KFJ9RZ2QS');</script>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <a class="brand" href="./dashboard.html"><span class="brand-mark">HT</span>Honest Tom</a>
+      <a class="back" href="./dashboard.html">← back to the dashboard</a>
+    </header>
+
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Founding round · 10 free reviews</p>
+        <h1>Your website needs an <em>honest</em> look.</h1>
+        <p class="hero-copy">Send me your small-business website. I’ll tell you what is clear, what is costing you leads, and <strong>one AI workflow actually worth considering.</strong> No fake score. No sales-bot nonsense.</p>
+        <a class="button" href="#request">Request a Truth Test <span class="arrow">→</span></a>
+      </div>
+      <aside class="audit-card" aria-label="Sample Truth Test report">
+        <div class="card-label"><span>Truth Test</span><span>sample</span></div>
+        <div class="score">67<small>/ 100</small></div>
+        <div class="meter"><i></i></div>
+        <p class="audit-note">Good service. Clear enough. But a new visitor can’t tell what to do next—and your best lead form is hiding in plain sight.</p>
+      </aside>
+    </section>
+
+    <section class="facts" aria-label="Truth Test promise">
+      <article class="fact"><b>Human reviewed</b><p>AI can prepare the first pass. Tom reads every result before it goes out.</p></article>
+      <article class="fact"><b>Practical, not shiny</b><p>You get one realistic next move, not a shopping list of software you do not need.</p></article>
+      <article class="fact"><b>No obligation</b><p>This is a useful review, even if you decide to make the changes yourself.</p></article>
+    </section>
+
+    <section class="section">
+      <div><p class="eyebrow">What you receive</p><h2>A short report you can actually use.</h2><p class="section-intro">The Truth Test is for a business owner who wants a straight answer before spending money on a new website, an AI chatbot, or another monthly tool.</p></div>
+      <div class="steps">
+        <div class="step"><div class="step-no">01</div><div><h3>Clarity check</h3><p>Can a first-time visitor tell what you sell, why it matters, and what they should do next?</p></div></div>
+        <div class="step"><div class="step-no">02</div><div><h3>Trust and lead check</h3><p>I look for missing proof, confusing paths, and the small changes that can make it easier to contact you.</p></div></div>
+        <div class="step"><div class="step-no">03</div><div><h3>One useful AI opportunity</h3><p>A specific workflow that may save time or help customers—plus a candid note if AI is not the answer.</p></div></div>
+      </div>
+    </section>
+
+    <section class="form-section" id="request">
+      <div>
+        <p class="eyebrow">Request a review</p>
+        <h2>Let’s look at it straight.</h2>
+        <p class="section-intro">The founding round is limited to ten free reviews. You will hear back personally; this is not an instant automated report.</p>
+      </div>
+      <form id="truth-test-form" action="https://formspree.io/f/mreobrvj" method="POST">
+        <input type="hidden" name="_subject" value="New Honest Tom Truth Test request">
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+        <label>Business name<input name="business_name" required autocomplete="organization" placeholder="Your business"></label>
+        <label>Website URL<input name="website" type="url" required placeholder="https://example.com"></label>
+        <label>Your name<input name="name" required autocomplete="name" placeholder="Your name"></label>
+        <label>Email<input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+        <label class="full">What would you like more of?<select name="goal" required><option value="" selected disabled>Choose one</option><option>More calls or inquiries</option><option>More bookings or sales</option><option>Less repetitive work</option><option>A clearer website</option><option>Not sure yet</option></select></label>
+        <label class="full">What is frustrating you right now?<textarea name="frustration" required placeholder="A few sentences is plenty."></textarea></label>
+        <p class="form-note full">By submitting, you are asking Tom to review the public website you provided. Your details are used only to reply about this request.</p>
+        <button class="submit" type="submit">Request my Truth Test</button>
+        <span class="message" id="form-message" aria-live="polite"></span>
+      </form>
+    </section>
+
+    <footer>HONEST TOM · A plain-English AI build lab</footer>
+  </main>
+  <script>
+    (function(){
+      var form=document.getElementById('truth-test-form'), button=form.querySelector('button'), message=document.getElementById('form-message');
+      form.addEventListener('submit',async function(event){
+        event.preventDefault(); button.disabled=true; button.textContent='Sending request…'; message.textContent='';
+        try {
+          var response=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{Accept:'application/json'}});
+          if(!response.ok) throw new Error('Request could not be sent');
+          form.reset(); message.textContent='Got it. Tom will review your request and get back to you.';
+        } catch(error) { message.textContent='That did not go through. Please try again in a moment.'; }
+        finally { button.disabled=false; button.textContent='Request my Truth Test'; }
+      });
+    }());
+  </script>
+</body>
+</html>
