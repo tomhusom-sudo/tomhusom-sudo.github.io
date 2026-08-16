@@ -347,10 +347,44 @@
     .trait-card p { margin: 0; line-height: 1.7; }
     .trait-card + .trait-card { margin-top: 14px; }
 
+    .reference-title {
+      margin: 48px 0 10px;
+      color: #3d2a16;
+      font-size: clamp(1.55rem, 3.5vw, 2.4rem);
+      font-weight: 500;
+    }
+
+    .reference-intro {
+      margin: 0 0 20px;
+      color: #624a2d;
+      font-style: italic;
+    }
+
+    .reference-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .reference-card {
+      padding: 22px;
+      border: 1px solid rgba(72,48,25,.38);
+      background: rgba(255,248,224,.16);
+    }
+
+    .reference-card h4 {
+      margin: 0 0 8px;
+      color: #513617;
+      font-size: 1.1rem;
+    }
+
+    .reference-card p { margin: 0; line-height: 1.65; }
+
     @media (max-width: 520px) {
       .glossary dl { grid-template-columns: 1fr; }
       .glossary dt { padding-bottom: 3px; border-bottom: 0; }
       .glossary dd { padding-top: 5px; }
+      .reference-grid { grid-template-columns: 1fr; }
     }
 
     .otis-record {
@@ -798,6 +832,69 @@
         <h3 id="pinky-strength-title">Pinky Strength</h3>
         <p>Staglights possess remarkable strength in their pinky fingers and pinky toes. The smallest digits are not an afterthought in their world; they grip, brace, pull, and hold with a power that surprises nearly every Humanis who witnesses it.</p>
       </section>
+
+      <h3 class="reference-title">Staglight Details</h3>
+      <p class="reference-intro">Small facts worth keeping in the record.</p>
+      <div class="reference-grid">
+        <section class="reference-card">
+          <h4>Furniture</h4>
+          <p>Staglights prefer trees as furniture, but learned that Humanis furniture can keep soup in the pot.</p>
+        </section>
+        <section class="reference-card">
+          <h4>Silver, Smoke &amp; Port</h4>
+          <p>SteegLahg has a penchant for silver. He is only seen with a long pipe or port wine&mdash;or so the record says.</p>
+        </section>
+        <section class="reference-card">
+          <h4>Favors</h4>
+          <p>After childhood, Staglights grant favors rather than gifts. A favor must be repaid reasonably, or status can be lost.</p>
+        </section>
+        <section class="reference-card">
+          <h4>The Log Rule</h4>
+          <p>Good listeners know wood speaks before it cracks. Folstein considers this practical attention, not magic.</p>
+        </section>
+      </div>
+
+      <h3 class="reference-title">Places</h3>
+      <p class="reference-intro">The places that have already begun to shape the story.</p>
+      <div class="reference-grid">
+        <section class="reference-card">
+          <h4>Forest of the Staglights</h4>
+          <p>The southern forest realm where Steegs was born: tree houses, bush dwellers, furniture work, and old boundaries.</p>
+        </section>
+        <section class="reference-card">
+          <h4>The Gully</h4>
+          <p>The north-northwest descent from Steegs&rsquo; property to Folstein&rsquo;s cove, tree house, shed, and woodpile.</p>
+        </section>
+        <section class="reference-card">
+          <h4>Helthesbroad</h4>
+          <p>A Humanis settlement for tobacco, salt, iron nails, trade, tavern talk, and bad opinions.</p>
+        </section>
+        <section class="reference-card">
+          <h4>Sublevel B</h4>
+          <p>The windowless Maintenance Department beneath Honest Tom&rsquo;s Corporation, filled with pipes, files, and an unnamed hum.</p>
+        </section>
+      </div>
+
+      <h3 class="reference-title">Cast</h3>
+      <p class="reference-intro">The people, creatures, and companies currently on the record.</p>
+      <div class="reference-grid">
+        <section class="reference-card">
+          <h4>SteegLahg</h4>
+          <p>Staglight furniture maker, tool-belt apprentice turned worker, and reluctant future Maintenance Department employee.</p>
+        </section>
+        <section class="reference-card">
+          <h4>Folstein</h4>
+          <p>Steegs&rsquo; very old neighbor: thin, reddish-gray haired, a sharp axe man, and an even sharper listener.</p>
+        </section>
+        <section class="reference-card">
+          <h4>Otis</h4>
+          <p>A sweet female BarkMole with a small permanent sneer and Steegs&rsquo; watchful companion.</p>
+        </section>
+        <section class="reference-card">
+          <h4>Honest Tom&rsquo;s Corporation</h4>
+          <p>The seagull-marked corporation whose timber, contracts, and Maintenance Department have reached the forest.</p>
+        </section>
+      </div>
     </div>
   </section>
 
