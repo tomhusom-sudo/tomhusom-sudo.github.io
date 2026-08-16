@@ -102,6 +102,31 @@
       text-shadow: 0 4px 24px rgba(0,0,0,.75);
     }
 
+    .title-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 24px;
+    }
+
+    .manuscript-bar {
+      flex: 0 0 auto;
+      margin-bottom: 4px;
+      padding: 11px 15px 10px;
+      border: 1px solid rgba(246, 250, 255, .72);
+      border-radius: 999px;
+      color: #1e2730;
+      background: linear-gradient(135deg, #f8fbff 0%, #aab3be 24%, #ffffff 47%, #7c8793 73%, #e6edf4 100%);
+      box-shadow: 0 3px 0 rgba(0,0,0,.3), 0 7px 24px rgba(0,0,0,.28), inset 0 1px 1px rgba(255,255,255,.9);
+      font: 800 .68rem/1 Arial, sans-serif;
+      letter-spacing: .12em;
+      text-decoration: none;
+      text-shadow: 0 1px rgba(255,255,255,.8);
+      text-transform: uppercase;
+      transition: transform .2s ease, filter .2s ease;
+    }
+
+    .manuscript-bar:hover { filter: brightness(1.12); transform: translateY(-2px); }
+
     .subtitle {
       max-width: 630px;
       margin: 24px 0 0;
@@ -197,12 +222,8 @@
       padding: clamp(55px, 9vw, 105px) 20px;
       color: #eee4cf;
       background:
-        linear-gradient(180deg, rgba(7,12,8,.08), rgba(7,12,8,.50)),
+        linear-gradient(180deg, rgba(7,12,8,.30), rgba(7,12,8,.88)),
         url("./steeglahg-ch12-marked-oak.png") center/cover no-repeat;
-    }
-
-    .chapter-twelve-art {
-      display: none;
     }
 
     .chapter-twelve article {
@@ -215,325 +236,6 @@
     .chapter-twelve .chapter-no { color: #d5b978; }
     .chapter-twelve h2 { color: #f1e6cd; margin-bottom: 34px; }
     .chapter-twelve .endmark { color: #d5b978; }
-
-    .chapter-thirteen {
-      padding: clamp(50px, 9vw, 105px) 20px;
-      color: #2d241a;
-      background: #0d120d;
-    }
-
-    .chapter-thirteen-inner {
-      width: min(1100px, 100%);
-      margin: 0 auto;
-    }
-
-    .chapter-thirteen figure { margin: 0 0 clamp(30px, 6vw, 65px); }
-
-    .chapter-thirteen img {
-      display: block;
-      width: 100%;
-      border: 1px solid rgba(210, 185, 120, .35);
-      box-shadow: 0 20px 60px rgba(0,0,0,.55);
-    }
-
-    .chapter-thirteen article {
-      padding: clamp(28px, 5vw, 54px);
-      color: #2d241a;
-      background:
-        radial-gradient(circle at 20% 8%, rgba(255,255,255,.19), transparent 25%),
-        linear-gradient(135deg, #e5d4ad, #c9ad74);
-    }
-
-    .chapter-thirteen .chapter-no { color: #6e522b; }
-    .chapter-thirteen h2 { color: #251b12; }
-    .chapter-thirteen .endmark { color: #6e522b; }
-
-    .glossary {
-      padding: clamp(50px, 8vw, 90px) 20px;
-      color: #30261b;
-      background:
-        radial-gradient(circle at 77% 15%, rgba(255,255,255,.18), transparent 24%),
-        linear-gradient(135deg, #dfc995, #b9915d);
-    }
-
-    .glossary-inner {
-      width: min(880px, 100%);
-      margin: 0 auto;
-    }
-
-    .glossary h2 {
-      margin-bottom: 10px;
-      color: #251b12;
-      font-size: clamp(2rem, 5vw, 3.6rem);
-    }
-
-    .glossary-intro {
-      margin: 0 0 28px;
-      color: #624a2d;
-      font-style: italic;
-    }
-
-    .glossary dl {
-      display: grid;
-      grid-template-columns: minmax(135px, .6fr) minmax(0, 2fr);
-      margin: 0;
-      border-top: 1px solid rgba(72,48,25,.35);
-    }
-
-    .glossary dt,
-    .glossary dd {
-      margin: 0;
-      padding: 16px 12px;
-      border-bottom: 1px solid rgba(72,48,25,.28);
-    }
-
-    .glossary dt {
-      color: #513617;
-      font-weight: 700;
-      letter-spacing: .03em;
-    }
-
-    .traits-title {
-      margin: 48px 0 10px;
-      color: #3d2a16;
-      font-size: clamp(1.55rem, 3.5vw, 2.4rem);
-      font-weight: 500;
-    }
-
-    .traits-intro {
-      margin: 0 0 20px;
-      color: #624a2d;
-      font-style: italic;
-    }
-
-    .trait-card {
-      padding: 24px;
-      border: 1px solid rgba(72,48,25,.38);
-      background: rgba(255,248,224,.16);
-    }
-
-    .trait-card h3 {
-      margin: 0 0 10px;
-      color: #513617;
-      font-size: 1.3rem;
-      font-weight: 700;
-    }
-
-    .trait-card p { margin: 0; line-height: 1.7; }
-    .trait-card + .trait-card { margin-top: 14px; }
-
-    @media (max-width: 520px) {
-      .glossary dl { grid-template-columns: 1fr; }
-      .glossary dt { padding-bottom: 3px; border-bottom: 0; }
-      .glossary dd { padding-top: 5px; }
-    }
-
-    .otis-record {
-      padding: clamp(50px, 8vw, 92px) 20px;
-      color: #e9dfcb;
-      background: #10170f;
-    }
-
-    .otis-record figure {
-      width: min(640px, 100%);
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .otis-record img {
-      display: block;
-      width: 100%;
-      border: 1px solid rgba(201, 171, 101, .4);
-      box-shadow: 0 20px 60px rgba(0,0,0,.55);
-    }
-
-    .otis-record figcaption { padding-top: 20px; }
-
-    .otis-record h2 {
-      margin: 0;
-      color: #f0e7d3;
-      font-size: clamp(2rem, 5vw, 3.7rem);
-      font-weight: 500;
-    }
-
-    .otis-record p {
-      margin: 7px 0 0;
-      color: #bcb5a2;
-      font-style: italic;
-    }
-
-    .contract-oracle {
-      padding: clamp(55px, 9vw, 105px) 20px;
-      color: #eee4cf;
-      background:
-        radial-gradient(circle at 50% 35%, rgba(87, 104, 130, .28), transparent 34%),
-        linear-gradient(145deg, #080d16, #151b26 52%, #080b10);
-      text-align: center;
-    }
-
-    .contract-oracle-inner {
-      width: min(680px, 100%);
-      margin: 0 auto;
-    }
-
-    .contract-oracle .chapter-no { color: #bfc6d2; }
-    .contract-oracle h2 { margin-bottom: 13px; color: #f0e8d8; font-size: clamp(2rem, 5vw, 3.8rem); }
-    .oracle-intro { margin: 0 auto 32px; color: #c2c4c6; font-style: italic; line-height: 1.65; }
-
-    .eight-ball {
-      display: grid;
-      place-items: center;
-      width: min(300px, 78vw);
-      aspect-ratio: 1;
-      margin: 0 auto 26px;
-      padding: 22px;
-      color: #cfe4ff;
-      background:
-        radial-gradient(circle at 35% 25%, rgba(255,255,255,.2), transparent 10%),
-        radial-gradient(circle at 50% 55%, #35527c 0 14%, #10223f 15% 30%, #020407 31% 66%, #000 67%);
-      border: 2px solid rgba(219, 225, 238, .18);
-      border-radius: 50%;
-      box-shadow: inset -20px -30px 45px rgba(0,0,0,.7), inset 14px 10px 28px rgba(255,255,255,.08), 0 24px 54px rgba(0,0,0,.55);
-      transform: rotate(-5deg);
-    }
-
-    .eight-ball.shaking { animation: oracle-shake .65s ease-in-out; }
-
-    .oracle-window {
-      display: grid;
-      place-items: center;
-      width: 53%;
-      aspect-ratio: 1;
-      padding: 8px 13px 5px;
-      background: #122a55;
-      clip-path: polygon(50% 0, 100% 100%, 0 100%);
-      text-shadow: 0 0 10px rgba(177,220,255,.8);
-    }
-
-    .oracle-answer {
-      width: 76%;
-      max-width: 92px;
-      margin-top: 21px;
-      color: #d9edff;
-      font: 700 clamp(.55rem, 1.7vw, .68rem)/1.18 Arial, sans-serif;
-      letter-spacing: .045em;
-      overflow-wrap: anywhere;
-      text-transform: uppercase;
-    }
-
-    .oracle-button {
-      padding: 14px 24px;
-      color: #f3eadb;
-      background: #6e522b;
-      border: 1px solid #b99552;
-      border-radius: 4px;
-      box-shadow: 0 5px 18px rgba(0,0,0,.35);
-      cursor: pointer;
-      font: 700 .78rem/1 Arial, sans-serif;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-    }
-
-    .oracle-button:hover { background: #85663b; }
-    .oracle-button:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
-    .oracle-clue { margin: 22px 0 0; color: #a7acb1; font: .76rem/1.55 Arial, sans-serif; letter-spacing: .06em; }
-
-    @keyframes oracle-shake {
-      0%, 100% { transform: rotate(-5deg) translate(0); }
-      18% { transform: rotate(7deg) translate(-10px, 2px); }
-      38% { transform: rotate(-9deg) translate(11px, -3px); }
-      58% { transform: rotate(6deg) translate(-7px, 4px); }
-      78% { transform: rotate(-6deg) translate(5px, -2px); }
-    }
-
-    .sublevel-record {
-      position: relative;
-      padding: clamp(55px, 10vw, 115px) 20px;
-      color: #ded8c7;
-      background: #11110e;
-    }
-
-    .sublevel-inner {
-      width: min(1100px, 100%);
-      margin: 0 auto;
-    }
-
-    .sublevel-label {
-      margin: 0 0 14px;
-      color: #bca96d;
-      font: 700 .72rem/1.4 Arial, sans-serif;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-    }
-
-    .sublevel-record h2 {
-      margin-bottom: 25px;
-      color: #eee6d4;
-      font-size: clamp(2rem, 5vw, 3.7rem);
-    }
-
-    .sublevel-record figure {
-      width: min(48%, 560px);
-      min-width: 300px;
-      margin: 0 auto;
-    }
-
-    .sublevel-record img {
-      display: block;
-      width: 100%;
-      border: 1px solid rgba(204,177,111,.45);
-      box-shadow: 0 18px 60px rgba(0,0,0,.6);
-    }
-
-    .sublevel-record figcaption {
-      margin: 15px 0 0;
-      color: #a8a596;
-      font: italic 1rem/1.6 Georgia, "Times New Roman", serif;
-    }
-
-    .property {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      padding: 20px;
-      color: #c8c5b8;
-      background: #080a08;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      text-transform: uppercase;
-    }
-
-    .property-logo {
-      display: block;
-      width: 104px;
-      height: 70px;
-      object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,.7));
-    }
-
-    .property-brand {
-      display: grid;
-      gap: 2px;
-      text-align: left;
-    }
-
-    .property-brand strong {
-      color: #e1dfd4;
-      font-size: .76rem;
-      letter-spacing: .18em;
-    }
-
-    .property-brand small {
-      color: #aaa99f;
-      font-size: .61rem;
-      font-weight: 700;
-      letter-spacing: .12em;
-    }
-
-    @media (max-width: 640px) {
-      .sublevel-record figure { width: min(90%, 560px); }
-    }
 
     .coming {
       padding: 28px 20px;
@@ -549,21 +251,9 @@
       .hero { min-height: 78vh; background-position: 57% center; }
       .corporation { display: none; }
       .hero-copy { padding-bottom: 45px; }
+      .title-row { align-items: flex-start; flex-direction: column; gap: 18px; }
+      .manuscript-bar { margin-bottom: 0; }
       article { line-height: 1.68; }
-      .chapter-twelve {
-        padding: 0 20px 55px;
-        background: #0b100b;
-      }
-      .chapter-twelve-art {
-        display: block;
-        width: calc(100% + 40px);
-        max-width: none;
-        height: auto;
-        margin: 0 -20px 28px;
-        border-bottom: 1px solid rgba(210, 185, 120, .35);
-        box-shadow: 0 16px 38px rgba(0,0,0,.45);
-      }
-      .chapter-twelve article { background: rgba(10, 17, 11, .64); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -579,7 +269,10 @@
     </nav>
     <div class="hero-copy">
       <p class="eyebrow">A Story From Another Realm</p>
-      <h1>SteegLahg of the Staglights</h1>
+      <div class="title-row">
+        <h1>SteegLahg of the Staglights</h1>
+        <a class="manuscript-bar" href="./steeglahg-manuscript.html">Working Manuscript <span aria-hidden="true">◆</span></a>
+      </div>
       <p class="subtitle">Before the basement. Before Honest Tom. Before the contract, there was the forest.</p>
     </div>
   </header>
@@ -607,7 +300,6 @@
   </main>
 
   <section class="chapter-twelve" id="chapter-twelve" aria-labelledby="chapter-twelve-title">
-    <img class="chapter-twelve-art" src="./steeglahg-ch12-marked-oak.png" alt="SteegLahg, seen from behind in the Staglights forest, beside the freshly cut oak marked with an HT seagull emblem.">
     <article>
       <p class="chapter-no">Preview &mdash; Chapter Twelve</p>
       <h2 id="chapter-twelve-title">The Corporation</h2>
@@ -632,215 +324,10 @@
 
       <p>He was standing at the very edge of Staglight land. On the far side of his S marking, at the base of the tree, was a seagull.</p>
 
-      <p>HT.</p>
-
-      <p>Whatever HT was, it had marked the tree before Steegs ever put his own S into the bark.</p>
-
-      <p>He processed the oak in silence and stacked the wood beside the stump. It was still good wood. Beautiful wood. But it no longer felt like his wood.</p>
-
-      <p>By the time he returned home, Steegs had a game plan. He would find out who HT was. He would ask around Helthesbroad. The tavern regulars, the trade-store people, Winston Gallroy&mdash;somebody would know who had been buying timber near Staglight land.</p>
-
-      <p>But first, he would speak to Folstein.</p>
-
       <div class="endmark" aria-hidden="true">&mdash; &#10022; &mdash;</div>
     </article>
   </section>
 
-  <section class="chapter-thirteen" aria-labelledby="chapter-thirteen-title">
-    <div class="chapter-thirteen-inner">
-      <figure>
-        <img src="./steeglahg-ch13-folstein-cove.png" alt="SteegLahg, seen from behind, descends through the Staglights forest toward Folstein, a small ancient Staglight chopping wood near a shed and tree house cove.">
-      </figure>
-      <article>
-        <p class="chapter-no">Chapter Thirteen</p>
-        <h2 id="chapter-thirteen-title">Folstein</h2>
-
-        <p>Staglights do not give gifts after childhood.</p>
-
-        <p>They grant favors.</p>
-
-        <p>And favors are taken seriously.</p>
-
-        <p>To refuse a reasonable favor is to declare yourself an outright enemy. To fail to pay back a favor within a reasonable time lowers your status among the Staglights. One who repeatedly fails to repay&mdash;or re-favor&mdash;another eventually earns the name <em>stoober.</em></p>
-
-        <p>A stoober lives a hard life in the Staglight community.</p>
-
-        <p>One must note: it works both ways. And the word <em>reasonable</em> is often where the problems begin.</p>
-
-        <p>A Staglight who repays debts well, and chooses how to repay them wisely, can gain great status over the years. Wealth, respect, good trees&mdash;all of it can follow.</p>
-
-        <p>Beware befriending a <em>stight</em> person if you are not one hundred percent certain of their intentions. A stight person can favor you with something you could never repay, and then you lose status trying.</p>
-
-        <p>Many Staglights have gone treeless because of such practices. A wealthy stight may offer a piece of farm equipment, for instance&mdash;something a poorer Staglight could never hope to return in kind. The favor is accepted. The debt remains. The trees eventually change hands.</p>
-
-        <p>Now, there are rules about who may favor whom. You must be seen together as acquaintances more than once. Invitations must be accepted. Birthdays attended. The Staglight community is very astute about such things, however, and generally keeps minor skirmishes between the involved parties.</p>
-
-        <p>The next morning, Steegs headed north-northwest, down through the gully off his property, toward his neighbor Folstein.</p>
-
-        <p>Folstein was older than most Staglights. Much older.</p>
-
-        <p>He had been around for many, many years.</p>
-
-        <p>And he was still an excellent axe man indeed.</p>
-
-        <p>Steegs could hear him before he saw him.</p>
-
-        <p><strong>Stoig!</strong></p>
-
-        <p>The axe struck oak.</p>
-
-        <p><strong>Stoig!</strong></p>
-
-        <p>Folstein lived in a cove below the hill, near an old tree house and a small shed where he kept his wood, tools, and things that did not belong in a tree. His hair was reddish-gray and hung down his back. He looked thin from a distance&mdash;almost frail to a Humanis eye&mdash;but Folstein could split a log with one swing that would take three ordinary Staglights to move.</p>
-
-        <p>Folstein stopped chopping as Steegs came down the hill. He did not turn around.</p>
-
-        <p>&ldquo;Your boots say staflaross,&rdquo; Folstein said.</p>
-
-        <p>Steegs looked at the axe in Folstein&rsquo;s hand, then at the woodpile.</p>
-
-        <p>&ldquo;I found a mark.&rdquo;</p>
-
-        <p>Folstein became still.</p>
-
-        <p>&ldquo;A seagull,&rdquo; Steegs said. &ldquo;And HT.&rdquo;</p>
-
-        <p>For a moment, nothing moved except the trees.</p>
-
-        <p>Then Folstein set down his axe.</p>
-
-        <p>&ldquo;SteegLahg,&rdquo; he said quietly, &ldquo;the logs whisper to me when they are about to crack. Do not hold back what you saw. What you do next may be what holds the key.&rdquo;</p>
-
-        <div class="endmark" aria-hidden="true">&mdash; &#10022; &mdash;</div>
-      </article>
-    </div>
-  </section>
-
-  <section class="sublevel-record" aria-labelledby="sublevel-title">
-    <div class="sublevel-inner">
-      <p class="sublevel-label">Maintenance Department Record</p>
-      <h2 id="sublevel-title">Sublevel B</h2>
-      <figure>
-        <img src="./steeglahg-sublevel-b-honest-toms.png" alt="An older SteegLahg, seen from behind, preparing an Honest Tom's Backyard Bug Control prototype in the Maintenance Department of Sublevel B.">
-        <figcaption>Somewhere beneath Honest Tom's, the work continues.</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <section class="glossary" aria-labelledby="glossary-title">
-    <div class="glossary-inner">
-      <p class="chapter-no">Staglight Reference</p>
-      <h2 id="glossary-title">Staglight Glossary</h2>
-      <p class="glossary-intro">A few words from the Staglights.</p>
-      <dl>
-        <dt>Humanis</dt>
-        <dd>Human species, albeit 200 million years ago.</dd>
-
-        <dt>Blaklahzee</dt>
-        <dd>Amazing or awesome &mdash; the shit.</dd>
-
-        <dt>Staglights</dt>
-        <dd>The Staglight species.</dd>
-
-        <dt>Haukflaw</dt>
-        <dd>Keep it moving &mdash; or, &ldquo;C&rsquo;mon already!&rdquo;</dd>
-
-        <dt>Staflaross</dt>
-        <dd>Pissed off, moving in anger, or acting in anger.</dd>
-
-        <dt>Heegflaag</dt>
-        <dd>Mine.</dd>
-
-        <dt>LakaLaka</dt>
-        <dd>Enjoyment: a tickle, a drink of port, a good puff, or a good shit in the woods.</dd>
-
-        <dt>Stoig!</dt>
-        <dd>A cry of excitement, most often heard when chopping wood or when something good has happened.</dd>
-      </dl>
-
-      <h3 class="traits-title">Staglight Traits</h3>
-      <p class="traits-intro">Certain ways of the Staglights do not translate neatly to Humanis custom.</p>
-      <section class="trait-card" aria-labelledby="tickle-title">
-        <h3 id="tickle-title">Tickle</h3>
-        <p>For Staglights, tickling is not merely a children&rsquo;s game or a Humanis joke. It is a familiar kind of relief: part massage, part stretch, and part release. A good tickle can settle the body like a satisfying bowel movement or a well-timed bit of flatulence. Staglights tickle one another often&mdash;to reconnect, to calm a friend, and sometimes because a stressful moment has made them nervous and they do not know what else to do.</p>
-      </section>
-      <section class="trait-card" aria-labelledby="pinky-strength-title">
-        <h3 id="pinky-strength-title">Pinky Strength</h3>
-        <p>Staglights possess remarkable strength in their pinky fingers and pinky toes. The smallest digits are not an afterthought in their world; they grip, brace, pull, and hold with a power that surprises nearly every Humanis who witnesses it.</p>
-      </section>
-    </div>
-  </section>
-
-  <section class="otis-record" aria-labelledby="otis-title">
-    <figure>
-      <img src="./otis-the-barkmole.png" alt="Otis the BarkMole, SteegLahg's stout and sweet forest companion with a small permanent sneer.">
-      <figcaption>
-        <h2 id="otis-title">Otis the BarkMole</h2>
-        <p>SteegLahg&rsquo;s sweet, watchful companion.</p>
-      </figcaption>
-    </figure>
-  </section>
-
-  <section class="contract-oracle" aria-labelledby="oracle-title">
-    <div class="contract-oracle-inner">
-      <p class="chapter-no">Maintenance Department Oracle</p>
-      <h2 id="oracle-title">Name the Unnameable</h2>
-      <p class="oracle-intro">The first half is a pronoun. The second is a thing people do. Shake wisely: three angry utterances may dissolve a contract.</p>
-
-      <div class="eight-ball" id="eight-ball" aria-live="polite">
-        <div class="oracle-window"><span class="oracle-answer" id="oracle-answer">Ask the Ball</span></div>
-      </div>
-
-      <button class="oracle-button" id="oracle-button" type="button">Shake the Eight Ball</button>
-      <p class="oracle-clue">The Corporation does not recognize this activity as legally binding.</p>
-    </div>
-  </section>
-
-  <footer>
-    <div class="coming">The story of SteegLahg will continue.</div>
-    <div class="property">
-      <img class="property-logo" src="./honest-toms-hood-ornament.png" alt="Honest Tom's seagull hood ornament">
-      <span class="property-brand"><strong>Honest Tom's</strong><small>Property of Honest Tom's Corporation</small></span>
-    </div>
-  </footer>
-  <script>
-    (() => {
-      const answers = [
-        'They Ski', 'We Run', 'He Jogs', 'She Sings', 'It Dances',
-        'You Swim', 'They Hike', 'We Fish', 'He Cooks', 'She Reads',
-        'I Paint', 'You Drive', 'They Build', 'We Laugh', 'He Sleeps',
-        'She Folds', 'It Rolls', 'You Dig', 'They Garden', 'We Paddle',
-        'I Whistle', 'You Hammer', 'They Wander', 'We Climb', 'He Sweeps',
-        'She Sews', 'It Hops', 'You Carve', 'They Roast', 'We Row',
-        'I Bake', 'You Chase', 'They Whisper', 'We Dance', 'He Sips',
-        'She Rakes', 'It Burrows', 'You Sketch', 'They Tinker', 'We Nap'
-      ];
-      const ball = document.getElementById('eight-ball');
-      const answer = document.getElementById('oracle-answer');
-      const button = document.getElementById('oracle-button');
-      let timer;
-      let previousAnswer = '';
-
-      button.addEventListener('click', () => {
-        window.clearTimeout(timer);
-        ball.classList.remove('shaking');
-        void ball.offsetWidth;
-        answer.textContent = '...';
-        ball.classList.add('shaking');
-        button.disabled = true;
-        timer = window.setTimeout(() => {
-          if (Math.random() < 0.02 && previousAnswer !== 'She Tar') {
-            previousAnswer = 'She Tar';
-          } else {
-            const choices = answers.filter((item) => item !== previousAnswer);
-            previousAnswer = choices[Math.floor(Math.random() * choices.length)];
-          }
-          answer.textContent = previousAnswer;
-          ball.classList.remove('shaking');
-          button.disabled = false;
-        }, 620);
-      });
-    })();
-  </script>
+  <footer class="coming">The story of SteegLahg will continue.</footer>
 </body>
 </html>
