@@ -594,6 +594,37 @@
       .sublevel-record figure { width: min(90%, 560px); }
     }
 
+    .field-recording {
+      padding: 30px 20px 32px;
+      color: #e7dfcb;
+      background:
+        radial-gradient(circle at 50% 0, rgba(173,139,73,.18), transparent 48%),
+        #11180f;
+      text-align: center;
+    }
+
+    .field-recording p {
+      margin: 0 0 8px;
+      color: #d3b979;
+      font: 700 .68rem/1.4 Arial, sans-serif;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .field-recording h2 {
+      margin: 0 0 16px;
+      color: #f3ead6;
+      font-size: clamp(1.55rem, 4vw, 2.35rem);
+      font-weight: 500;
+    }
+
+    .field-recording audio {
+      display: block;
+      width: min(440px, 100%);
+      height: 42px;
+      margin: 0 auto;
+    }
+
     .coming {
       padding: 28px 20px;
       color: #b8bcae;
@@ -960,6 +991,14 @@
   </section>
 
   <footer>
+    <section class="field-recording" aria-labelledby="recording-title">
+      <p>Staglight Field Recording</p>
+      <h2 id="recording-title">SteegLahg&rsquo;s Day Begins</h2>
+      <audio controls preload="metadata">
+        <source src="./steeglahgs-day-begins.m4a" type="audio/mp4">
+        Your browser does not support this recording.
+      </audio>
+    </section>
     <div class="coming">The story of SteegLahg will continue.</div>
     <div class="property">
       <img class="property-logo" src="./honest-toms-hood-ornament.png" alt="Honest Tom's seagull hood ornament">
