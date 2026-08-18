@@ -108,9 +108,16 @@
       gap: 24px;
     }
 
+    .title-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding-bottom: 4px;
+    }
+
     .manuscript-bar {
       flex: 0 0 auto;
-      margin-bottom: 4px;
       padding: 11px 15px 10px;
       border: 1px solid rgba(246, 250, 255, .72);
       border-radius: 999px;
@@ -126,6 +133,22 @@
     }
 
     .manuscript-bar:hover { filter: brightness(1.12); transform: translateY(-2px); }
+
+    .chapter-preview-bar {
+      padding: 11px 15px 10px;
+      border: 1px solid rgba(223, 192, 122, .72);
+      border-radius: 999px;
+      color: #f4e3bd;
+      background: rgba(15, 29, 17, .88);
+      box-shadow: 0 3px 0 rgba(0,0,0,.3), 0 7px 24px rgba(0,0,0,.28), inset 0 1px rgba(255,255,255,.08);
+      font: 800 .68rem/1 Arial, sans-serif;
+      letter-spacing: .12em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: transform .2s ease, filter .2s ease;
+    }
+
+    .chapter-preview-bar:hover { filter: brightness(1.16); transform: translateY(-2px); }
 
     .subtitle {
       max-width: 630px;
@@ -640,7 +663,7 @@
       .corporation { display: none; }
       .hero-copy { padding-bottom: 45px; }
       .title-row { align-items: flex-start; flex-direction: column; gap: 18px; }
-      .manuscript-bar { margin-bottom: 0; }
+      .title-actions { padding-bottom: 0; }
       article { line-height: 1.68; }
       .chapter-twelve {
         padding: 0 20px 55px;
@@ -673,7 +696,10 @@
       <p class="eyebrow">A Story From Another Realm</p>
       <div class="title-row">
         <h1>SteegLahg of the Staglights</h1>
-        <a class="manuscript-bar" href="./steeglahg-manuscript.html">Working Manuscript <span aria-hidden="true">◆</span></a>
+        <div class="title-actions">
+          <a class="chapter-preview-bar" href="./steeglahg-chapter-one-preview.html">🪓 Preview Chpt 1</a>
+          <a class="manuscript-bar" href="./steeglahg-manuscript.html">Working Manuscript <span aria-hidden="true">◆</span></a>
+        </div>
       </div>
       <p class="subtitle">Before the basement. Before Honest Tom. Before the contract, there was the forest.</p>
     </div>
