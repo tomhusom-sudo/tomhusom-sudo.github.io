@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Read Chapter Three, Otis the BarkMole, from SteegLahg of the Staglights.">
+  <meta name="theme-color" content="#10170f">
+  <title>Preview Chapter Three | SteegLahg of the Staglights</title>
+  <style>
+    :root { --night:#10170f; --paper:#ead8ad; --ink:#30261b; --gold:#b99552; }
+    * { box-sizing:border-box; } html { scroll-behavior:smooth; }
+    body { margin:0; color:#f2ead8; background:var(--night); font-family:Georgia,"Times New Roman",serif; }
+    a { color:inherit; }
+    .hero { min-height:48vh; display:grid; align-content:end; padding:clamp(28px,7vw,88px); background:linear-gradient(180deg,rgba(5,9,5,.12),rgba(8,14,9,.94)),url("./otis-the-barkmole.png") center 30%/cover; box-shadow:inset 0 -35px 85px rgba(0,0,0,.65); }
+    .back { position:absolute; top:22px; left:clamp(20px,5vw,72px); color:#e9dfca; font:700 .72rem/1 Arial,sans-serif; letter-spacing:.13em; text-decoration:none; text-transform:uppercase; }
+    .eyebrow { margin:0 0 12px; color:#d9bc78; font:700 .72rem/1.4 Arial,sans-serif; letter-spacing:.2em; text-transform:uppercase; }
+    .corp-mark { width:24px; height:24px; margin-right:7px; object-fit:contain; vertical-align:middle; filter:drop-shadow(0 2px 4px rgba(0,0,0,.55)); }
+    h1 { max-width:900px; margin:0; font-size:clamp(3rem,8vw,6.6rem); font-weight:500; letter-spacing:-.05em; line-height:.87; text-shadow:0 3px 18px #000; }
+    .subtitle { margin:20px 0 0; color:#e6dcc5; font-size:clamp(1rem,2vw,1.2rem); font-style:italic; }
+    .contest { width:min(820px,calc(100% - 32px)); margin:clamp(-24px,-4vw,-46px) auto 0; padding:clamp(24px,5vw,40px); color:#ede4d0; background:#152017; border:1px solid rgba(213,185,120,.35); box-shadow:0 16px 44px rgba(0,0,0,.34); text-align:center; }
+    .contest .otis-paw { display:block; margin-bottom:9px; color:#d5b978; font-size:2.1rem; }
+    .contest h2 { margin:0 0 10px; font-size:clamp(1.45rem,3vw,2rem); font-weight:500; }
+    .contest p { max-width:650px; margin:0 auto; line-height:1.65; }
+    .book { width:min(860px,calc(100% - 28px)); margin:0 auto; padding:clamp(38px,8vw,92px); color:var(--ink); background:radial-gradient(circle at 18% 0,rgba(255,255,255,.35),transparent 25%),repeating-linear-gradient(0deg,transparent 0 3px,rgba(77,48,21,.06) 3px 4px),var(--paper); box-shadow:0 0 50px rgba(0,0,0,.42),inset 13px 0 18px rgba(93,61,26,.12); }
+    article { max-width:690px; margin:0 auto; }
+    .chapter-no { margin:0 0 9px; color:#765521; font:700 .71rem/1.4 Arial,sans-serif; letter-spacing:.18em; text-transform:uppercase; }
+    .last-edit { margin:-19px 0 31px; color:#765521; font:700 .68rem/1.5 Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; }
+    h2 { margin:0 0 35px; color:#2d2116; font-size:clamp(2.35rem,5.5vw,4.25rem); font-weight:500; letter-spacing:-.04em; line-height:.95; }
+    article p { margin:0 0 1.15em; font-size:clamp(1.05rem,1.8vw,1.22rem); line-height:1.8; }
+    article p:first-of-type::first-letter { float:left; margin:.09em .13em 0 0; color:#6d5028; font-size:4.15em; line-height:.68; }
+    .endmark { margin:42px 0 0; color:#765521; letter-spacing:.65em; text-align:center; }
+    .review { padding:clamp(46px,8vw,88px) 20px; color:#ede4d0; background:#0d130d; }
+    .review-inner { width:min(680px,100%); margin:0 auto; }
+    .review h2 { color:#f0e4c9; }
+    .review-intro { margin:0 0 24px; color:#cfc6af; line-height:1.65; }
+    label { display:block; margin:18px 0 7px; color:#dbbf7f; font:700 .72rem/1.4 Arial,sans-serif; letter-spacing:.12em; text-transform:uppercase; }
+    input, select, textarea { width:100%; border:1px solid rgba(217,190,127,.4); border-radius:4px; padding:12px; color:#f4ead7; background:#182219; font:1rem/1.4 Arial,sans-serif; }
+    textarea { min-height:160px; resize:vertical; }
+    .check { display:flex; gap:10px; align-items:flex-start; margin-top:18px; color:#cfc6af; font-size:.92rem; line-height:1.5; }
+    .check input { width:auto; margin-top:4px; }
+    button { margin-top:22px; padding:13px 18px; border:1px solid rgba(255,255,255,.65); border-radius:999px; color:#172019; background:linear-gradient(135deg,#fbfcff,#aeb7c0 28%,#fff 48%,#7d8790 75%,#e7edf4); cursor:pointer; font:800 .72rem/1 Arial,sans-serif; letter-spacing:.13em; text-transform:uppercase; }
+    button:hover { filter:brightness(1.1); } button:disabled { cursor:wait; opacity:.72; }
+    .form-note { margin:17px 0 0; color:#aaa99f; font:.82rem/1.5 Arial,sans-serif; }
+    .sent { display:none; margin-top:16px; color:#d9bd7c; } .sent.error { color:#e7a28e; }
+    footer { display:flex; justify-content:center; align-items:center; gap:8px; padding:18px 22px; color:#a9ad9f; background:#080a08; font:700 .66rem/1.5 Arial,sans-serif; letter-spacing:.12em; text-align:center; text-transform:uppercase; }
+    footer .corp-mark { width:31px; height:31px; margin:0; }
+    @media (max-width:640px) { .hero { min-height:39vh; padding-bottom:45px; } .book { width:calc(100% - 16px); padding:31px 22px; } article p { line-height:1.7; } }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <a class="back" href="./steeglahg.html">← Return to Staglights</a>
+    <p class="eyebrow"><img class="corp-mark" src="./honest-toms-hood-ornament.png" alt="">Honest Tom&rsquo;s Corporation &middot; Preview Copy</p>
+    <h1>Preview Chapter Three</h1>
+    <p class="subtitle">Otis the BarkMole &middot; Read on, then leave your Honest Review using the form at the bottom.</p>
+  </header>
+
+  <aside class="contest">
+    <span class="otis-paw" aria-hidden="true">✦</span>
+    <h2>Leave an Honest Review</h2>
+    <p>Give this preview an <em>Honest Review</em> and you will be entered to win a prize selected by SteegLahg himself&mdash;if we can find him and trick him into doing so. Otis will likely inspect your entry.</p>
+  </aside>
+
+  <main class="book"><article>
+    <p class="chapter-no">Chapter Three</p>
+    <h2>Otis the BarkMole</h2>
+    <p class="last-edit">Last story edit &mdash; August 18, 2026 at 9:01 PM CT &middot; Work in progress</p>
+    <p>Otis just fell out of a tree one day. No kidding.</p>
+    <p>There were all kinds of moles in the forest: TreeMoles, TwigMoles, MossMoles, and BarkMoles were the most common in those parts. Most moles were wild animals, not to be tamed. Humanis hunted them for meat, fur, and sometimes, it seemed, for fun.</p>
+    <p>BarkMoles were different. They were known to bond with Staglights, though usually both had to be young. It was almost always a female BarkMole and a young male Staglight. Nobody could say exactly why. Old Staglights had explanations, but none of them agreed with one another and most involved the moon, the smell of sap, or a female BarkMole having better sense than a young male Staglight.</p>
+    <p>In this case, it was Otis and Steegs.</p>
+    <p>Otis had been abandoned after her mother and siblings were hunted and eaten by Grimkites, fierce birds of prey in the forest that hunted moles&mdash;usually the young, and sometimes the mother too. Somehow Otis survived. She found the new rented tree house where Katah and the boys had just moved and climbed higher than a small creature with that much fur had any business climbing.</p>
+    <p>Steegs found her sitting beneath a few leaves in his branch room. She had made herself so small he might have missed her, except that she sneezed.</p>
+    <p>He turned toward the sound.</p><p>Otis saw him, slipped, and fell straight onto him.</p><p>Both of them were startled.</p>
+    <p>Steegs landed on his back with the BarkMole on his chest. Otis froze. She was stout as a small dog and twice as determined, with bark-dark fur, twiggy whiskers, and a small permanent sneer that made her look meaner than she was.</p>
+    <p>Then Steegs started laughing.</p><p>Otis stopped, looked at him quizzically, coughed once, and gave a little snarl.</p>
+    <p>“Hey,” Steegs said. “You okay there?”</p><p>Otis stared back, trying to understand.</p><p>“Looks like you&rsquo;re going to make it. Where&rsquo;s your family?”</p><p>Otis looked down sheepishly.</p><p>Steegs stopped laughing. “Hmm,” he said. “I get it.”</p>
+    <p>He sat up slowly so he would not scare her. “How about you hang out here? I can get some toasted nuts for later. But don&rsquo;t make too much noise, or those two”&mdash;he pointed down a branch or two toward Tah and Tel&mdash;“will torment you.”</p>
+    <p>Otis sneered. Hmmmph.</p><p>“Okay. But I warned you. For now, let&rsquo;s keep the bark shedding easy. I&rsquo;ll call you Otis. I&rsquo;m SteegLahg of the Staglight Forest.”</p><p>He gave her a small salute.</p>
+    <p>Otis moved one clawed foot forward, trying to imitate him.</p><p>Steegs considered this an excellent beginning.</p><p>Otis yawned, curled into the leaves, and seemed to find her place right quick. Steegs was happy to have a new friend, but he knew Katah would not allow it right away.</p><p>“Keep it a secret,” he whispered.</p>
+    <p>Otis slept inside Steegs&rsquo; tool belt that first night. By morning, she had chewed through the strap that had been rubbing his hip for months. After that, he considered her hired.</p><p>Keeping her silent&mdash;or hidden&mdash;was going to be another matter.</p>
+    <p>By the second morning, one of Tah&rsquo;s gloves was gone. By supper, Tel&rsquo;s left glove had vanished too. Both boys accused the other one. Tah claimed Tel had borrowed his by mistake. Tel said he would rather put his hand in a squirrel hole.</p><p>Steegs said nothing. Otis sat inside the fold of his shirt with only her whiskers showing.</p>
+    <p>Two days later, Bosoko found both gloves in a corner of his shed, tucked beside a small dish where he kept treats for animals that knew better than to ask. He did not mention it. He only looked toward the tree house, saw Otis watching from the lower branches, and put one extra toasted nut in the dish.</p><p>Nobody seemed to know why the gloves kept finding their way to Bosoko&rsquo;s shed.</p>
+    <p>The secret ended at breakfast.</p><p>Katah had made beans with pine nuts, eggs, and a little fried root bread. Tah was talking with his mouth full. Tel was complaining that his remaining glove smelled like shed dirt. Steegs had Otis tucked inside his tool belt beneath the table, where she had been warned&mdash;very clearly&mdash;not to move.</p><p>Then Katah set the bean bowl down.</p><p>Otis moved.</p>
+    <p>She came out from under Steegs&rsquo; chair, climbed the table leg like it had insulted her, and launched herself directly into the center of the breakfast table.</p><p>The bean bowl tipped. Pine nuts scattered. Tah shouted and nearly fell backward off his stool. Tel jumped up so fast his knee struck the underside of the table.</p><p>“A rat!” Tel yelled.</p>
+    <p>Otis coughed, planted her little feet in the beans, and gave Tel the strongest sneer her face could manage.</p><p>“She is not a rat,” Steegs said too quickly.</p><p>Everyone looked at him.</p><p>Katah closed her eyes for one long second. “SteegLahg.”</p><p>“She fell out of a tree,” he said.</p><p>“Of course she did,” Katah said.</p><p>“She has nowhere else to go.”</p><p>Otis looked at Katah. Her sneer softened only a little.</p>
+    <p>Katah looked at the ruined beans, the fur on the table, and Steegs&rsquo; face trying very hard not to ask for something. “That animal is a nuisance,” she said.</p><p>“She has a name,” Steegs said. “Otis.”</p><p>Tel pointed at her. “Otis stole my glove.”</p><p>Tah pointed at his own bare hand. “And mine.”</p><p>Otis looked at both of them as if she had done no such thing and would do it again if necessary.</p>
+    <p>Katah picked up the bean bowl. “She stays out of the food. She stays out of beds. She stays away from the roof patches. And if she chews another strap, it had better be one that needs chewing.”</p><p>Steegs broke into a smile. “So she can stay?”</p><p>“I said she is a nuisance,” Katah replied. “Do not make more of it.”</p>
+    <p>Later that week, Steegs saw Katah leave a small scrap of fried root bread beside the stove. Another day, he saw her scratch Otis between the ears while she thought nobody was watching. Once, when Otis had fallen asleep in a basket of clean cloth, Katah bent down and kissed the top of her head.</p><p>She looked up and saw Steegs watching.</p><p>“Do not make anything of it,” Katah said.</p><p>“I would not dare,” Steegs said.</p>
+    <p>Tel and Otis annoyed one another from that day forward. Tel called her a shed rat. Otis hid his gloves, chewed the ends of his bootlaces, and once sat on his folded shirt until he was late to tree learning. When Tel tried to shoo her away, she bared her little teeth and sneered like a creature with a long list of grievances.</p><p>Steegs thought they would get along eventually.</p><p>They did not.</p>
+    <div class="endmark" aria-hidden="true">— ✦ —</div>
+  </article></main>
+
+  <section class="review" aria-labelledby="review-title"><div class="review-inner">
+    <p class="eyebrow">Maintenance Department Reader Desk</p><h2 id="review-title">Your Honest Review</h2>
+    <p class="review-intro">Tell us what worked, what did not, and what you want to know next. Your review goes straight to Honest Tom&rsquo;s reader desk. If it is judged worthy, SteegLahg himself will be summoned to award a prize to the Humanis who earned it.</p>
+    <form id="review-form" action="https://formspree.io/f/mreobrvj" method="POST"><input type="hidden" name="_subject" value="Honest Review — SteegLahg Chapter Three"><input type="hidden" name="_gotcha" style="display:none">
+      <label for="reviewer-name">Name</label><input id="reviewer-name" name="name" autocomplete="name" required>
+      <label for="reviewer-email">Email for contest entry</label><input id="reviewer-email" name="email" type="email" autocomplete="email" required>
+      <label for="rating">Chapter rating</label><select id="rating" name="rating" required><option value="">Choose one</option><option>5 — Baklahzee</option><option>4 — Strong wood</option><option>3 — Needs sanding</option><option>2 — Staflaross</option><option>1 — Send help</option></select>
+      <label for="review-text">Review</label><textarea id="review-text" name="review" required placeholder="What stayed with you? What would you change?"></textarea>
+      <label class="check"><input id="contest-entry" name="contest_entry" value="Yes" type="checkbox" required><span>I am submitting an honest review and want to be entered for the SteegLahg prize.</span></label>
+      <button id="review-submit" type="submit">Send Honest Review</button><p class="form-note">Your review is delivered directly to Honest Tom&rsquo;s reader desk. A worthy Humanis may compel the summoning of SteegLahg himself to award the prize.</p><p class="sent" id="sent-message" role="status" aria-live="polite"></p>
+    </form>
+  </div></section>
+  <footer><img class="corp-mark" src="./honest-toms-hood-ornament.png" alt="Honest Tom&rsquo;s seagull hood ornament"><span>Property of Honest Tom&rsquo;s Corporation &middot; Maintenance Department Archives</span></footer>
+  <script>
+    (function () { const form=document.getElementById("review-form"),button=document.getElementById("review-submit"),message=document.getElementById("sent-message"); form.addEventListener("submit",async function(event){event.preventDefault();button.disabled=true;button.textContent="Sending...";message.style.display="none";message.className="sent";try{const response=await fetch(form.action,{method:"POST",body:new FormData(form),headers:{"Accept":"application/json"}});if(!response.ok){const data=await response.json().catch(function(){return {}});throw new Error(data.errors&&data.errors[0]&&data.errors[0].message?data.errors[0].message:"Something went wrong.");}form.reset();message.textContent="Honest Review received. You are entered for SteegLahg's prize, assuming we can locate him.";message.style.display="block";}catch(error){message.textContent=error.message||"Could not send your review. Please try again.";message.className="sent error";message.style.display="block";}finally{button.disabled=false;button.textContent="Send Honest Review";}});}());
+  </script>
+</body>
+</html>

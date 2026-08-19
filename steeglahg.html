@@ -444,6 +444,26 @@
       font-style: italic;
     }
 
+    .otis-chapter-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+      padding: 7px 15px 7px 8px;
+      border: 1px solid rgba(201, 171, 101, .56);
+      border-radius: 999px;
+      color: #f0e7d3;
+      background: rgba(24, 37, 23, .8);
+      font: 800 .68rem/1 Arial, sans-serif;
+      letter-spacing: .1em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: transform .2s ease, filter .2s ease;
+    }
+
+    .otis-chapter-link:hover { filter: brightness(1.14); transform: translateY(-2px); }
+    .otis-chapter-link img { width:35px; height:35px; border:1px solid rgba(201, 171, 101, .45); border-radius:50%; object-fit:cover; }
+
     .contract-oracle {
       padding: clamp(55px, 9vw, 105px) 20px;
       color: #eee4cf;
@@ -997,6 +1017,7 @@
       <figcaption>
         <h2 id="otis-title">Otis the BarkMole</h2>
         <p>SteegLahg&rsquo;s sweet, watchful companion.</p>
+        <a class="otis-chapter-link" href="./steeglahg-chapter-three-preview.html"><img src="./otis-the-barkmole.png" alt="">Read Chapter Three</a>
       </figcaption>
     </figure>
   </section>
