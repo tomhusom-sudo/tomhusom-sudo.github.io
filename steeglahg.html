@@ -379,6 +379,48 @@
       .book-card { min-height: 350px; }
     }
 
+    .book-two-outline {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(58px, 9vw, 105px) 20px;
+      color: #2a1d0c;
+      background:
+        radial-gradient(circle at 78% 16%, rgba(255,237,167,.5), transparent 23%),
+        radial-gradient(circle at 12% 80%, rgba(84,51,15,.22), transparent 28%),
+        linear-gradient(135deg, #8c611a 0%, #d6ac4a 42%, #a57520 100%);
+    }
+
+    .book-two-outline::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .36; background-image: repeating-linear-gradient(108deg, rgba(72,41,8,.15) 0 1px, transparent 1px 8px); }
+    .book-two-inner { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(240px, .72fr) minmax(0, 1.28fr); gap: clamp(28px, 5vw, 72px); align-items: center; width: min(1140px, 100%); margin: 0 auto; }
+    .book-two-cover { min-height: 405px; padding: 34px 28px; color: #fff1be; text-align: center; background: radial-gradient(circle at 50% 13%, rgba(255,245,190,.2), transparent 28%), linear-gradient(130deg, #9b701c, #d0a23a 48%, #805713); border: 2px solid #f4d46e; box-shadow: -12px 14px 0 #57330a, -18px 22px 37px rgba(55,29,3,.42), inset 0 0 0 7px rgba(74,44,5,.28); transform: rotate(2deg); }
+    .book-two-cover .tiny-mark { color: #3b2607; font: 800 .62rem/1.45 Arial, sans-serif; letter-spacing: .18em; text-transform: uppercase; }
+    .book-two-cover .cover-rule { width: 78%; height: 1px; margin: 32px auto 24px; background: linear-gradient(90deg, transparent, #472a05, transparent); }
+    .book-two-cover h2 { margin: 0; color: #fff4c8; font-size: clamp(2.6rem, 5vw, 4.4rem); line-height: .9; text-shadow: 0 3px 0 rgba(71,40,5,.52); }
+    .book-two-cover h2 span { display: block; font-size: .55em; }
+    .book-two-cover .book-two-short { margin: 23px 0 4px; color: #3d2809; font-size: 1.28rem; font-style: italic; font-weight: 800; }
+    .book-two-cover .book-two-full { margin: 0; color: #fff0b4; font-size: 1.06rem; font-style: italic; }
+    .book-two-cover .draft-mark { margin: 37px 0 0; color: #3c280c; font: 800 .62rem/1.4 Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase; }
+    .book-two-kicker { margin: 0 0 8px; color: #55340a; font: 800 .65rem/1.3 Arial, sans-serif; letter-spacing: .18em; text-transform: uppercase; }
+    .book-two-content h3 { margin: 0 0 20px; color: #2e1b06; font-size: clamp(2rem, 4vw, 3.5rem); line-height: .95; }
+    .book-two-content > p:last-child { margin: 20px 0 0; color: #4a2e09; font-style: italic; line-height: 1.55; }
+    .book-two-scenes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 25px; }
+    .book-two-scenes figure { margin: 0; overflow: hidden; border: 1px solid rgba(74,43,4,.6); background: #281a08; box-shadow: 0 10px 22px rgba(66,37,3,.26); }
+    .book-two-scenes img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+    .book-two-scenes figcaption { padding: 10px 12px 11px; color: #f4d87e; font: 800 .63rem/1.35 Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+    .book-two-chapters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 30px; margin: 0; padding: 0 0 0 22px; color: #362007; font-weight: 700; line-height: 1.45; }
+    .book-two-chapters li { padding-left: 3px; }
+    .book-two-chapters li::marker { color: #70470c; font-family: Georgia, serif; font-weight: 900; }
+
+    @media (max-width: 760px) {
+      .book-two-inner { grid-template-columns: 1fr; }
+      .book-two-cover { max-width: 365px; width: 100%; margin: 0 auto; }
+    }
+
+    @media (max-width: 520px) {
+      .book-two-scenes, .book-two-chapters { grid-template-columns: 1fr; }
+      .book-two-cover { min-height: 365px; }
+    }
+
     .chapter-preview {
       display: inline-flex;
       align-items: center;
@@ -1053,6 +1095,50 @@
       </div>
     </div>
     <p class="book-launch-note">Thirteen chapters from the Forest of the Staglights, where trees are homes, favors are debts, and someone has begun marking the boundary.</p>
+  </section>
+
+  <section class="book-two-outline" aria-labelledby="book-two-title">
+    <div class="book-two-inner">
+      <div class="book-two-cover">
+        <p class="tiny-mark">Honest Tom&rsquo;s Corporation<br>Restricted Draft</p>
+        <div class="cover-rule" aria-hidden="true"></div>
+        <h2 id="book-two-title"><span>Book Two</span>Outline!</h2>
+        <p class="book-two-short">The Helth Fav.</p>
+        <p class="book-two-full">The Helthesbroad Favor</p>
+        <p class="draft-mark">Thirteen chapters in development</p>
+      </div>
+
+      <div class="book-two-content">
+        <p class="book-two-kicker">Next in the Rhelm</p>
+        <h3>The Helthesbroad Favor</h3>
+        <div class="book-two-scenes">
+          <figure>
+            <img src="./mr-tight-book-two.png" alt="Mr. Tight seen from behind in a fedora and dark overcoat at a shadowed office desk.">
+            <figcaption>The man behind the papers</figcaption>
+          </figure>
+          <figure>
+            <img src="./riley-steegs-helthesbroad-tavern.png" alt="Young SteegLahg meeting a drink-holding Riley in a smoky Helthesbroad tavern.">
+            <figcaption>A drink for information</figcaption>
+          </figure>
+        </div>
+        <ol class="book-two-chapters">
+          <li>The Road to Helthesbroad</li>
+          <li>The Tavern With No Windows</li>
+          <li>A Drink for Information</li>
+          <li>Clean Hands, Folded Papers</li>
+          <li>The Ledger</li>
+          <li>A Favor With Pay</li>
+          <li>The Route Folstein Does Not Use</li>
+          <li>The Price of a Shortcut</li>
+          <li>River Timber</li>
+          <li>Riley&rsquo;s Other Story</li>
+          <li>The Wrong Receipt</li>
+          <li>Folstein&rsquo;s River</li>
+          <li>Mr. Tight Will See You Now</li>
+        </ol>
+        <p>One trip into town, one favor with a price, and a man Steegs is not supposed to meet yet.</p>
+      </div>
+    </div>
   </section>
 
   <section class="sublevel-record" aria-labelledby="sublevel-title">
