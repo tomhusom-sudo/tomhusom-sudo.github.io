@@ -219,6 +219,166 @@
       letter-spacing: .7em;
     }
 
+    /* The original previews remain in the archive, but Book One now opens as one whole manuscript. */
+    .story-wrap,
+    .chapter-twelve,
+    .chapter-thirteen {
+      display: none;
+    }
+
+    .book-launch {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(58px, 10vw, 118px) 20px;
+      color: #eee4cf;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(185,149,82,.22), transparent 25%),
+        linear-gradient(135deg, rgba(6,13,8,.88), rgba(20,35,21,.96)),
+        url("./steeglahg-ch13-folstein-cove.png") center/cover no-repeat;
+    }
+
+    .book-launch::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .48;
+      background: linear-gradient(90deg, rgba(5,9,6,.94), transparent 45%, rgba(5,9,6,.88));
+    }
+
+    .book-launch-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(250px, .8fr) minmax(0, .95fr);
+      gap: clamp(20px, 4vw, 55px);
+      align-items: center;
+      width: min(1200px, 100%);
+      margin: 0 auto;
+    }
+
+    .glimpse-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .glimpse {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid rgba(220,190,124,.34);
+      background: rgba(10,18,11,.78);
+      box-shadow: 0 16px 34px rgba(0,0,0,.34);
+    }
+
+    .glimpse img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      filter: saturate(.78) contrast(1.04);
+    }
+
+    .glimpse figcaption {
+      padding: 13px 15px 15px;
+      color: #e8dcc2;
+      font-size: .97rem;
+      line-height: 1.4;
+    }
+
+    .glimpse strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #d7b96f;
+      font: 700 .66rem/1.3 Arial, sans-serif;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .book-card {
+      display: block;
+      min-height: 445px;
+      padding: 34px 28px;
+      color: #f4ebd7;
+      text-align: center;
+      text-decoration: none;
+      background:
+        radial-gradient(circle at 50% 15%, rgba(255,244,205,.12), transparent 32%),
+        linear-gradient(130deg, #202d20 0%, #111a12 48%, #283826 100%);
+      border: 1px solid #c6a961;
+      box-shadow: -12px 14px 0 #0b100b, -15px 18px 34px rgba(0,0,0,.48), inset 0 0 0 7px rgba(197,165,91,.17);
+      transform: rotate(-2deg);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .book-card:hover {
+      transform: rotate(0) translateY(-8px);
+      box-shadow: -12px 14px 0 #0b100b, -15px 27px 43px rgba(0,0,0,.55), inset 0 0 0 7px rgba(197,165,91,.22);
+    }
+
+    .book-card .tiny-mark {
+      color: #c9ab62;
+      font: 700 .63rem/1.4 Arial, sans-serif;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .book-card .cover-rule {
+      width: 75%;
+      height: 1px;
+      margin: 34px auto 28px;
+      background: linear-gradient(90deg, transparent, #c9ab62, transparent);
+    }
+
+    .book-card h2 {
+      margin: 0;
+      color: #f5e9c7;
+      font-size: clamp(2.8rem, 5vw, 4.8rem);
+      line-height: .88;
+      text-shadow: 0 3px 11px #000;
+    }
+
+    .book-card h2 span { display: block; font-size: .55em; }
+
+    .book-card .book-subtitle {
+      margin: 22px 0 35px;
+      color: #ded0a8;
+      font-size: 1.08rem;
+      font-style: italic;
+      line-height: 1.45;
+    }
+
+    .book-card .open-book {
+      display: inline-block;
+      padding: 11px 13px 10px;
+      color: #1b241c;
+      background: #dfc883;
+      box-shadow: 0 2px 0 #96743b;
+      font: 800 .66rem/1 Arial, sans-serif;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .book-launch-note {
+      max-width: 650px;
+      margin: 42px auto 0;
+      color: #dbcfb3;
+      text-align: center;
+      font-size: 1.05rem;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 820px) {
+      .book-launch-inner { grid-template-columns: 1fr; }
+      .book-card { order: -1; min-height: 385px; max-width: 390px; width: 100%; margin: 0 auto; }
+      .glimpse-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 520px) {
+      .glimpse-stack { grid-template-columns: 1fr; }
+      .book-card { min-height: 350px; }
+    }
+
     .chapter-preview {
       display: inline-flex;
       align-items: center;
@@ -717,9 +877,7 @@
       <div class="title-row">
         <h1>SteegLahg of the Staglights</h1>
         <div class="title-actions">
-          <a class="chapter-preview-bar" href="./steeglahg-chapter-one-preview.html">🪓 Preview Chpt 1</a>
-          <a class="chapter-preview-bar" href="./steeglahg-chapter-three-preview.html">Otis &middot; Preview Chpt 3</a>
-          <a class="manuscript-bar" href="./steeglahg-manuscript.html">Read Book One · 13 Chapters <span aria-hidden="true">◆</span></a>
+          <a class="manuscript-bar" href="./steeglahg-manuscript.html">Open Book One <span aria-hidden="true">◆</span></a>
         </div>
       </div>
       <p class="subtitle">Before the basement. Before Honest Tom. Before the contract, there was the forest.</p>
@@ -856,6 +1014,41 @@
         <div class="endmark" aria-hidden="true">&mdash; &#10022; &mdash;</div>
       </article>
     </div>
+  </section>
+
+  <section class="book-launch" aria-labelledby="book-launch-title">
+    <div class="book-launch-inner">
+      <div class="glimpse-stack">
+        <figure class="glimpse">
+          <img src="./shoshi-fallen-future-oak-v2.png" alt="A fallen young oak in the Staglights forest.">
+          <figcaption><strong>A costly mistake</strong>A young oak falls, and a family finds itself looking for a new tree.</figcaption>
+        </figure>
+        <figure class="glimpse">
+          <img src="./otis-and-pippi-tilly-bird.png" alt="Otis the BarkMole with Pippi the Tilly Bird.">
+          <figcaption><strong>Small companions</strong>Otis and Pippi know more about surviving the forest than they let on.</figcaption>
+        </figure>
+      </div>
+
+      <a class="book-card" href="./steeglahg-manuscript.html" aria-label="Open Book One, The Seagull Mark">
+        <p class="tiny-mark">Honest Tom&rsquo;s Corporation<br>Archives of the Rhelm</p>
+        <div class="cover-rule" aria-hidden="true"></div>
+        <h2 id="book-launch-title"><span>SteegLahg of</span> the Staglights</h2>
+        <p class="book-subtitle">Book One<br><em>The Seagull Mark</em></p>
+        <span class="open-book">Open the Manuscript</span>
+      </a>
+
+      <div class="glimpse-stack">
+        <figure class="glimpse">
+          <img src="./steeglahg-ch12-marked-oak.png" alt="SteegLahg beside an oak marked with an HT seagull emblem.">
+          <figcaption><strong>The mark in the wood</strong>A white bird and two letters turn one beautiful tree into a long problem.</figcaption>
+        </figure>
+        <figure class="glimpse">
+          <img src="./steeglahg-ch13-folstein-cove.png" alt="Folstein chopping wood near his cove.">
+          <figcaption><strong>A favor owed</strong>Folstein has an axe, a warning, and no patience for people who interfere with timber.</figcaption>
+        </figure>
+      </div>
+    </div>
+    <p class="book-launch-note">Thirteen chapters from the Forest of the Staglights, where trees are homes, favors are debts, and someone has begun marking the boundary.</p>
   </section>
 
   <section class="sublevel-record" aria-labelledby="sublevel-title">
