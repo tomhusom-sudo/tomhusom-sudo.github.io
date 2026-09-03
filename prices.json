@@ -1,36 +1,36 @@
 {
   "prices": {
     "AA": 51.05,
-    "MSFT": 496.82,
-    "AMZN": 254.98,
-    "BTC": 77003.17,
-    "NVDA": 224.41,
-    "VOO": 703.41,
-    "VONG": 125.43,
-    "EXE": 99.32,
-    "ETH": 2378.85,
-    "ARKK": 83.39
+    "MSFT": 510.12,
+    "AMZN": 258.9,
+    "BTC": 81086.31,
+    "NVDA": 228.45,
+    "VOO": 710.72,
+    "VONG": 127.07,
+    "EXE": 99.05,
+    "ETH": 2499.63,
+    "ARKK": 87.14
   },
   "indices": {
     "S&P 500": {
-      "value": 7666.6,
-      "change": 35.13,
-      "pct": 0.46
+      "value": 7747.71,
+      "change": 81.11,
+      "pct": 1.06
     },
     "DOW": {
-      "value": 53061.95,
-      "change": 295.07,
-      "pct": 0.56
+      "value": 53686.11,
+      "change": 624.16,
+      "pct": 1.18
     },
     "NASDAQ": {
-      "value": 26217.83,
-      "change": 118.06,
-      "pct": 0.45
+      "value": 26584.06,
+      "change": 366.23,
+      "pct": 1.4
     }
   },
-  "updated": "September 02, 2026",
+  "updated": "September 03, 2026",
   "oil": {
-    "price": 90.77,
-    "pct": 0.09
+    "price": 91.76,
+    "pct": 0.77
   }
 }
