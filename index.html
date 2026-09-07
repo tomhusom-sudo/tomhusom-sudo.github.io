@@ -1,8 +1,25 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HonestTom — The Portfolio Bakery</title><meta name="description" content="Build your own investment recipe. Mix funds, stocks, crypto, bonds and cash into an interactive portfolio pie."><link rel="stylesheet" href="/bakery.css"></head>
-<body><header><a class="brand" href="/">HONEST<span>TOM</span><small>THE PORTFOLIO BAKERY</small></a><a href="/old/">The old neighborhood ↗</a></header>
-<main><div class="intro"><div><p class="eyebrow">GOOD INGREDIENTS. YOUR RECIPE.</p><h1>Make yourself<br>a bigger <em>slice.</em></h1><p>A little market. A little growth. Something to help you sleep.<br>Mix a portfolio that feels like yours.</p></div><div class="total"><label for="budget">Your recipe budget</label><div><span>$</span><input id="budget" type="number" min="0" step="1000" value="100000"></div><small>Illustrative dollars. No live prices or trades.</small></div></div>
-<div class="workspace"><section class="counter" aria-label="Portfolio allocation chart"><div class="counter-top"><span>FRESH FROM YOUR OVEN</span><button id="bake">Bake my pie ↗</button></div><div class="pie-stage"><svg id="pie" viewBox="-240 -210 480 420" role="img" aria-label="Your portfolio allocation"></svg></div><div class="pie-caption"><span id="selectedName">The whole recipe</span><strong id="selectedValue">$100,000</strong><small id="selectedPercent">Select a slice to see its ingredient</small></div><div id="legend" class="legend"></div><p class="counter-note">Every slice is sized by dollars. Coffee, toast and extras count too.</p></section>
-<section class="recipe"><div class="recipe-head"><div><p class="eyebrow">THE RECIPE CARD</p><h2>What goes in?</h2></div><span id="allocation">100% mixed</span></div><div id="ingredients"></div><div class="add-row"><label for="newIngredient">Another ingredient</label><div><select id="newIngredient"></select><button id="add" aria-label="Add selected investment">＋</button></div></div><div class="recipe-foot"><span>Allocated <strong id="allocated"></strong></span><span id="remaining"></span></div><p id="status" role="status"></p></section></div>
-<section class="sides"><div class="sides-heading"><p class="eyebrow">ON THE SIDE</p><h2>Coffee. Toast. A little extra.</h2><p>They are part of your total recipe, not money on top.</p></div><button class="side" data-add="SGOV"><span class="side-icon">☕</span><span><strong>Your sleeping pill</strong><small>SGOV · short Treasury bills</small><em>Add a cup →</em></span></button><button class="side" data-add="CASH"><span class="side-icon">🍞</span><span><strong>Keep it plain</strong><small>Cash · money ready to use</small><em>Add some toast →</em></span></button><button class="side" data-add="BND"><span class="side-icon">🥛</span><span><strong>A splash of bonds</strong><small>BND · broad U.S. bonds</small><em>Add the cream →</em></span></button></section>
-<section class="notes"><p><strong>A recipe, not a recommendation.</strong> The starting mix is an example. Funds can overlap; owning more tickers does not automatically add diversification. Company shares such as AA and XOM are not the commodities themselves. Bond funds can lose value, and crypto can move sharply.</p><button id="reset">Start a fresh recipe</button><button id="download">Save recipe ↓</button></section></main><footer><span>HONESTTOM · MADE WITH A LITTLE COMMON SENSE.</span><a href="/old/">Explore the original site ↗</a></footer><script src="/bakery.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="HonestTom">
+  <link rel="apple-touch-icon" href="/lincoln.jpg">
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=dashboard.html">
+    <title>HonestTom | AI-Assisted Development &amp; Data Engineering</title>
+  <meta name="google-site-verification" content="xNW511C_p0gxCEqdU2Acuy_SEHVKBnK4dfmmdsonc6M" />
+  <meta name="description" content="Tom Hugunin — retired Oracle DBA with 25+ years experience, now building AI-assisted projects at honesttom.ai using Claude Code and modern data tools.">
+  <meta name="keywords" content="HonestTom, Tom Hugunin, AI development, Claude Code, Oracle DBA, data engineering, honesttom.ai">
+  <meta property="og:title" content="HonestTom"/>
+  <meta property="og:description" content="AI-assisted development and data engineering by Tom Hugunin"/>
+  <meta property="og:url" content="https://honesttom.ai"/>
+  <meta property="og:type" content="website"/>
+  <link rel="canonical" href="https://honesttom.ai"/>
+</head>
+<body>
+  <script>window.location.replace('dashboard.html');</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+</body>
+</html>
