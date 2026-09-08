@@ -1,0 +1,18 @@
+const {readFileSync}=require('node:fs');
+const vm=require('node:vm');
+const assert=require('node:assert/strict');
+const elements=new Map();
+const element=()=>({style:{setProperty(){}},setAttribute(){},append(){},replaceChildren(){},textContent:'',value:''});
+const context=vm.createContext({Intl,Option:function(){},document:{getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id)},createElement:element}});
+const source=readFileSync(__dirname+'/bakery-3d.mjs','utf8').split('try{const THREE=')[0];
+vm.runInContext(source,context);
+assert.equal(vm.runInContext('total()',context),100000);
+vm.runInContext("select(6);$('amount').oninput({target:{validity:{valid:true},value:'25000'}})",context);
+assert.equal(vm.runInContext('total()',context),115000);
+vm.runInContext("$('amount').oninput({target:{validity:{valid:false},value:'-2'}})",context);
+assert.equal(vm.runInContext('total()',context),115000);
+vm.runInContext("recipes.forEach(r=>r.amount=0);renderList()",context);
+assert.equal(elements.get('total').textContent,'$0');
+vm.runInContext("select(0);$('instrument').onchange({target:{value:'VTI'}})",context);
+assert.equal(vm.runInContext('recipes[0].symbol',context),'VTI');
+console.log('PASS: example total, edited allocation, invalid input, zero total, instrument change');
