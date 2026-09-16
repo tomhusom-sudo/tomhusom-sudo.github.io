@@ -874,6 +874,10 @@
       margin: 0 auto;
     }
 
+    .field-recording audio + h2 {
+      margin-top: 32px;
+    }
+
     .coming {
       padding: 28px 20px;
       color: #b8bcae;
@@ -1344,9 +1348,15 @@
     <section class="field-recording" aria-labelledby="recording-title">
       <p>Staglight Field Recording</p>
       <h2 id="recording-title">SteegLahg&rsquo;s Day Begins</h2>
-      <audio controls preload="metadata">
+      <audio controls preload="metadata" aria-labelledby="recording-title">
         <source src="./steeglahgs-day-begins.m4a" type="audio/mp4">
         Your browser does not support this recording.
+      </audio>
+      <h2 id="dilemma-recording-title">Steeglagh&rsquo;s Dilemma</h2>
+      <audio controls preload="metadata" aria-labelledby="dilemma-recording-title">
+        <source src="./steeglaghs-dilemma.m4a" type="audio/mp4">
+        Your browser does not support this recording.
+        <a href="./steeglaghs-dilemma.m4a">Listen to Steeglagh&rsquo;s Dilemma</a>.
       </audio>
     </section>
     <div class="coming">The story of SteegLahg will continue.</div>
