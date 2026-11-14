@@ -14,6 +14,10 @@
 .concept-heading { text-align: center; margin: 0 auto 32px; max-width: 700px; }
 .concept-heading h2 { font-weight: 400; font-size: clamp(28px, 4vw, 46px); margin: 0 0 12px; }
 .concept-heading p { color: #bdb4a0; line-height: 1.6; margin: 0; }
+.location-option + .location-option { border-top: 1px solid #615642; margin-top: 64px; padding-top: 64px; }
+.location-option > figure { margin: 0; }
+.location-option > figure img { border: 1px solid #615642; }
+.location-option > figure figcaption { color: #cabb9b; font: 700 11px Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase; margin-top: 12px; }
 .concept-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; }
 .concept-gallery figure { margin: 0; }
 .concept-gallery .wide { grid-column: 1 / -1; }
@@ -27,15 +31,24 @@
 <div class="top"><nav aria-label="Main"><a href="index.html#staff">Staff</a><a href="dashboard.html">Archive</a></nav></div>
 <section class="storefront" aria-labelledby="instruments-title">
 <h1 id="instruments-title" class="name instruments">Honest Tom<br>Instruments</h1>
+<div class="location-option">
 <div class="concept-heading">
-<h2>A new home on Main Street</h2>
-<p>Concept renderings based on the proposed location. A window-filled storefront and warm wood interiors bring instruments, customers, and staff into view.</p>
+<h2>Former Last Chance Bar location</h2>
+<p>A concept for Honest Tom Instruments at the original location.</p>
+</div>
+<figure><img src="honest-tom-instruments-storefront.png?v=4" alt="Concept rendering of Honest Tom Instruments at the former Last Chance Bar location"><figcaption>Original location concept</figcaption></figure>
+</div>
+<div class="location-option">
+<div class="concept-heading">
+<h2>Another Main Street option</h2>
+<p>Concept renderings for a second property in Aberdeen, with a window-filled storefront and warm wood interiors.</p>
 </div>
 <div class="concept-gallery">
 <figure class="wide"><img src="instruments-main-street-front.png" alt="Concept rendering of the Main Street storefront with continuous display windows and Honest Tom Instruments signage"><figcaption>Main Street storefront</figcaption></figure>
 <figure><img src="instruments-main-street-corner.png" loading="lazy" alt="Corner view of the proposed Western-style music shop and its window displays"><figcaption>Corner view</figcaption></figure>
 <figure><img src="instruments-main-street-interior-wide.png" loading="lazy" alt="Concept rendering of a wood-finished instrument showroom with customers and staff"><figcaption>Showroom</figcaption></figure>
 <figure class="wide"><img src="instruments-main-street-interior-long.png" loading="lazy" alt="Long view of the proposed barn-style interior with guitars, strings, keyboards and staff"><figcaption>Interior gallery</figcaption></figure>
+</div>
 </div>
 </section>
 </main>
